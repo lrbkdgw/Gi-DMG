@@ -1,0 +1,82 @@
+name: 构建单文件 EXE
+
+on:
+  push:
+    paths:
+      - "exe_src/**"
+      - ".github/workflows/build-exe.yml"
+  pull_request:
+    paths:
+      - "exe_src/**"
+      - ".github/workflows/build-exe.yml"
+  workflow_dispatch:
+    inputs:
+      commit_binary:
+        description: "把构建好的 EXE 提交回 exe_bin/（PR 前更新 bin 用）"
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    name: Windows 打包
+    runs-on: windows-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: exe_src/requirements.txt
+
+      - name: 准备 Node（对拍测试需要，用来跑 HTML 版引擎）
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 安装依赖
+        working-directory: exe_src
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: 运行测试（含与 HTML 版的数值对拍）
+        working-directory: exe_src
+        run: python -m pytest tests -q
+
+      - name: 打包 EXE
+        working-directory: exe_src
+        run: python build.py --skip-tests
+
+      - name: 读取版本号
+        id: meta
+        shell: bash
+        run: |
+          version=$(python -c "import sys; sys.path.insert(0,'exe_src'); from gidmg.version import VERSION; print(VERSION)")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "artifact=Gi DMG v$version" >> "$GITHUB_OUTPUT"
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gi-DMG-v${{ steps.meta.outputs.version }}-windows
+          path: exe_bin/Gi DMG v${{ steps.meta.outputs.version }}.exe
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: 提交 EXE 回 exe_bin/
+        if: github.event_name == 'workflow_dispatch' && inputs.commit_binary
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "exe_bin/Gi DMG v${{ steps.meta.outputs.version }}.exe"
+          if git diff --cached --quiet; then
+            echo "EXE 没有变化，跳过提交。"
+          else
+            git commit -m "构建：更新 exe_bin/Gi DMG v${{ steps.meta.outputs.version }}.exe [skip ci]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
