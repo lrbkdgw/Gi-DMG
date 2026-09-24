@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+exe_src/.venv/
+.pytest_cache/
+
+# PyInstaller
+exe_src/build/
+exe_src/dist/
+*.spec
+
+# 运行时数据（EXE 旁边的 date 文件夹）
+date/
+exe_src/date/
+
+# 预览截图的临时输出目录（docs/screenshots/ 里的图是提交进仓库的）
+docs/preview/
