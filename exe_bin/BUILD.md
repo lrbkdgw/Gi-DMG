@@ -17,6 +17,7 @@ build.bat
 仓库内的工作流 **构建单文件 EXE**（`.github/workflows/build-exe.yml`）在 `windows-latest` 上执行同样的流程：
 
 - 任何改动 `exe_src/**` 的推送或 PR 都会自动构建，产物作为 Artifact 下载；
-- 手动触发（workflow_dispatch）时勾选 `commit_binary`，会把构建好的 EXE 直接提交回本目录。
+- 手动触发（workflow_dispatch）时勾选 `commit_binary`，会把构建好的 EXE 直接提交回本目录；
+- 或者在提交信息里带上 `[commit-exe]`，推送后工作流同样会把 EXE 提交回本目录。
 
 > 本目录只存放构建产物，源码在 `exe_src/`。

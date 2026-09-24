@@ -54,7 +54,7 @@
 - `exe_src/build.py` + `build.bat`（Windows 一键）/ `build.sh`（本地自测）：装依赖 → 跑测试 → PyInstaller 单文件打包
   → 产物复制到 `exe_bin/Gi DMG v2.1.9.exe`。
 - `.github/workflows/build-exe.yml`：在 `windows-latest` 上执行同一套流程，产物作为 Artifact 上传；
-  手动触发时可选择把 EXE 提交回 `exe_bin/`。
+  手动触发勾选 `commit_binary`，或提交信息里带 `[commit-exe]`，会把 EXE 提交回 `exe_bin/`。
 
 ### 其他
 

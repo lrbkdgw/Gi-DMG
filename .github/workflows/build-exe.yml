@@ -24,6 +24,8 @@ jobs:
   build:
     name: Windows 打包
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
       - name: 检出代码
@@ -92,8 +94,11 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      # 两种回填方式：手动触发时勾选 commit_binary，或在提交信息里带 [commit-exe]
       - name: 提交 EXE 回 exe_bin/
-        if: github.event_name == 'workflow_dispatch' && inputs.commit_binary
+        if: |
+          (github.event_name == 'workflow_dispatch' && inputs.commit_binary) ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[commit-exe]'))
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -103,5 +108,6 @@ jobs:
             echo "EXE 没有变化，跳过提交。"
           else
             git commit -m "构建：更新 exe_bin/Gi DMG v${{ steps.meta.outputs.version }}.exe [skip ci]"
-            git push origin HEAD:${GITHUB_REF_NAME}
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin HEAD:"${GITHUB_REF_NAME}"
           fi

@@ -130,8 +130,8 @@ build.bat
 Linux / macOS 上可以用 `./build.sh` 打本地自测包（产物不是 .exe）。
 
 也可以直接用 GitHub Actions：仓库里的 **构建单文件 EXE** 工作流（`.github/workflows/build-exe.yml`）在
-`windows-latest` 上完成同样的流程，产物作为 Artifact 上传；手动触发（workflow_dispatch）时可勾选
-`commit_binary`，让它把 EXE 提交回 `exe_bin/`。
+`windows-latest` 上完成同样的流程，产物作为 Artifact 上传；手动触发（workflow_dispatch）勾选 `commit_binary`，
+或在提交信息里带上 `[commit-exe]`，都会让它把 EXE 提交回 `exe_bin/`。
 
 ## 五、测试
 
