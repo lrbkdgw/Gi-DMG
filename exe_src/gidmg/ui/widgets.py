@@ -473,7 +473,7 @@ BUTTON_SKINS: dict = {
                      hover_bg=theme.SURFACE_SUBTLE, hover_border="transparent",
                      hover_fg=theme.TEXT, press_bg=theme.SURFACE_HOVER, radius=999,
                      checked_bg=theme.BLUE_TINT, checked_border="transparent",
-                     checked_fg=theme.BLUE, align_left=True, pad=12),
+                     checked_fg=theme.BLUE, align_left=True, pad=12, checked_bold=True),
 }
 
 
@@ -610,7 +610,10 @@ class MotionButton(QPushButton):
             icon_pm = self.icon().pixmap(self.iconSize())
 
         gap = 6 if (icon_pm is not None and text) else 0
-        fm = QFontMetrics(self.font())
+        base_font = QFont(self.font())
+        if skin.get("checked_bold") and checked > 0.5:
+            base_font.setWeight(QFont.Weight.Bold)
+        fm = QFontMetrics(base_font)
         text_w = fm.horizontalAdvance(text) if text else 0
         icon_w = (icon_pm.width() / icon_pm.devicePixelRatio()) if icon_pm is not None else 0
         icon_h = (icon_pm.height() / icon_pm.devicePixelRatio()) if icon_pm is not None else 0
@@ -627,7 +630,7 @@ class MotionButton(QPushButton):
             p.drawPixmap(QPointF(x, cy - icon_h / 2), icon_pm)
             x += icon_w + gap
         if text:
-            font = QFont(self.font())
+            font = QFont(base_font)
             if skin.get("underline"):
                 font.setUnderline(self._hover.hover > 0.5)
             p.setFont(font)

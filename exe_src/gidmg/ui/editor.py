@@ -150,6 +150,7 @@ class EditorView(QWidget):
         cl = vbox(char_part, (12, 10, 12, 8), 6)
         head = hbox(spacing=8)
         self.nav_chars = self._nav("users-round", "角色")
+        self.nav_chars.setMinimumHeight(32)      # .sidebar-section-title-button
         head.addWidget(self.nav_chars, 1)
         self.add_char_btn = icon_button("plus", "新增角色", char_part,
                                         lambda: self.s.add_char(), theme.BLUE, 15, "AddBtn")
@@ -244,9 +245,13 @@ class EditorView(QWidget):
         return f
 
     def _subhead(self, text: str) -> QLabel:
+        # .sidebar-subhead { margin:10px 7px 6px; font-size:10.5px; font-weight:700;
+        #                    letter-spacing:.04em; color: muted }
         lb = label(text)
-        lb.setStyleSheet(f"color:{theme.MUTED};font-size:10.5px;font-weight:700;"
-                         "padding:6px 5px 2px;")
+        f = theme.ui_font(7.5, QFont.Weight.Bold)
+        f.setLetterSpacing(QFont.SpacingType.PercentageSpacing, 104)
+        lb.setFont(f)
+        lb.setStyleSheet(f"color:{theme.MUTED};padding:10px 7px 6px;")
         return lb
 
     # ------------------------------------------------------------------ 状态
