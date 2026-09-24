@@ -14,5 +14,5 @@ exe_src/dist/
 date/
 exe_src/date/
 
-# 预览截图等本地产物
+# 预览截图的临时输出目录（docs/screenshots/ 里的图是提交进仓库的）
 docs/preview/
