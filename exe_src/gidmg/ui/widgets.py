@@ -8,12 +8,12 @@ from __future__ import annotations
 
 from typing import Any, Callable, Iterable, List, Optional, Sequence, Tuple
 
-from PySide6.QtCore import (QEasingCurve, QEvent, QPoint, QPropertyAnimation, QRect, QSize, Qt,
-                            Property, Signal)
+from PySide6.QtCore import (QEasingCurve, QEvent, QObject, QParallelAnimationGroup, QPoint,
+                            QPropertyAnimation, QRect, QSize, Qt, Property, Signal)
 from PySide6.QtGui import QColor, QCursor, QDoubleValidator, QIcon, QPainter, QPen
 from PySide6.QtWidgets import (QAbstractSpinBox, QComboBox, QFrame, QGraphicsDropShadowEffect,
-                               QHBoxLayout, QLabel, QLayout, QLineEdit, QPushButton, QScrollArea,
-                               QSizePolicy, QVBoxLayout, QWidget)
+                               QGraphicsOpacityEffect, QHBoxLayout, QLabel, QLayout, QLineEdit,
+                               QPushButton, QScrollArea, QSizePolicy, QVBoxLayout, QWidget)
 
 from . import icons, theme
 from ..core.state import num, numz
@@ -45,6 +45,144 @@ def shadow(widget: QWidget, blur: int = 22, dy: int = 4, alpha: int = 16) -> QWi
     eff.setColor(QColor(22, 31, 48, alpha))
     widget.setGraphicsEffect(eff)
     return widget
+
+
+# ------------------------------------------------------------------ 微动效（灵动感）
+#
+# Qt 的 QSS 不支持 transition，所以「悬停轻微抬升」「聚焦蓝色辉光」这类网页上很自然
+# 的过渡，全部用 QPropertyAnimation 驱动 QGraphicsDropShadowEffect 来近似。
+#
+# 关键点：每个控件同一时刻只能挂一个 QGraphicsEffect，而卡片本身已经用掉了阴影，
+# 所以这些动效采用「按需挂载」策略——静止时不挂任何 effect（保持文字清晰、零开销），
+# 触发（进入/聚焦）时才创建 effect 并动画放大，离开后动画收回再卸载。
+
+class _AnimatedShadow(QObject):
+    """给控件挂上「按需出现的动画阴影」。
+
+    trigger="hover" 用 Enter/Leave；trigger="focus" 用 FocusIn/FocusOut。
+    active = (blur, dy, QColor) 是触发后的目标阴影。
+    """
+
+    def __init__(self, widget: QWidget, active, trigger: str = "hover",
+                 duration: int = 150):
+        super().__init__(widget)
+        self._w = widget
+        self._active = active
+        self._trigger = trigger
+        self._duration = duration
+        self._eff: Optional[QGraphicsDropShadowEffect] = None
+        self._anim: Optional[QParallelAnimationGroup] = None
+        self._on = False
+        widget.installEventFilter(self)
+
+    # -- 事件 → 目标状态
+    def eventFilter(self, obj, ev):  # noqa: N802 (Qt 命名)
+        t = ev.type()
+        if self._trigger == "hover":
+            if t == QEvent.Type.Enter:
+                self._go(True)
+            elif t == QEvent.Type.Leave:
+                self._go(False)
+        else:
+            if t == QEvent.Type.FocusIn:
+                self._go(True)
+            elif t == QEvent.Type.FocusOut:
+                self._go(False)
+        return False
+
+    def _ensure_effect(self) -> QGraphicsDropShadowEffect:
+        if self._eff is None:
+            eff = QGraphicsDropShadowEffect(self._w)
+            blur, dy, color = self._active
+            start = QColor(color)
+            start.setAlpha(0)
+            eff.setBlurRadius(0.0)
+            eff.setOffset(0, 0)
+            eff.setColor(start)
+            self._w.setGraphicsEffect(eff)
+            self._eff = eff
+        return self._eff
+
+    def _go(self, on: bool) -> None:
+        if on == self._on and self._eff is not None:
+            return
+        self._on = on
+        if not on and self._eff is None:
+            return
+        eff = self._ensure_effect()
+        if self._anim is not None:
+            self._anim.stop()
+        blur, dy, color = self._active
+        if on:
+            end_blur, end_dy, end_color = float(blur), dy, QColor(color)
+        else:
+            end_blur, end_dy = 0.0, 0
+            end_color = QColor(color)
+            end_color.setAlpha(0)
+
+        group = QParallelAnimationGroup(self)
+        for prop, end in ((b"blurRadius", end_blur), (b"yOffset", float(end_dy)),
+                          (b"color", end_color)):
+            a = QPropertyAnimation(eff, prop, self)
+            a.setDuration(self._duration)
+            a.setEasingCurve(QEasingCurve.Type.OutCubic)
+            a.setEndValue(end)
+            group.addAnimation(a)
+        if not on:
+            group.finished.connect(self._detach)
+        self._anim = group
+        group.start()
+
+    def _detach(self) -> None:
+        # 离开动画结束后卸下 effect，静止态保持原生清晰渲染。
+        if not self._on and self._eff is not None:
+            self._w.setGraphicsEffect(None)
+            self._eff = None
+        self._anim = None
+
+
+def attach_hover_lift(widget: QWidget, active=None, duration: int = 150) -> QWidget:
+    """悬停时浮现一层柔和阴影，营造「抬起」的现代交互感。"""
+    active = active or theme.SHADOW_HOVER
+    _AnimatedShadow(widget, active, trigger="hover", duration=duration)
+    return widget
+
+
+def attach_focus_glow(widget: QWidget, duration: int = 140) -> QWidget:
+    """聚焦时浮现蓝色辉光，近似网页版输入框的 focus ring。"""
+    _AnimatedShadow(widget, (14, 0, theme.FOCUS_GLOW), trigger="focus", duration=duration)
+    return widget
+
+
+def fade_in(widget: QWidget, duration: int = 200, delay: int = 0,
+            start: float = 0.0) -> None:
+    """用透明度动画让控件淡入（离场时自动卸载 effect，避免影响后续渲染）。"""
+    if not theme.ANIMATIONS:
+        return
+    eff = QGraphicsOpacityEffect(widget)
+    eff.setOpacity(start)
+    widget.setGraphicsEffect(eff)
+    anim = QPropertyAnimation(eff, b"opacity", widget)
+    anim.setDuration(duration)
+    anim.setStartValue(start)
+    anim.setEndValue(1.0)
+    anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+
+    def _cleanup():
+        try:
+            # 只有当前 effect 仍是这次淡入用的，才卸载，避免误删悬停辉光等其它 effect。
+            if widget.graphicsEffect() is eff:
+                widget.setGraphicsEffect(None)
+        except RuntimeError:
+            pass
+
+    anim.finished.connect(_cleanup)
+    widget._fade_anim = anim  # 防止被 GC
+    if delay > 0:
+        from PySide6.QtCore import QTimer
+        QTimer.singleShot(delay, anim.start)
+    else:
+        anim.start()
 
 
 def clear_layout(layout: QLayout) -> None:
@@ -254,6 +392,7 @@ class NumField(QLineEdit):
             self.setFixedWidth(width)
         self.set_value(value)
         self.textEdited.connect(lambda _t: self.edited.emit(self.value()))
+        attach_focus_glow(self)
 
     def value(self) -> float:
         return numz(self.text()) if self._zero_ok else num(self.text(), self._default)
@@ -278,6 +417,7 @@ class TextField(QLineEdit):
             self.setPlaceholderText(placeholder)
         if width:
             self.setFixedWidth(width)
+        attach_focus_glow(self)
 
 
 class Select(QComboBox):
@@ -293,6 +433,7 @@ class Select(QComboBox):
             self.setFixedWidth(width)
         self.currentIndexChanged.connect(
             lambda _i: self.picked.emit(self.value()))
+        attach_focus_glow(self)
 
     def set_options(self, options: Sequence[Tuple[str, str]], value: str = "") -> None:
         blocked = self.blockSignals(True)
@@ -343,6 +484,14 @@ def button(text: str = "", icon_name: str = "", kind: str = "", parent=None,
     b.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     if on_click:
         b.clicked.connect(lambda: on_click())
+    # 主按钮悬停时轻微抬升，色调与按钮语义一致（灵动感，但静止态仍与网页版一致地扁平）。
+    _LIFT = {
+        "Primary": (26, 6, QColor(11, 87, 208, 90)),
+        "Tonal": (22, 5, QColor(11, 87, 208, 60)),
+        "DangerBtn": (22, 5, QColor(197, 34, 31, 60)),
+    }
+    if kind in _LIFT:
+        attach_hover_lift(b, active=_LIFT[kind])
     return b
 
 
