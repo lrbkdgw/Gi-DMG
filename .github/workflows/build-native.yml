@@ -1,0 +1,20 @@
+name: Build native EXE
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'native/**'
+      - '.github/workflows/build-native.yml'
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Compile static native GUI
+        shell: cmd
+        run: cl /nologo /std:c++17 /O2 /MT /utf-8 /DUNICODE /D_UNICODE native\main.cpp /Fe:"exe_bin\Gi DMG v3.0.0.exe" /link /SUBSYSTEM:WINDOWS comctl32.lib comdlg32.lib shell32.lib gdi32.lib user32.lib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Gi-DMG-v3.0.0-native
+          path: exe_bin/Gi DMG v3.0.0.exe
