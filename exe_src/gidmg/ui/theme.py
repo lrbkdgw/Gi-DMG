@@ -6,6 +6,10 @@
 
 from __future__ import annotations
 
+import tempfile
+from pathlib import Path
+from typing import Dict
+
 from PySide6.QtGui import QColor, QFont, QFontDatabase
 
 # ------------------------------------------------------------------ 颜色令牌
@@ -14,7 +18,7 @@ CANVAS = "#f3f5f8"
 SURFACE = "#ffffff"
 SURFACE_SUBTLE = "#eef1f5"
 SURFACE_HOVER = "#e7ebf1"
-BORDER = "#e2e5eb"
+BORDER = "#dce1e8"
 BORDER_SOFT = "#eceff4"
 TEXT = "#2b2f36"
 TEXT_STRONG = "#1f242b"
@@ -39,6 +43,19 @@ RADIUS_MD = 14
 RADIUS_LG = 20
 RADIUS_CARD = 24
 CONTROL_H = 32
+
+# ------------------------------------------------------------------ 阴影令牌
+# 对应 HTML 版 --studio-shadow / --studio-shadow-float，用于 QGraphicsDropShadowEffect。
+# 每个元组是 (blur, dy, QColor)，供 widgets.shadow() / 悬浮抬升动画取用。
+SHADOW_REST = (22, 4, QColor(22, 31, 48, 18))
+SHADOW_HOVER = (34, 10, QColor(24, 37, 59, 40))
+SHADOW_FLOAT = (40, 14, QColor(24, 37, 59, 48))
+# 输入控件聚焦时的蓝色辉光（近似 CSS 的 0 0 0 3px rgba(11,87,208,.13) 焦点环）。
+FOCUS_GLOW = QColor(11, 87, 208, 110)
+
+# 全局动效开关。默认开启；离屏截图（tools/dev_preview.py）会临时关掉，
+# 以便一次性抓到动画的终态，而不是中间帧。
+ANIMATIONS = True
 
 # 元素配色（与 HTML EL 表一致）
 ELEMENT_COLORS = {
@@ -105,9 +122,55 @@ def font_stack() -> str:
     return ", ".join(fams)
 
 
+# ------------------------------------------------------------------ QSS 用小图标
+# QSS 的 image:url() 需要真实文件；这里把 lucide 的勾选/箭头图标按主题色重新着色
+# 后写到临时目录，让复选框有真正的对勾、下拉框有和网页版一致的 chevron 箭头。
+
+_QSS_ASSETS: Dict[str, str] = {}
+
+
+def _qss_assets() -> Dict[str, str]:
+    if _QSS_ASSETS:
+        return _QSS_ASSETS
+    default = {"chevron": "", "chevron_disabled": "", "check": ""}
+    try:
+        from . import icons
+
+        cache = Path(tempfile.gettempdir()) / "gidmg_qss_assets"
+        cache.mkdir(parents=True, exist_ok=True)
+
+        def _write(name: str, color: str, out: str) -> str:
+            svg = icons.recolor(icons._svg_source(name), color)
+            path = cache / out
+            path.write_text(svg, encoding="utf-8")
+            return path.as_posix()
+
+        _QSS_ASSETS.update(
+            chevron=_write("chevron-down", MUTED_SOFT, "chevron.svg"),
+            chevron_disabled=_write("chevron-down", "#b6bdc7", "chevron-disabled.svg"),
+            check=_write("check", "#ffffff", "check.svg"),
+        )
+    except Exception:  # pragma: no cover - 缺资源时退回原生控件外观
+        _QSS_ASSETS.update(default)
+    return _QSS_ASSETS
+
+
 # ------------------------------------------------------------------ 全局 QSS
 
 def stylesheet() -> str:
+    assets = _qss_assets()
+    chevron = assets.get("chevron", "")
+    chevron_dis = assets.get("chevron_disabled", "")
+    check = assets.get("check", "")
+    combo_arrow = (
+        f"QComboBox::down-arrow {{ image: url({chevron}); width: 14px; height: 14px; }}\n"
+        f"QComboBox::down-arrow:disabled {{ image: url({chevron_dis}); }}\n"
+        if chevron else ""
+    )
+    check_img = (
+        f"QCheckBox::indicator:checked {{ image: url({check}); }}\n"
+        if check else ""
+    )
     return f"""
 * {{ outline: none; }}
 
@@ -191,17 +254,18 @@ QLineEdit[invalid="true"], QSpinBox[invalid="true"], QDoubleSpinBox[invalid="tru
 QSpinBox::up-button, QSpinBox::down-button,
 QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {{ width: 0; border: none; }}
 
-QComboBox::drop-down {{ width: 26px; border: none; }}
-QComboBox QAbstractItemView {{
+QComboBox::drop-down {{ width: 28px; border: none; padding-right: 6px; }}
+{combo_arrow}QComboBox QAbstractItemView {{
     background: {SURFACE};
     border: 1px solid {BORDER};
-    border-radius: {RADIUS_SM}px;
-    padding: 4px;
+    border-radius: {RADIUS_MD}px;
+    padding: 5px;
     outline: none;
     selection-background-color: {BLUE_TINT};
     selection-color: {BLUE};
 }}
-QComboBox QAbstractItemView::item {{ min-height: 26px; padding: 3px 8px; border-radius: 7px; }}
+QComboBox QAbstractItemView::item {{ min-height: 28px; padding: 4px 9px; border-radius: 8px; }}
+QComboBox QAbstractItemView::item:hover {{ background: {SURFACE_SUBTLE}; }}
 
 /* ------------------------------------------------ 按钮 */
 QPushButton {{
@@ -300,13 +364,15 @@ QListWidget::item {{ border-radius: {RADIUS_SM}px; padding: 2px; }}
 QListWidget::item:selected {{ background: {BLUE_TINT}; color: {BLUE}; }}
 
 /* ------------------------------------------------ 其它 */
-QCheckBox {{ spacing: 7px; font-size: 12px; }}
+QCheckBox {{ spacing: 8px; font-size: 12px; }}
 QCheckBox::indicator {{
-    width: 15px; height: 15px; border: 1.5px solid #9aa3af;
-    border-radius: 4px; background: {SURFACE};
+    width: 16px; height: 16px; border: 1.5px solid #9aa3af;
+    border-radius: 5px; background: {SURFACE};
 }}
 QCheckBox::indicator:checked {{ background: {BLUE}; border-color: {BLUE}; }}
-QCheckBox::indicator:hover {{ border-color: {BLUE}; }}
+{check_img}QCheckBox::indicator:hover {{ border-color: {BLUE}; }}
+QCheckBox::indicator:checked:hover {{ background: {BLUE_HOVER}; border-color: {BLUE_HOVER}; }}
+QCheckBox::indicator:disabled {{ border-color: #d3d8e0; background: #f2f4f7; }}
 
 QProgressBar {{
     min-height: 8px; max-height: 8px; background: {SURFACE_SUBTLE};

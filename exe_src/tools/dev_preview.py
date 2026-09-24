@@ -28,6 +28,9 @@ from PySide6.QtWidgets import QApplication, QWidget  # noqa: E402
 from gidmg.core import state as st  # noqa: E402
 from gidmg.ui import theme  # noqa: E402
 
+# 截图时关闭入场/过渡动画，确保抓到的是终态而不是动画中间帧。
+theme.ANIMATIONS = False
+
 
 def _register_dev_font() -> None:
     path = os.environ.get("GIDMG_DEV_FONT")

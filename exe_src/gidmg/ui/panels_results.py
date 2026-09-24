@@ -38,6 +38,7 @@ class ResultRow(QFrame):
                              border-radius:14px; }}
             QFrame#ResRow:hover {{ background:{theme.BLUE_TINT}; border-color:{theme.BLUE_BORDER}; }}
         """)
+        W.attach_hover_lift(self, active=(18, 4, theme.tint("#182533", 28)), duration=130)
         lay = vbox(self, (10, 9, 10, 9), 4)
 
         head = hbox(spacing=5)

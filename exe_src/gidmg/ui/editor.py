@@ -63,6 +63,8 @@ class CharRow(QFrame):
         self.toggle.toggled.connect(lambda v: self.toggled.emit(self.char_id, v))
         lay.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignVCenter)
 
+        W.attach_hover_lift(self, active=(16, 3, theme.tint("#182533", 26)), duration=130)
+
     def mousePressEvent(self, ev) -> None:
         if ev.button() == Qt.MouseButton.LeftButton:
             self.picked.emit(self.char_id)
@@ -215,9 +217,13 @@ class EditorView(QWidget):
         navs = {"character": (0, self.nav_chars), "monster": (1, self.nav_monster),
                 "timeline": (2, self.nav_timeline)}
         index, nav = navs.get(key, navs["character"])
+        changed = self.stack.currentIndex() != index
         self.stack.setCurrentIndex(index)
         nav.setChecked(True)
         self.scroll.verticalScrollBar().setValue(0)
+        if changed:
+            # 切换工作区时让新面板轻柔淡入，弱化生硬的整屏跳变。
+            W.fade_in(self.stack.currentWidget(), duration=190, start=0.15)
 
     def set_quick_table_mode(self, on: bool) -> None:
         self.add_char_btn.setVisible(not on)

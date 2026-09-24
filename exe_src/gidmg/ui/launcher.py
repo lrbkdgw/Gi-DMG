@@ -81,6 +81,8 @@ class ConfigCard(QFrame):
                        lambda: self.opened.emit(self.meta.name))
         lay.addWidget(enter, 0, Qt.AlignmentFlag.AlignVCenter)
 
+        W.attach_hover_lift(self, active=(26, 7, theme.tint("#182533", 34)))
+
     def mouseDoubleClickEvent(self, ev) -> None:
         self.opened.emit(self.meta.name)
         ev.accept()
@@ -216,7 +218,7 @@ class LauncherView(QWidget):
                 "folder", "date 文件夹里还没有配置",
                 "点击上面的「空白配置」新建一份，或用右上角的导入按钮载入 JSON。"))
             return
-        for meta in metas:
+        for i, meta in enumerate(metas):
             card = ConfigCard(meta, self.list_host)
             card.opened.connect(self.openConfig.emit)
             card.renamed.connect(self._rename)
@@ -224,6 +226,8 @@ class LauncherView(QWidget):
             card.deleted.connect(self._delete)
             card.exported.connect(self._export)
             self.list_lay.addWidget(card)
+            # 逐张错峰淡入，进入配置管理页时有轻盈的列表铺开感。
+            W.fade_in(card, duration=260, delay=min(i, 8) * 45, start=0.0)
 
     def _create(self, default_name: str, presets) -> None:
         name, ok = QInputDialog.getText(self, "新建配置", "配置名称：", text=default_name)
