@@ -16,7 +16,7 @@ from PySide6.QtGui import QColor, QCursor, QPainter, QPainterPath
 from PySide6.QtWidgets import (QFrame, QGraphicsDropShadowEffect, QHBoxLayout, QLabel,
                                QPushButton, QSizePolicy, QStackedLayout, QWidget)
 
-from . import icons, theme
+from . import icons, motion, theme, widgets as W
 from .widgets import hbox, vbox
 
 COLLAPSED_PEEK = 5        # 收起时露在窗口顶边外的高度
@@ -24,23 +24,19 @@ ISLAND_HEIGHT = 34
 ANIM_MS = 220
 
 
-class _IslandButton(QPushButton):
-    """灵动岛展开后的圆形图标按钮。"""
+class _IslandButton(W.MotionButton):
+    """灵动岛展开后的圆形图标按钮（悬停底色渐变）。"""
 
     def __init__(self, icon_name: str, tip: str, color: str, parent=None):
-        super().__init__(parent)
+        super().__init__("", "", parent)
         self.setFixedSize(28, 28)
-        self.setIcon(icons.icon(icon_name, 15, color))
-        self.setIconSize(QSize(15, 15))
         self.setToolTip(tip)
-        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        c = QColor(color)
-        hover = f"rgba({c.red()},{c.green()},{c.blue()},0.13)"
-        self.setStyleSheet(f"""
-            QPushButton {{ background: transparent; border: none; border-radius: 14px; }}
-            QPushButton:hover {{ background: {hover}; }}
-            QPushButton:pressed {{ background: rgba({c.red()},{c.green()},{c.blue()},0.22); }}
-        """)
+        self.set_skin(bg="transparent", border="transparent", fg=color,
+                      hover_bg=theme.mix(theme.SURFACE, color, 0.13),
+                      hover_border="transparent", hover_fg=color,
+                      press_bg=theme.mix(theme.SURFACE, color, 0.24),
+                      radius=999, circular=True)
+        self.set_icon(icon_name, color, 15)
 
 
 class DynamicIsland(QWidget):
@@ -166,6 +162,7 @@ class DynamicIsland(QWidget):
             return
         self._expanded_actions = visible
         self.pages.setCurrentIndex(1 if visible else 0)
+        motion.fade_in(self.pages.currentWidget(), motion.CONTROL, 0.0)
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor if visible
                                else Qt.CursorShape.PointingHandCursor))
         self._reposition(animate=True)

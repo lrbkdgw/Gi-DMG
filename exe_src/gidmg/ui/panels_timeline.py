@@ -9,20 +9,29 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
-from PySide6.QtCore import QPoint, QRect, QRectF, Qt, Signal
+from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, Qt, Signal
 from PySide6.QtGui import QColor, QCursor, QFont, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QSizePolicy, QToolTip, QWidget
 
 from ..core import state as st
 from ..core.format import rounded, dps as fmt_dps, trim
-from . import icons, theme, widgets as W
+from . import icons, motion, theme, widgets as W
 from .session import Session
 from .widgets import button, hbox, label, vbox
 
-LABEL_W = 132
-ROW_PAD = 10
-LANE_H = 22
-RULER_H = 26
+# 几何全部对齐 HTML 的 .timeline-* 规则（style2.css 最终层叠结果）
+LABEL_W = 150            # grid-template-columns: 150px minmax(0,1fr)
+RULER_H = 38             # .timeline-ruler-row { min-height: 38px }
+LANE_H = 26              # .timeline-lane { height: 26px }
+LANE_GAP = 4             # .timeline-lane + .timeline-lane { margin-top: 4px }
+LANES_PAD = 8            # .timeline-lanes { padding: 8px 0 }
+ROW_MIN_H = 46           # 标签列 10px 内边距 + 26px 徽标
+BOARD_RADIUS = 18        # .timeline-board { border-radius: 18px }
+GRID_LINE = "#eceff4"    # .timeline-lane 竖向网格
+LANE_MID = "#f1f4f9"     # .timeline-lane::before
+TICK_COLOR = "#cdd3db"   # .timeline-tick i
+ROW_HOVER = "#fafbfd"    # .timeline-character-row:hover
+CAP_FILL = "#fbfbfd"     # .tl-cap / .timeline-instant 内部填色
 
 
 @dataclass
@@ -47,9 +56,13 @@ class TimelineGraph(QWidget):
         super().__init__(parent)
         self.s = session
         self.setMouseTracking(True)
+        self.setAttribute(Qt.WidgetAttribute.WA_Hover, True)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self._rows: List[Tuple[Dict[str, Any], List[Block], int]] = []
         self._hit: List[Tuple[QRect, Block]] = []
+        self._row_rects: List[QRect] = []
+        self._hover_row = -1
+        self._row_t: Dict[int, motion.Tween] = {}
         self._ticks = 5
 
     # ------------------------------------------------------------------ 数据
@@ -98,114 +111,160 @@ class TimelineGraph(QWidget):
             self._rows.append((c, blocks, max(1, len(lane_ends))))
 
         self._ticks = max(4, min(8, round(rot / 4)))
-        h = RULER_H + 8
+        self._hover_row = -1
+        self._row_t.clear()
+        h = RULER_H
         for _c, _b, lanes in self._rows:
-            h += lanes * LANE_H + ROW_PAD * 2
-        self.setMinimumHeight(max(120, h + 8))
+            h += self._row_height(lanes)
+        self.setMinimumHeight(max(120, h + 2))
         self.updateGeometry()
         self.update()
+
+    @staticmethod
+    def _row_height(lanes: int) -> int:
+        return max(ROW_MIN_H, LANES_PAD * 2 + lanes * LANE_H + (lanes - 1) * LANE_GAP)
+
+    def _row_progress(self, index: int) -> float:
+        t = self._row_t.get(index)
+        return t.value if t is not None else 0.0
 
     # ------------------------------------------------------------------ 绘制
 
     def paintEvent(self, _ev) -> None:
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-        p.setFont(theme.ui_font(8.5))
         self._hit = []
+        self._row_rects = []
 
         rot = self.s.rotation
-        track_x = LABEL_W
-        track_w = max(40, self.width() - LABEL_W - 4)
+        board = QRectF(self.rect()).adjusted(0.5, 0.5, -0.5, -0.5)
 
+        # ---- 空态：.timeline-empty-state（浅灰圆角块，无边框）
         if not self._rows:
-            p.setPen(QColor(theme.MUTED_SOFT))
+            p.setPen(Qt.PenStyle.NoPen)
+            p.setBrush(QColor(theme.SURFACE_SUBTLE))
+            p.drawRoundedRect(board, BOARD_RADIUS, BOARD_RADIUS)
+            p.setPen(QColor(theme.MUTED))
+            p.setFont(theme.ui_font(9))
             p.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, "暂无启用且可结算的伤害来源。")
             p.end()
             return
 
-        # 刻度尺
-        y = 4
+        # ---- 板面：白底 + 1px 边框 + 18px 圆角，内容按圆角裁剪
+        path = QPainterPath()
+        path.addRoundedRect(board, BOARD_RADIUS, BOARD_RADIUS)
+        p.save()
+        p.setClipPath(path)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QColor(theme.SURFACE))
+        p.drawPath(path)
+
+        track_x = LABEL_W
+        track_w = max(40.0, board.width() - LABEL_W)
+        step = track_w / self._ticks
+
+        # ---- 刻度行
+        p.setBrush(QColor(theme.SURFACE_SUBTLE))
+        p.drawRect(QRectF(0, 0, board.right(), RULER_H))
         p.setPen(QColor(theme.MUTED))
-        p.drawText(QRect(0, y, LABEL_W - 12, RULER_H),
-                   Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, "队伍轨迹")
-        for i in range(self._ticks + 1):
-            x = track_x + track_w * i / self._ticks
-            p.setPen(QPen(QColor(theme.BORDER), 1))
-            p.drawLine(int(x), y + RULER_H - 9, int(x), y + RULER_H - 3)
-            p.setPen(QColor(theme.MUTED_SOFT))
-            secs = rot * i / self._ticks
-            if i == 0:                       # 首个刻度靠左，避免压住「队伍轨迹」
-                rect, align = QRect(int(x), y, 44, 12), Qt.AlignmentFlag.AlignLeft
-            elif i == self._ticks:           # 末个刻度靠右，避免超出画布
-                rect, align = QRect(int(x) - 44, y, 44, 12), Qt.AlignmentFlag.AlignRight
-            else:
-                rect, align = QRect(int(x) - 22, y, 44, 12), Qt.AlignmentFlag.AlignHCenter
-            p.drawText(rect, align | Qt.AlignmentFlag.AlignVCenter, f"{trim(secs)}s")
-        y += RULER_H
+        f = theme.ui_font(7.5, QFont.Weight.Bold)
+        f.setLetterSpacing(QFont.SpacingType.PercentageSpacing, 106)
+        p.setFont(f)
+        p.drawText(QRectF(16, 0, LABEL_W - 24, RULER_H),
+                   int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter), "队伍轨迹")
+        # 竖线只画 6px 短标记，首尾不画（与 :first-child / :last-child i{display:none} 一致）
+        p.setPen(QPen(QColor(TICK_COLOR), 1))
+        for i in range(1, self._ticks):
+            x = round(track_x + step * i) + 0.5
+            p.drawLine(QPointF(x, RULER_H / 2 - 3), QPointF(x, RULER_H / 2 + 3))
+        p.setPen(QPen(QColor(theme.BORDER), 1))
+        p.drawLine(QPointF(0, RULER_H - 0.5), QPointF(board.right(), RULER_H - 0.5))
 
-        for c, blocks, lanes in self._rows:
-            row_h = lanes * LANE_H + ROW_PAD * 2
-            p.setPen(Qt.PenStyle.NoPen)
-            p.setBrush(QColor(theme.SURFACE_SUBTLE))
-            p.drawRoundedRect(QRectF(0, y + 2, self.width(), row_h - 4), 12, 12)
+        y = float(RULER_H)
+        for index, (c, blocks, lanes) in enumerate(self._rows):
+            row_h = self._row_height(lanes)
+            row_rect = QRectF(0, y, board.right(), row_h)
+            self._row_rects.append(row_rect.toRect())
 
-            # 角色标签
-            badge = icons.element_badge(c.get("element", "pyro"), 24)
-            p.drawPixmap(12, int(y + row_h / 2 - 12), badge)
+            hover = self._row_progress(index)
+            if hover > 0.001:
+                p.setPen(Qt.PenStyle.NoPen)
+                p.setBrush(motion.mix_color(theme.SURFACE, ROW_HOVER, hover))
+                p.drawRect(row_rect)
+
+            # 标签列
+            pm = icons.element_pixmap(c.get("element", "pyro"), 17)
+            p.drawPixmap(QPointF(14 + (26 - 17) / 2, y + row_h / 2 - 8.5), pm)
+            tx = 14 + 26 + 9
             p.setPen(QColor(theme.TEXT))
-            f = theme.ui_font(9, QFont.Weight.DemiBold)
-            p.setFont(f)
-            p.drawText(QRect(44, int(y + row_h / 2 - 15), LABEL_W - 52, 15),
-                       Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            p.setFont(theme.ui_font(9, QFont.Weight.DemiBold))
+            p.drawText(QRectF(tx, y + row_h / 2 - 15, LABEL_W - tx - 12, 15),
+                       int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom),
                        str(c.get("name", "")))
-            p.setFont(theme.ui_font(8))
-            p.setPen(QColor(theme.MUTED_SOFT))
+            p.setFont(theme.ui_font(7.5))
+            p.setPen(QColor("#9aa1ab"))
             n_src = len({b.src_id for b in blocks})
-            p.drawText(QRect(44, int(y + row_h / 2), LABEL_W - 52, 14),
-                       Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            p.drawText(QRectF(tx, y + row_h / 2 + 1, LABEL_W - tx - 12, 14),
+                       int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop),
                        f"{n_src} 个来源 · {lanes} 轨")
+            p.setPen(QPen(QColor(theme.BORDER), 1))
+            p.drawLine(QPointF(LABEL_W - 0.5, y), QPointF(LABEL_W - 0.5, y + row_h))
 
-            # 网格
-            p.setPen(QPen(QColor(theme.BORDER), 1, Qt.PenStyle.DotLine))
-            for i in range(1, self._ticks):
-                x = track_x + track_w * i / self._ticks
-                p.drawLine(int(x), int(y + 6), int(x), int(y + row_h - 6))
+            # 轨道区
+            lanes_top = y + (row_h - (lanes * LANE_H + (lanes - 1) * LANE_GAP)) / 2
+            for lane in range(lanes):
+                ly = lanes_top + lane * (LANE_H + LANE_GAP)
+                # 竖向网格（每个刻度一条 1px 线）
+                p.setPen(QPen(QColor(GRID_LINE), 1))
+                for i in range(self._ticks):
+                    x = round(track_x + step * i) + 0.5
+                    p.drawLine(QPointF(x, ly), QPointF(x, ly + LANE_H))
+                # 轨道中线 2px
+                p.setPen(Qt.PenStyle.NoPen)
+                p.setBrush(QColor(LANE_MID))
+                p.drawRoundedRect(QRectF(track_x, ly + LANE_H / 2 - 1, track_w, 2), 1, 1)
 
             for b in blocks:
-                lane_y = y + ROW_PAD + b.lane * LANE_H
+                ly = lanes_top + b.lane * (LANE_H + LANE_GAP)
+                cy = ly + LANE_H / 2
                 x0 = track_x + track_w * (b.start / rot)
                 x1 = track_x + track_w * (b.end / rot)
                 color = QColor(b.color)
                 if b.instant:
-                    r = 5
-                    rect = QRect(int(x0 - r), int(lane_y + LANE_H / 2 - r), r * 2, r * 2)
-                    p.setPen(QPen(QColor("#ffffff"), 1.6))
-                    p.setBrush(color)
-                    p.drawEllipse(rect)
-                    self._hit.append((rect.adjusted(-4, -4, 4, 4), b))
+                    # .timeline-instant：16px 圆环，2.5px 描边，圆心对齐时间点
+                    p.setPen(QPen(color, 2.5))
+                    p.setBrush(QColor(CAP_FILL))
+                    p.drawEllipse(QPointF(x0, cy), 6.75, 6.75)
+                    self._hit.append((QRect(int(x0 - 10), int(cy - 10), 20, 20), b))
                 else:
-                    w = max(4.0, x1 - x0)
-                    rect = QRectF(x0, lane_y + LANE_H / 2 - 5, w, 10)
+                    w = max(8.0, x1 - x0)
+                    # .tl-line：4px 色条；dynamic 为白底 + 1px 内描边
                     p.setPen(Qt.PenStyle.NoPen)
                     if b.mode == "uniform_snapshot":
-                        fill = QColor(color)
-                        fill.setAlpha(210)
-                        p.setBrush(fill)
-                        p.drawRoundedRect(rect, 5, 5)
+                        p.setBrush(color)
+                        p.drawRoundedRect(QRectF(x0, cy - 2, w, 4), 2, 2)
                     else:
-                        fill = QColor(color)
-                        fill.setAlpha(110)
-                        p.setBrush(fill)
-                        p.drawRoundedRect(rect, 5, 5)
-                        p.setPen(QPen(color, 1.4))
+                        p.setBrush(QColor("#ffffff"))
+                        p.drawRoundedRect(QRectF(x0, cy - 2, w, 4), 2, 2)
+                        p.setPen(QPen(color, 1))
                         p.setBrush(Qt.BrushStyle.NoBrush)
-                        p.drawRoundedRect(rect.adjusted(0.7, 0.7, -0.7, -0.7), 5, 5)
-                    p.setPen(Qt.PenStyle.NoPen)
-                    p.setBrush(color)
-                    p.drawEllipse(QRectF(rect.left() - 1.5, rect.center().y() - 3.5, 7, 7))
-                    p.drawEllipse(QRectF(rect.right() - 5.5, rect.center().y() - 3.5, 7, 7))
-                    self._hit.append((rect.toRect().adjusted(-2, -6, 2, 6), b))
+                        p.drawRoundedRect(QRectF(x0 + 0.5, cy - 1.5, w - 1, 3), 1.5, 1.5)
+                    # .tl-cap：两端 12px 圆帽，2px 描边
+                    p.setPen(QPen(color, 2))
+                    p.setBrush(QColor(CAP_FILL))
+                    p.drawEllipse(QPointF(x0, cy), 5, 5)
+                    p.drawEllipse(QPointF(x0 + w, cy), 5, 5)
+                    self._hit.append((QRect(int(x0 - 6), int(cy - 8), int(w + 12), 16), b))
+
             y += row_h
+            if index < len(self._rows) - 1:
+                p.setPen(QPen(QColor(theme.BORDER), 1))
+                p.drawLine(QPointF(0, y - 0.5), QPointF(board.right(), y - 0.5))
+
+        p.restore()
+        p.setPen(QPen(QColor(theme.BORDER), 1))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawPath(path)
         p.end()
 
     # ------------------------------------------------------------------ 交互
@@ -216,14 +275,34 @@ class TimelineGraph(QWidget):
                 return b
         return None
 
+    def _set_hover_row(self, index: int) -> None:
+        if index == self._hover_row:
+            return
+        for i in (self._hover_row, index):
+            if i < 0:
+                continue
+            t = self._row_t.get(i)
+            if t is None:
+                t = motion.Tween(self, lambda _v: self.update(), motion.CONTROL)
+                self._row_t[i] = t
+            t.to(1.0 if i == index else 0.0)
+        self._hover_row = index
+
     def mouseMoveEvent(self, ev) -> None:
-        b = self._block_at(ev.position().toPoint())
+        pos = ev.position().toPoint()
+        b = self._block_at(pos)
+        row = next((i for i, r in enumerate(self._row_rects) if r.contains(pos)), -1)
+        self._set_hover_row(row)
         if b:
             QToolTip.showText(ev.globalPosition().toPoint(), b.title, self)
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         else:
             QToolTip.hideText()
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+
+    def leaveEvent(self, ev) -> None:
+        self._set_hover_row(-1)
+        super().leaveEvent(ev)
 
     def mousePressEvent(self, ev) -> None:
         b = self._block_at(ev.position().toPoint())
@@ -276,7 +355,9 @@ class TimelinePanel(QWidget):
         for w in (self.stat_rot, self.stat_total, self.stat_dps):
             bl.addWidget(w)
         bl.addStretch(1)
-        bl.addWidget(button("轴长设置", "settings-2", "", bar, self.openSettings.emit))
+        settings_btn = button("轴长设置", "settings-2", "", bar, self.openSettings.emit)
+        settings_btn.setMinimumHeight(34)          # .timeline-settings-btn
+        bl.addWidget(settings_btn, 0, Qt.AlignmentFlag.AlignVCenter)
         cl.addWidget(bar)
 
         self.graph = TimelineGraph(session, self.container)
@@ -288,12 +369,20 @@ class TimelinePanel(QWidget):
         self.refresh()
 
     def _stat(self, name: str, value: str, accent: bool = False) -> QWidget:
-        w = W.SoftCard(padding=10, spacing=2)
-        w.setMinimumWidth(112)
-        w.add(label(name, "Muted"))
+        """对应 HTML 的 .timeline-stat（96px 起宽、8/14 内边距、14px 圆角）。"""
+        w = W.SoftCard(padding=0, spacing=2)
+        w.body.setContentsMargins(14, 8, 14, 8)
+        w.setMinimumWidth(96)
+        w.setStyleSheet(
+            f"QFrame#SoftCard {{ background:{theme.BLUE_TINT if accent else theme.SURFACE_SUBTLE};"
+            f"border:1px solid transparent; border-radius:14px; }}")
+        cap = label(name)
+        cap.setStyleSheet(f"color:{'#5581ce' if accent else theme.MUTED};"
+                          "font-size:10px;font-weight:600;background:transparent;")
+        w.add(cap)
         v = label(value)
         v.setStyleSheet(f"color:{theme.BLUE if accent else theme.TEXT};"
-                        f"font-size:14px;font-weight:700;")
+                        "font-size:15px;font-weight:700;background:transparent;")
         w.add(v)
         setattr(w, "value_label", v)
         return w

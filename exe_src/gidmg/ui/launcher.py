@@ -20,7 +20,7 @@ from . import icons, theme, widgets as W
 from .widgets import button, chip, clear_layout, hbox, icon_button, label, vbox
 
 
-class ConfigCard(QFrame):
+class ConfigCard(W.HoverCard):
     """配置列表里的一行。"""
 
     opened = Signal(str)
@@ -30,17 +30,11 @@ class ConfigCard(QFrame):
     exported = Signal(str)
 
     def __init__(self, meta: ConfigMeta, parent: Optional[QWidget] = None):
-        super().__init__(parent)
+        super().__init__(parent, bg=theme.SURFACE, border=theme.BORDER,
+                         hover_bg="#fbfcfe", hover_border=theme.BLUE_BORDER, radius=16)
         self.meta = meta
         self.setObjectName("ConfigCard")
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.setStyleSheet(f"""
-            QFrame#ConfigCard {{
-                background: {theme.SURFACE}; border: 1px solid {theme.BORDER};
-                border-radius: 16px;
-            }}
-            QFrame#ConfigCard:hover {{ border-color: {theme.BLUE_BORDER}; background: #fbfcfe; }}
-        """)
         lay = hbox(self, (16, 13, 12, 13), 12)
 
         badge = QLabel()

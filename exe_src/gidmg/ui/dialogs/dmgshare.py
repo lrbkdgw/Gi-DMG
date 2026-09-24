@@ -5,14 +5,14 @@ from __future__ import annotations
 import math
 from typing import Any, Dict, List, Optional
 
-from PySide6.QtCore import QPoint, QRectF, Qt
-from PySide6.QtGui import QColor, QFont, QPainter, QPen
+from PySide6.QtCore import QRectF, Qt
+from PySide6.QtGui import QColor, QCursor, QFont, QPainter, QPen
 from PySide6.QtWidgets import QLabel, QSizePolicy, QToolTip, QWidget
 
 from ...core import state as st
 from ...core.constants import ELEM_COLOR_MAP, EXTRA_PALETTE
 from ...core.format import dps as fmt_dps, rounded
-from .. import icons, theme, widgets as W
+from .. import icons, motion, theme, widgets as W
 from ..session import Session
 from ..widgets import hbox, label, vbox
 from .base import Modal
@@ -62,6 +62,8 @@ class DonutChart(QWidget):
         self.setFixedSize(size, size)
         self.setMouseTracking(True)
         self._size = size
+        self._hover_idx = -1
+        self._fade: Dict[int, motion.Tween] = {}
 
     def paintEvent(self, _ev) -> None:
         p = QPainter(self)
@@ -76,10 +78,14 @@ class DonutChart(QWidget):
             p.drawEllipse(rect)
         else:
             start = 90 * 16
-            for it in self.items:
+            for idx, it in enumerate(self.items):
                 span = -int(it["dmg"] / self.total * 360 * 16)
                 p.setPen(QPen(QColor("#ffffff"), 2))
-                p.setBrush(QColor(it["color"]))
+                # .pie-slice:hover { opacity: .85 }，按 .15s 过渡
+                color = QColor(it["color"])
+                t = self._fade[idx].value if idx in self._fade else 0.0
+                color.setAlphaF(1.0 - 0.15 * t)
+                p.setBrush(color)
                 p.drawPie(rect, start, span)
                 start += span
 
@@ -98,25 +104,48 @@ class DonutChart(QWidget):
                    Qt.AlignmentFlag.AlignCenter, rounded(self.total))
         p.end()
 
+    def _set_hover(self, idx: int) -> None:
+        if idx == self._hover_idx:
+            return
+        for i in (self._hover_idx, idx):
+            if i < 0:
+                continue
+            t = self._fade.get(i)
+            if t is None:
+                t = motion.Tween(self, lambda _v: self.update(), motion.CONTROL)
+                self._fade[i] = t
+            t.to(1.0 if i == idx else 0.0)
+        self._hover_idx = idx
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor if idx >= 0
+                               else Qt.CursorShape.ArrowCursor))
+
     def mouseMoveEvent(self, ev) -> None:
         pos = ev.position()
         c = self._size / 2
         dx, dy = pos.x() - c, pos.y() - c
         dist = math.hypot(dx, dy)
         if not self.items or self.total <= 0 or dist > c - 6 or dist < c * 0.42:
+            self._set_hover(-1)
             QToolTip.hideText()
             return
         angle = (math.degrees(math.atan2(-dy, dx)) - 90) % 360
         angle = (360 - angle) % 360
         acc = 0.0
-        for it in self.items:
+        for idx, it in enumerate(self.items):
             share = it["dmg"] / self.total * 360
             if acc <= angle < acc + share:
+                self._set_hover(idx)
                 QToolTip.showText(ev.globalPosition().toPoint(),
                                   f"{it['name']}\n{rounded(it['dmg'])} · {it['pct']:.1f}%", self)
                 return
             acc += share
+        self._set_hover(-1)
         QToolTip.hideText()
+
+    def leaveEvent(self, ev) -> None:
+        self._set_hover(-1)
+        QToolTip.hideText()
+        super().leaveEvent(ev)
 
 
 class ShareBar(QWidget):

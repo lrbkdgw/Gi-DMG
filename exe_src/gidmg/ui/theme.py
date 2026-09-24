@@ -172,8 +172,9 @@ QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox, QPlainTextEdit, QTextEdit {{
     border-radius: {RADIUS_SM}px;
     selection-background-color: {BLUE};
     selection-color: #ffffff;
-    font-size: 12px;
+    font-size: 11.5px;
 }}
+QLineEdit {{ placeholder-text-color: #8a94a2; }}
 QPlainTextEdit, QTextEdit {{ padding: 8px 10px; }}
 QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover, QComboBox:hover {{
     background: #edf1f7; border-color: #d4d9e1;
@@ -197,83 +198,80 @@ QComboBox QAbstractItemView {{
     border: 1px solid {BORDER};
     border-radius: {RADIUS_SM}px;
     padding: 4px;
+    margin: 0px;
     outline: none;
     selection-background-color: {BLUE_TINT};
     selection-color: {BLUE};
 }}
-QComboBox QAbstractItemView::item {{ min-height: 26px; padding: 3px 8px; border-radius: 7px; }}
+QComboBox QAbstractItemView::item {{ min-height: 30px; padding: 6px 8px; border-radius: 8px; font-size: 11px; }}
 
 /* ------------------------------------------------ 按钮 */
+/* 颜色过渡由 widgets.MotionButton 自绘完成（对应 CSS transition），
+   这里只声明几何与字体，尺寸取自 HTML 最终层叠结果。 */
 QPushButton {{
-    min-height: {CONTROL_H}px;
-    padding: 0 14px;
-    color: #3d4652;
-    background: {SURFACE_SUBTLE};
+    min-height: 30px;
+    padding: 0 12px;
+    color: #4f5a67;
+    background: transparent;
     border: 1px solid {BORDER};
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 500;
 }}
-QPushButton:hover {{ background: {SURFACE_HOVER}; color: {TEXT}; }}
-QPushButton:pressed {{ background: #dfe4ec; }}
-QPushButton:disabled {{ color: #aab1bb; background: #f2f4f7; border-color: {BORDER_SOFT}; }}
 
-QPushButton#Primary {{ color: #ffffff; background: {BLUE}; border-color: {BLUE}; font-weight: 600; }}
-QPushButton#Primary:hover {{ background: {BLUE_HOVER}; border-color: {BLUE_HOVER}; }}
-QPushButton#Primary:pressed {{ background: #06316f; }}
-QPushButton#Primary:disabled {{ color: #eef1f5; background: #9db7e4; border-color: #9db7e4; }}
+QPushButton#Primary {{
+    min-height: 32px; padding: 0 13px; color: #ffffff;
+    background: {BLUE}; border-color: {BLUE}; font-size: 11.5px; font-weight: 600;
+}}
 
-QPushButton#Tonal {{ color: {BLUE}; background: {BLUE_TINT}; border-color: {BLUE_BORDER}; font-weight: 600; }}
-QPushButton#Tonal:hover {{ background: {BLUE_TINT_HOVER}; }}
+QPushButton#Tonal {{
+    min-height: 32px; padding: 0 13px; color: {BLUE};
+    background: {BLUE_TINT}; border-color: {BLUE_BORDER}; font-size: 11.5px; font-weight: 600;
+}}
 
-QPushButton#DangerBtn {{ color: {DANGER}; background: {DANGER_TINT}; border-color: #f7cfcb; font-weight: 600; }}
-QPushButton#DangerBtn:hover {{ background: #f9d6d3; }}
+QPushButton#DangerBtn {{
+    min-height: 30px; padding: 0 12px; color: {DANGER};
+    background: {DANGER_TINT}; border-color: #f7cfcb; font-size: 11.5px; font-weight: 600;
+}}
 
-QPushButton#Ghost {{ color: {MUTED}; background: transparent; border-color: transparent; }}
-QPushButton#Ghost:hover {{ color: {TEXT}; background: {SURFACE_SUBTLE}; }}
+QPushButton#Ghost {{
+    min-height: 30px; padding: 0 9px; color: #647080;
+    background: transparent; border-color: transparent; font-size: 11px;
+}}
 
 QPushButton#Link {{
-    min-height: 18px; padding: 0 2px; color: {BLUE}; background: transparent;
+    min-height: 18px; padding: 0 3px; color: {BLUE}; background: transparent;
     border: none; font-size: 11px; font-weight: 700;
 }}
-QPushButton#Link:hover {{ color: {BLUE_HOVER}; }}
 
 QPushButton#Chip {{
     min-height: 24px; padding: 0 10px; color: #4f5966; background: {SURFACE_SUBTLE};
     border: 1px solid transparent; border-radius: 999px; font-size: 10.5px; font-weight: 500;
 }}
-QPushButton#Chip:hover {{ color: {BLUE}; background: {BLUE_TINT}; }}
-QPushButton#Chip:checked {{ color: {BLUE}; background: {BLUE_TINT}; border-color: {BLUE_BORDER}; font-weight: 600; }}
 
 QPushButton#IconBtn {{
     min-width: 30px; max-width: 30px; min-height: 30px; max-height: 30px;
     padding: 0; background: transparent; border: 1px solid transparent; border-radius: 15px;
 }}
-QPushButton#IconBtn:hover {{ background: {SURFACE_SUBTLE}; }}
-QPushButton#IconBtn:pressed {{ background: {SURFACE_HOVER}; }}
-QPushButton#IconBtn:checked {{ background: {BLUE_TINT}; }}
 
 QPushButton#AddBtn {{
     min-width: 30px; max-width: 30px; min-height: 30px; max-height: 30px; padding: 0;
     background: {BLUE_TINT}; border: 1px solid {BLUE_BORDER}; border-radius: 15px;
 }}
-QPushButton#AddBtn:hover {{ background: {BLUE_TINT_HOVER}; }}
 
 QPushButton#NavEntry {{
-    min-height: 38px; padding: 0 10px; color: #4f5966; background: transparent;
-    border: 1px solid transparent; border-radius: {RADIUS_SM}px;
-    font-size: 12.5px; font-weight: 600; text-align: left;
+    min-height: 38px; padding: 0 12px; color: #4f5966; background: transparent;
+    border: 1px solid transparent; border-radius: 19px;
+    font-size: 12.5px; font-weight: 500; text-align: left;
 }}
-QPushButton#NavEntry:hover {{ background: {SURFACE_SUBTLE}; color: {TEXT}; }}
-QPushButton#NavEntry:checked {{ background: {BLUE_TINT}; color: {BLUE}; border-color: {BLUE_BORDER}; }}
 
 /* ------------------------------------------------ 滚动条 */
 QScrollArea, QScrollArea > QWidget > QWidget {{ background: transparent; border: none; }}
-QScrollBar:vertical {{ width: 8px; background: transparent; margin: 2px; }}
-QScrollBar::handle:vertical {{ background: {SCROLL}; border-radius: 4px; min-height: 28px; }}
+QScrollBar:vertical {{ width: 6px; background: transparent; margin: 2px; }}
+QScrollBar::handle:vertical {{ background: {SCROLL}; border-radius: 3px; min-height: 28px; }}
 QScrollBar::handle:vertical:hover {{ background: {SCROLL_HOVER}; }}
-QScrollBar:horizontal {{ height: 8px; background: transparent; margin: 2px; }}
-QScrollBar::handle:horizontal {{ background: {SCROLL}; border-radius: 4px; min-width: 28px; }}
+QScrollBar:horizontal {{ height: 6px; background: transparent; margin: 2px; }}
+QScrollBar::handle:horizontal {{ background: {SCROLL}; border-radius: 3px; min-width: 28px; }}
 QScrollBar::handle:horizontal:hover {{ background: {SCROLL_HOVER}; }}
 QScrollBar::add-line, QScrollBar::sub-line {{ width: 0; height: 0; border: none; background: none; }}
 QScrollBar::add-page, QScrollBar::sub-page {{ background: none; }}
@@ -315,14 +313,17 @@ QProgressBar {{
 QProgressBar::chunk {{ background: {BLUE}; border-radius: 4px; }}
 
 QMenu {{
-    background: {SURFACE}; border: 1px solid {BORDER}; border-radius: {RADIUS_SM}px; padding: 6px;
+    background: {SURFACE}; border: 1px solid {BORDER}; border-radius: 12px; padding: 6px;
 }}
-QMenu::item {{ padding: 7px 14px 7px 12px; border-radius: 7px; font-size: 12px; color: #3d4652; }}
-QMenu::item:selected {{ background: {SURFACE_SUBTLE}; color: {TEXT}; }}
+QMenu::item {{ padding: 8px 14px 8px 9px; border-radius: 9px; font-size: 11.5px; color: #43474e; }}
+QMenu::item:selected {{ background: {BLUE_TINT}; color: {BLUE}; }}
 QMenu::separator {{ height: 1px; background: {BORDER}; margin: 5px 6px; }}
 
 QSplitter::handle {{ background: {BORDER}; }}
 QSplitter::handle:horizontal {{ width: 1px; }}
 
 QDialog {{ background: {SURFACE}; }}
+/* 自绘的无边框弹窗（dialogs.base.Modal）：窗体透明，卡片自己画圆角与阴影 */
+QDialog#Modal {{ background: transparent; }}
+QFrame#ModalCard {{ background: {SURFACE}; border: none; border-radius: {RADIUS_CARD}px; }}
 """

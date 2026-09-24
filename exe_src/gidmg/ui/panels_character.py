@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, List, Optional
 
 from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtWidgets import (QFrame, QGridLayout, QLabel, QMenu, QSizePolicy, QSlider,
+from PySide6.QtWidgets import (QFrame, QGridLayout, QLabel, QMenu, QSizePolicy,
                                QWidget)
 
 from ..core import state as st
@@ -91,7 +91,7 @@ class DmgSourceCard(QFrame):
         self.name = W.TextField(str(d.get("name", "")))
         self.name.textEdited.connect(self._on_name)
         head.addWidget(self.name, 1)
-        self.toggle = W.ToggleSwitch(bool(d.get("on")), scale=0.85)
+        self.toggle = W.ToggleSwitch(bool(d.get("on")))
         self.toggle.toggled.connect(self._on_toggle)
         head.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignVCenter)
         if not locked:
@@ -184,15 +184,9 @@ class DmgSourceCard(QFrame):
         head.addWidget(badge)
         box.add_layout(head)
 
-        sl = QSlider(Qt.Orientation.Horizontal)
+        sl = W.Slider(Qt.Orientation.Horizontal)
         sl.setRange(0, 12)
         sl.setValue(stacks)
-        sl.setStyleSheet(f"""
-            QSlider::groove:horizontal {{ height:4px; background:{theme.BORDER}; border-radius:2px; }}
-            QSlider::sub-page:horizontal {{ background:{theme.BLUE}; border-radius:2px; }}
-            QSlider::handle:horizontal {{ width:14px; height:14px; margin:-5px 0;
-                background:{theme.BLUE}; border:2px solid #fff; border-radius:7px; }}
-        """)
 
         def on_move(v: int) -> None:
             badge.setText(f"{v} 层 · {star_coeff_from_stacks(v):.2f}")
@@ -307,7 +301,7 @@ class TalentCard(QFrame):
         self.name = W.TextField(str(t.get("name", "")))
         self.name.textEdited.connect(self._on_name)
         head.addWidget(self.name, 1)
-        self.toggle = W.ToggleSwitch(bool(t.get("on")), scale=0.85)
+        self.toggle = W.ToggleSwitch(bool(t.get("on")))
         self.toggle.toggled.connect(self._on_toggle)
         head.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignVCenter)
         head.addWidget(icon_button("trash-2", "删除该天赋", self,

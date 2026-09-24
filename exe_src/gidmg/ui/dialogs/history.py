@@ -69,10 +69,8 @@ class HistoryDialog(Modal):
         return lb
 
     def _row_frame(self) -> QFrame:
-        f = QFrame()
-        f.setStyleSheet(f"QFrame {{ background:{theme.SURFACE_SUBTLE}; border:1px solid transparent;"
-                        f"border-radius:12px; }} QFrame:hover {{ border-color:{theme.BLUE_BORDER}; }}")
-        return f
+        return W.HoverCard(bg=theme.SURFACE_SUBTLE, border="transparent",
+                           hover_border=theme.BLUE_BORDER, radius=12)
 
     def _cfg_row(self, rec: Dict[str, Any]) -> QFrame:
         f = self._row_frame()

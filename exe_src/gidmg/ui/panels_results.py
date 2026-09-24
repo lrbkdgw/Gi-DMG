@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtGui import QCursor
+from PySide6.QtCore import QRectF, QSize, Qt, Signal
+from PySide6.QtGui import QColor, QCursor, QPainter, QPen
 from PySide6.QtWidgets import QFrame, QInputDialog, QLabel, QSizePolicy, QWidget
 
 from ..core import state as st
 from ..core.constants import EL_BY_ID
 from ..core.format import rounded, dps as fmt_dps
-from . import icons, theme, widgets as W
+from . import icons, motion, theme, widgets as W
 from .session import Session
 from .widgets import button, clear_layout, hbox, icon_button, label, vbox
 
@@ -33,11 +33,8 @@ class ResultRow(QFrame):
         self.source_id = r.get("sourceId", "")
         self.setObjectName("ResRow")
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.setStyleSheet(f"""
-            QFrame#ResRow {{ background:{theme.SURFACE_SUBTLE}; border:1px solid transparent;
-                             border-radius:14px; }}
-            QFrame#ResRow:hover {{ background:{theme.BLUE_TINT}; border-color:{theme.BLUE_BORDER}; }}
-        """)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, False)
+        self._hover = motion.HoverTracker(self, motion.CONTROL)
         lay = vbox(self, (10, 9, 10, 9), 4)
 
         head = hbox(spacing=5)
@@ -100,6 +97,19 @@ class ResultRow(QFrame):
         d.setStyleSheet(f"color:{theme.MUTED_SOFT};font-size:10.5px;")
         lay.addWidget(d)
 
+    def paintEvent(self, _ev) -> None:
+        # #resList .sc：浅灰卡片、14px 圆角；悬停时渐变到蓝色浅底
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        t = self._hover.hover
+        bg = motion.mix_color(theme.SURFACE_SUBTLE, theme.BLUE_TINT, t)
+        border = motion.mix_color(QColor(0, 0, 0, 0), theme.BLUE_BORDER, t)
+        rect = QRectF(self.rect()).adjusted(0.5, 0.5, -0.5, -0.5)
+        p.setPen(Qt.PenStyle.NoPen if border.alpha() == 0 else QPen(border, 1))
+        p.setBrush(bg)
+        p.drawRoundedRect(rect, theme.RADIUS_MD, theme.RADIUS_MD)
+        p.end()
+
     def mousePressEvent(self, ev) -> None:
         if ev.button() == Qt.MouseButton.LeftButton:
             self.inspect.emit(self.source_id)
@@ -150,6 +160,7 @@ class ResultsPanel(QWidget):
         mr.addWidget(label("基准对比模式", "Muted"), 1)
         self.mode_btn = button("当前 vs 基准", "", "", self.mode_row, self._flip_mode)
         self.mode_btn.setStyleSheet("font-size:11px;padding:0 10px;min-height:26px;")
+        self.mode_btn.set_skin(bg=theme.SURFACE)
         mr.addWidget(self.mode_btn)
         card.add(self.mode_row)
 
@@ -237,8 +248,8 @@ class ResultsPanel(QWidget):
 
             name_btn = button(str(b.get("name", "基准")), "", "Link", row,
                               lambda bid=b["id"]: self.viewBaseline.emit(bid))
-            name_btn.setStyleSheet(f"color:{theme.TEXT};font-size:11.5px;font-weight:600;"
-                                   "background:transparent;border:none;text-align:left;")
+            name_btn.setStyleSheet("font-size:11.5px;font-weight:600;")
+            name_btn.set_skin(fg=theme.TEXT, hover_fg=theme.BLUE)
             rl.addWidget(name_btn)
             rl.addWidget(label(f"({rounded(val)})", "Muted"))
             rl.addStretch(1)

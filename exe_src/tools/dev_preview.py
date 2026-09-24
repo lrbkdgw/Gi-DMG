@@ -21,7 +21,8 @@ sys.path.insert(0, str(ROOT))
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("GIDMG_DATA_DIR", tempfile.mkdtemp(prefix="gidmg-preview-"))
 
-from PySide6.QtCore import QCoreApplication, Qt, QTimer  # noqa: E402
+from PySide6.QtCore import QCoreApplication, QElapsedTimer, Qt, QTimer  # noqa: E402
+from PySide6.QtCore import QEventLoop  # noqa: E402
 from PySide6.QtGui import QFontDatabase  # noqa: E402
 from PySide6.QtWidgets import QApplication, QWidget  # noqa: E402
 
@@ -87,13 +88,19 @@ def _demo_state() -> dict:
     return s
 
 
+def settle(ms: int = 420) -> None:
+    """把界面动画跑完再截图，避免拍到补间中间帧。"""
+    timer = QElapsedTimer()
+    timer.start()
+    while timer.elapsed() < ms:
+        QApplication.processEvents(QEventLoop.ProcessEventsFlag.AllEvents, 16)
+
+
 def grab(widget: QWidget, path: Path, size=None) -> None:
     if size:
         widget.resize(*size)
     widget.show()
-    QApplication.processEvents()
-    for _ in range(3):
-        QApplication.processEvents()
+    settle()
     widget.grab().save(str(path))
     print(f"  · {path.name}  ({widget.width()}×{widget.height()})")
 

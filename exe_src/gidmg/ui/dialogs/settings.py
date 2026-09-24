@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QMessageBox, QWidget
 
 from ...version import VERSION
 from .. import theme, widgets as W
@@ -85,6 +85,20 @@ class SettingsDialog(Modal):
         box5.add(label("全局设置、武器库、圣遗物库与所有配置都自动保存在这里。", "Muted", wrap=True))
         self.add(box5)
 
+        # -------- 重置配置（HTML 在右上角「更多」菜单里）
+        box6 = W.SoftCard(padding=12, spacing=8)
+        row6 = hbox(spacing=10)
+        col6 = vbox(spacing=2)
+        col6.addWidget(label("重置配置", "FieldLabel"))
+        col6.addWidget(label("清空当前配置里的所有角色与基准值，魔物设置与全局设置会保留。",
+                             "Muted", wrap=True))
+        row6.addLayout(col6, 1)
+        self.reset_btn = W.button("重置配置", "rotate-ccw", "DangerBtn", box6, self._reset,
+                                  icon_color=theme.DANGER)
+        row6.addWidget(self.reset_btn, 0, Qt.AlignmentFlag.AlignVCenter)
+        box6.add_layout(row6)
+        self.add(box6)
+
         self.finish_body()
         self.add_button("完成", "check", "Primary", self.accept)
 
@@ -114,6 +128,19 @@ class SettingsDialog(Modal):
         self.s.state["baselineMode"] = "b" if self.s.state.get("baselineMode", "a") == "a" else "a"
         self.mode_btn.setText(self._mode_text())
         self.s.touch()
+
+    def _reset(self) -> None:
+        # 与 HTML 的 confirm('清空所有配置？') 一致
+        if QMessageBox.question(self, "重置配置", "清空所有配置？",
+                                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                                QMessageBox.StandardButton.No
+                                ) != QMessageBox.StandardButton.Yes:
+            return
+        self.s.reset_config()
+        win = self.parentWidget().window() if self.parentWidget() is not None else None
+        editor = getattr(win, "editor", None)
+        if editor is not None:
+            editor.refresh_sidebar()
 
     def _open_folder(self) -> None:
         from PySide6.QtCore import QUrl

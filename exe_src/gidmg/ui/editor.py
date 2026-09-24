@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtGui import QCursor
+from PySide6.QtCore import QPointF, QRectF, QSize, Qt, Signal
+from PySide6.QtGui import QColor, QCursor, QFont, QFontMetrics, QPainter
 from PySide6.QtWidgets import (QButtonGroup, QFrame, QLabel, QPushButton, QSizePolicy,
                                QStackedWidget, QWidget)
 
 from ..core.constants import EL_BY_ID
-from . import icons, theme, widgets as W
+from . import icons, motion, theme, widgets as W
 from .panels_character import CharacterPanel
 from .panels_monster import MonsterPanel
 from .panels_results import ResultsPanel
@@ -23,45 +23,86 @@ RIGHT_W = 324
 
 
 class CharRow(QFrame):
-    """左侧角色列表的一行。"""
+    """左侧角色列表的一行（对应 HTML 的 .sidebar-character-row）。
+
+    34px 高的胶囊，背景色在 hover / 选中之间补间，元素图标直接透明摆放，
+    名称与状态同一行（HTML 里是 `align-items: baseline` 的两个 span）。
+    """
 
     picked = Signal(str)
     toggled = Signal(str, bool)
     menuRequested = Signal(str)
+
+    NAME_COLOR = "#43474e"
+    STATUS_COLOR = "#9aa1ab"
+    STATUS_ACTIVE = "#5581ce"
 
     def __init__(self, c: Dict[str, Any], active: bool, parent=None):
         super().__init__(parent)
         self.char_id = c["id"]
         self.setObjectName("CharRow")
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        bg = theme.BLUE_TINT if active else "transparent"
-        border = theme.BLUE_BORDER if active else "transparent"
-        self.setStyleSheet(f"""
-            QFrame#CharRow {{ background:{bg}; border:1px solid {border}; border-radius:12px; }}
-            QFrame#CharRow:hover {{ background:{theme.BLUE_TINT if active else theme.SURFACE_SUBTLE}; }}
-        """)
-        lay = hbox(self, (8, 6, 8, 6), 9)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, False)
+        self.setMinimumHeight(34)
+        self._name = str(c.get("name", ""))
+        self._status = "已启用" if c.get("on") else "未计入"
+        self._element = c.get("element", "pyro")
+        self._active = bool(active)
+        self._active_t = motion.Tween(self, lambda _v: self.update(), motion.CONTROL)
+        self._active_t.to(1.0 if active else 0.0, animate=False)
+        self._hover = motion.HoverTracker(self, motion.CONTROL)
 
-        badge = QLabel()
-        badge.setFixedSize(30, 30)
-        badge.setPixmap(icons.element_badge(c.get("element", "pyro"), 30))
-        badge.setStyleSheet("background:transparent;")
-        lay.addWidget(badge, 0, Qt.AlignmentFlag.AlignVCenter)
-
-        col = vbox(spacing=1)
-        name = label(str(c.get("name", "")))
-        name.setStyleSheet(f"color:{theme.TEXT};font-size:12.5px;font-weight:700;"
-                           "background:transparent;")
-        col.addWidget(name)
-        status = label("已启用" if c.get("on") else "未计入")
-        status.setStyleSheet(f"color:{'#5581ce' if active else theme.MUTED};font-size:10.5px;"
-                             "background:transparent;")
-        col.addWidget(status)
-        lay.addLayout(col, 1)
-
-        self.toggle = W.ToggleSwitch(bool(c.get("on")), scale=0.78)
+        lay = hbox(self, (8, 4, 8, 4), 8)
+        lay.addSpacing(24)                       # 元素图标（自绘）占位
+        lay.addStretch(1)
+        self.toggle = W.ToggleSwitch(bool(c.get("on")))
+        self.toggle.setToolTip("停用角色" if c.get("on") else "启用角色")
         self.toggle.toggled.connect(lambda v: self.toggled.emit(self.char_id, v))
         lay.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignVCenter)
+
+    def set_active(self, active: bool) -> None:
+        if active == self._active:
+            return
+        self._active = active
+        self._active_t.to(1.0 if active else 0.0)
+
+    def paintEvent(self, _ev) -> None:
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        rect = QRectF(self.rect())
+        act = self._active_t.value
+        bg = motion.mix_color(QColor(0, 0, 0, 0), theme.SURFACE_SUBTLE, self._hover.hover)
+        bg = motion.mix_color(bg, theme.BLUE_TINT, act)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(bg)
+        p.drawRoundedRect(rect, rect.height() / 2, rect.height() / 2)
+
+        pm = icons.element_pixmap(self._element, 18)
+        p.drawPixmap(QPointF(8 + (24 - 18) / 2, rect.center().y() - 9), pm)
+
+        x = 8 + 24 + 8
+        name_font = QFont(self.font())
+        name_font.setPixelSize(13)
+        status_font = QFont(self.font())
+        status_font.setPixelSize(10)
+        fm_n, fm_s = QFontMetrics(name_font), QFontMetrics(status_font)
+        toggle_w = self.toggle.width() + 8
+        avail = rect.right() - toggle_w - x - fm_s.horizontalAdvance(self._status) - 6
+
+        p.setFont(name_font)
+        p.setPen(motion.mix_color(self.NAME_COLOR, theme.BLUE, act))
+        name = fm_n.elidedText(self._name, Qt.TextElideMode.ElideRight, int(max(16, avail)))
+        p.drawText(QRectF(x, rect.top(), max(16.0, avail), rect.height()),
+                   int(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft), name)
+
+        p.setFont(status_font)
+        p.setPen(motion.mix_color(self.STATUS_COLOR, self.STATUS_ACTIVE, act))
+        sx = x + fm_n.horizontalAdvance(name) + 6
+        p.drawText(QRectF(sx, rect.top(), max(10.0, rect.right() - toggle_w - sx),
+                          rect.height()),
+                   int(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft),
+                   self._status)
+        p.end()
 
     def mousePressEvent(self, ev) -> None:
         if ev.button() == Qt.MouseButton.LeftButton:
@@ -86,6 +127,7 @@ class EditorView(QWidget):
     def __init__(self, session: Session, parent=None):
         super().__init__(parent)
         self.s = session
+        self.workspace = "character"
         self.setObjectName("Canvas")
         root = hbox(self, (0, 0, 0, 0), 0)
 
@@ -159,6 +201,7 @@ class EditorView(QWidget):
         self.panel_timeline.jump.connect(self._jump_to_source)
         for p in (self.panel_character, self.panel_monster, self.panel_timeline):
             self.stack.addWidget(p)
+        self._fader = motion.StackFader(self.stack)     # 换页淡入
         root.addWidget(center, 1)
 
         # ------------------------------------------------ 右栏
@@ -189,12 +232,9 @@ class EditorView(QWidget):
     # ------------------------------------------------------------------ 构件
 
     def _nav(self, icon_name: str, text: str, checkable: bool = True) -> QPushButton:
-        b = QPushButton(f"  {text}")
-        b.setObjectName("NavEntry")
-        b.setIcon(icons.icon(icon_name, 15, "#4f5966", active_color=theme.BLUE))
-        b.setIconSize(QSize(15, 15))
+        b = W.MotionButton(text, "NavEntry")
+        b.set_icon(icon_name, None, 15)       # 图标颜色跟随文字一起过渡
         b.setCheckable(checkable)
-        b.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         return b
 
     def _hline(self) -> QFrame:
@@ -215,9 +255,17 @@ class EditorView(QWidget):
         navs = {"character": (0, self.nav_chars), "monster": (1, self.nav_monster),
                 "timeline": (2, self.nav_timeline)}
         index, nav = navs.get(key, navs["character"])
-        self.stack.setCurrentIndex(index)
+        self.workspace = key if key in navs else "character"
+        self._fader.switch(index)
         nav.setChecked(True)
         self.scroll.verticalScrollBar().setValue(0)
+        # HTML 在魔物 / 时间轴工作区里会把角色行的选中高亮收起
+        self._sync_char_active()
+
+    def _sync_char_active(self) -> None:
+        sel = self.s.state.get("selId")
+        for row in self.char_scroll.inner.findChildren(CharRow):
+            row.set_active(self.workspace == "character" and row.char_id == sel)
 
     def set_quick_table_mode(self, on: bool) -> None:
         self.add_char_btn.setVisible(not on)
@@ -235,7 +283,8 @@ class EditorView(QWidget):
         else:
             sel = self.s.state.get("selId")
             for c in chars:
-                row = CharRow(c, c["id"] == sel, self.char_scroll.inner)
+                active = c["id"] == sel and self.workspace == "character"
+                row = CharRow(c, active, self.char_scroll.inner)
                 row.picked.connect(self._pick_char)
                 row.toggled.connect(self._toggle_char)
                 row.menuRequested.connect(self._char_menu)
@@ -255,11 +304,8 @@ class EditorView(QWidget):
             first = ids[0] if ids else "pyro"
             c.setIcon(icons.element_icon(first, 12))
             c.setIconSize(QSize(12, 12))
-            c.setEnabled(False)
-            c.setStyleSheet(
-                f"QPushButton {{ color:{theme.MUTED}; background:{theme.SURFACE_SUBTLE};"
-                f"border:1px solid transparent; border-radius:999px; padding:2px 8px;"
-                f"font-size:10px; }}")
+            c.set_skin(fg=theme.MUTED, hover_bg=theme.SURFACE_SUBTLE, hover_fg=theme.MUTED)
+            c.set_static(True)
             self.reso_flow.addWidget(c)
 
     def _sync_nav(self) -> None:

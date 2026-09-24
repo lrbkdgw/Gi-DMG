@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import List, Optional, Tuple
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QGridLayout, QSlider, QWidget
+from PySide6.QtWidgets import QGridLayout, QWidget
 
 from ...core.constants import FORMULA_REACTS
 from ...core.engine import level_coeff
@@ -98,7 +98,7 @@ class FormulaDialog(Modal):
         head.addWidget(self.lv_badge)
         card.add_layout(head)
 
-        self.slider = QSlider(Qt.Orientation.Horizontal)
+        self.slider = W.Slider(Qt.Orientation.Horizontal)
         self.slider.setRange(1, 100)
         self.slider.setValue(90)
         self.slider.valueChanged.connect(self._update_lv)

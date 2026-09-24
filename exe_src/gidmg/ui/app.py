@@ -83,10 +83,20 @@ class MainWindow(QMainWindow):
         self.editor.restoreBaseline.connect(self.restore_baseline)
 
     def _wire_shortcuts(self) -> None:
-        QShortcut(QKeySequence.StandardKey.Save, self, self._quick_save)
-        QShortcut(QKeySequence("Ctrl+Q"), self, self.open_quick_table)
+        # 与 README「常用快捷键」一致
+        QShortcut(QKeySequence.StandardKey.Save, self, self._quick_save)   # Ctrl+S 保存
+        QShortcut(QKeySequence("Ctrl+Q"), self, self._save_and_exit_shortcut)
+        QShortcut(QKeySequence("Ctrl+T"), self, self._quick_table_shortcut)
         QShortcut(QKeySequence("Ctrl+,"), self, self.open_settings)
         QShortcut(QKeySequence("Escape"), self, self._on_escape)
+
+    def _save_and_exit_shortcut(self) -> None:
+        if self.stack.currentWidget() is self.editor_host:
+            self.save_and_exit()
+
+    def _quick_table_shortcut(self) -> None:
+        if self.stack.currentWidget() is self.editor_host:
+            self.open_quick_table()
 
     # ------------------------------------------------------------------ 导航
 

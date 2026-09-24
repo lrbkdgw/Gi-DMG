@@ -192,6 +192,13 @@ class Session(QObject):
         self.touch(chars=True, selection=True, immediate=True)
         return c
 
+    def reset_config(self) -> None:
+        """清空所有角色与基准值（对应 HTML「更多 → 重置配置」）。"""
+        self.state["chars"] = []
+        self.state["selId"] = None
+        self.state["baselines"] = []
+        self.touch(chars=True, selection=True, editor=True, immediate=True)
+
     # -------------------------------------------------- 基准值
 
     @property
