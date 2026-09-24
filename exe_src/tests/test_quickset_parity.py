@@ -64,6 +64,7 @@ class JsQuickSet:
         payload.write_text(json.dumps(chars), encoding="utf-8")
         proc = subprocess.run(["node", str(self._script), str(payload)],
                               capture_output=True, text=True, timeout=300,
+                              encoding="utf-8", errors="replace",  # 同上，避免 Windows 解码乱码
                               env={**os.environ})
         if proc.returncode != 0:
             raise RuntimeError(f"node 执行失败：{proc.stderr[-4000:]}")

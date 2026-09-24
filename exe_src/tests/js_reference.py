@@ -115,6 +115,7 @@ class JsEngine:
         proc = subprocess.run(
             ["node", str(self._script), str(payload)],
             capture_output=True, text=True, timeout=600,
+            encoding="utf-8", errors="replace",  # Windows 上默认编码不是 UTF-8
             env={**os.environ, "NODE_OPTIONS": "--max-old-space-size=1024"},
         )
         if proc.returncode != 0:

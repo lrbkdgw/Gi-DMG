@@ -45,7 +45,18 @@ jobs:
 
       - name: 运行测试（含与 HTML 版的数值对拍）
         working-directory: exe_src
-        run: python -m pytest tests -q
+        shell: bash
+        run: |
+          set +e
+          python -m pytest tests -q --tb=short > pytest.log 2>&1
+          code=$?
+          cat pytest.log
+          if [ $code -ne 0 ]; then
+            # 把失败详情写进 annotation，方便在 Actions 概览页直接看到
+            msg=$(tail -c 3000 pytest.log | python -c "import sys;print(sys.stdin.read().replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
+            echo "::error title=测试失败::$msg"
+          fi
+          exit $code
 
       - name: 打包 EXE
         working-directory: exe_src
