@@ -19,7 +19,10 @@ jobs:
         shell: powershell
         run: |
           & cl /nologo /std:c++17 /O2 /MT /utf-8 native/main.cpp '/Fe:exe_bin/Gi DMG v3.0.0.exe' /link /SUBSYSTEM:WINDOWS comctl32.lib comdlg32.lib shell32.lib gdi32.lib user32.lib 2>&1 | Tee-Object build.log
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ($LASTEXITCODE -ne 0) {
+            Get-Content build.log | ForEach-Object { Write-Output "::error::$($_)" }
+            exit $LASTEXITCODE
+          }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
