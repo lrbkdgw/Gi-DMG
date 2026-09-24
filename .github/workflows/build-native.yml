@@ -16,9 +16,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Compile static native GUI
-        shell: cmd
-        run: cl /nologo /std:c++17 /O2 /MT /utf-8 /DUNICODE /D_UNICODE native\main.cpp /Fe:"exe_bin\Gi DMG v3.0.0.exe" /link /SUBSYSTEM:WINDOWS comctl32.lib comdlg32.lib shell32.lib gdi32.lib user32.lib
+        shell: powershell
+        run: |
+          & cl /nologo /std:c++17 /O2 /MT /utf-8 native/main.cpp '/Fe:exe_bin/Gi DMG v3.0.0.exe' /link /SUBSYSTEM:WINDOWS comctl32.lib comdlg32.lib shell32.lib gdi32.lib user32.lib 2>&1 | Tee-Object build.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: Gi-DMG-v3.0.0-native
-          path: exe_bin/Gi DMG v3.0.0.exe
+          path: |
+            exe_bin/Gi DMG v3.0.0.exe
+            build.log
