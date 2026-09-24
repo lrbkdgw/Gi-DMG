@@ -60,7 +60,17 @@ jobs:
 
       - name: 打包 EXE
         working-directory: exe_src
-        run: python build.py --skip-tests
+        shell: bash
+        run: |
+          set +e
+          python build.py --skip-tests > build.log 2>&1
+          code=$?
+          cat build.log
+          if [ $code -ne 0 ]; then
+            msg=$(tail -c 3000 build.log | python -c "import sys;print(sys.stdin.read().replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
+            echo "::error title=打包失败::$msg"
+          fi
+          exit $code
 
       - name: 读取版本号
         id: meta

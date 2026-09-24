@@ -30,7 +30,8 @@ sys.path.insert(0, str(HERE))
 
 from gidmg.version import VERSION  # noqa: E402
 
-APP_NAME = f"Gi DMG v{VERSION}"
+APP_NAME = f"Gi DMG v{VERSION}"        # 最终交付的文件名（仓库约定）
+BUILD_NAME = "GiDMG"                   # PyInstaller 内部用名，避免空格/小数点带来的边角问题
 ENTRY = HERE / "main.py"
 ASSETS = HERE / "gidmg" / "assets"
 
@@ -60,19 +61,14 @@ def run_tests() -> None:
         raise SystemExit(proc.returncode)
 
 
-def build(args: argparse.Namespace) -> Path:
-    work = HERE / "build"
-    dist = HERE / "dist"
-    if args.clean:
-        for d in (work, dist):
-            shutil.rmtree(d, ignore_errors=True)
-
+def _pyinstaller_cmd(args: argparse.Namespace, dist: Path, work: Path,
+                     with_icon: bool) -> list:
     sep = ";" if os.name == "nt" else ":"
     cmd = [
         sys.executable, "-m", "PyInstaller",
         "--noconfirm",
         "--onefile",
-        "--name", APP_NAME,
+        "--name", BUILD_NAME,
         "--distpath", str(dist),
         "--workpath", str(work),
         "--specpath", str(work),
@@ -95,23 +91,41 @@ def build(args: argparse.Namespace) -> Path:
     if not args.console:
         cmd.append("--windowed")
     icon = HERE / "gidmg" / "assets" / "app.ico"
-    if icon.exists():
+    if with_icon and icon.exists():
         cmd += ["--icon", str(icon)]
     cmd.append(str(ENTRY))
+    return cmd
+
+
+def build(args: argparse.Namespace) -> Path:
+    work = HERE / "build"
+    dist = HERE / "dist"
+    if args.clean:
+        for d in (work, dist):
+            shutil.rmtree(d, ignore_errors=True)
 
     log("调用 PyInstaller……")
+    cmd = _pyinstaller_cmd(args, dist, work, with_icon=True)
     log(" ".join(f'"{c}"' if " " in c else c for c in cmd))
     proc = subprocess.run(cmd, cwd=HERE)
     if proc.returncode != 0:
-        raise SystemExit(proc.returncode)
+        # 少数环境下嵌入图标会失败（图标资源写入依赖额外组件），退回无图标再来一次
+        log("打包失败，去掉图标重试一次……")
+        shutil.rmtree(work, ignore_errors=True)
+        cmd = _pyinstaller_cmd(args, dist, work, with_icon=False)
+        log(" ".join(f'"{c}"' if " " in c else c for c in cmd))
+        proc = subprocess.run(cmd, cwd=HERE)
+        if proc.returncode != 0:
+            raise SystemExit(proc.returncode)
 
     suffix = ".exe" if os.name == "nt" else ""
-    produced = dist / f"{APP_NAME}{suffix}"
+    produced = dist / f"{BUILD_NAME}{suffix}"
     if not produced.exists():  # PyInstaller 在个别平台上不带后缀
-        alt = dist / APP_NAME
+        alt = dist / BUILD_NAME
         produced = alt if alt.exists() else produced
     if not produced.exists():
         log(f"没有找到产物：{produced}")
+        log(f"dist 目录内容：{[p.name for p in dist.glob('*')] if dist.exists() else '不存在'}")
         raise SystemExit(1)
 
     out_dir = Path(args.output) if args.output else (REPO / "exe_bin")
