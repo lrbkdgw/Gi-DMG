@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QRectF, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QCursor, QPainter, QPen
-from PySide6.QtWidgets import QFrame, QInputDialog, QLabel, QSizePolicy, QWidget
+from PySide6.QtWidgets import QFrame, QInputDialog, QLabel, QWidget
 
 from ..core import state as st
 from ..core.constants import EL_BY_ID
@@ -178,9 +178,13 @@ class ResultsPanel(QWidget):
         s_head.addWidget(self.share_btn)
         card.add_layout(s_head)
 
-        self.res_host = QWidget()
-        self.res_lay = vbox(self.res_host, (0, 0, 0, 0), 7)
-        card.add(self.res_host)
+        # #resList { max-height: min(46vh, 410px); overflow:auto }
+        # 列表自己滚动，下方的总期望 / DPS 始终留在视野里
+        self.res_scroll = W.ScrollArea(margins=(0, 0, 2, 0), spacing=7)
+        self.res_scroll.setStyleSheet("background:transparent;")
+        self.res_host = self.res_scroll.inner
+        self.res_lay = self.res_scroll.body
+        card.add(self.res_scroll)
 
         card.add(W.HLine())
 
@@ -217,11 +221,22 @@ class ResultsPanel(QWidget):
                 row.inspect.connect(self.inspectSource.emit)
                 self.res_lay.addWidget(row)
 
+        self._fit_list()
         self.total_lb.setText(rounded(res.get("total", 0)))
         self.dps_row.setVisible(self.s.timeline_on)
         self.dps_lb.setText(fmt_dps(res.get("dps", 0)))
         self.share_btn.setVisible(self.s.share_on)
         self._refresh_baselines()
+
+    def _fit_list(self) -> None:
+        """列表高度随内容增长，上限 410px（网页是 min(46vh, 410px)）。"""
+        lay = self.res_lay
+        m = lay.contentsMargins()
+        rows = [lay.itemAt(i).widget() for i in range(lay.count())]
+        rows = [w for w in rows if w is not None]
+        need = m.top() + m.bottom() + sum(w.sizeHint().height() for w in rows)
+        need += max(0, len(rows) - 1) * lay.spacing()
+        self.res_scroll.setFixedHeight(min(410, max(34, need)))
 
     def _refresh_baselines(self) -> None:
         clear_layout(self.base_lay)
