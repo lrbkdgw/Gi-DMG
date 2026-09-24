@@ -1,6 +1,10 @@
 name: Build native EXE
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'native/**'
+      - '.github/workflows/build-native.yml'
   push:
     paths:
       - 'native/**'
