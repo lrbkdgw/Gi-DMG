@@ -1,0 +1,6 @@
+native/build/
+native/.vs/
+*.obj
+*.pdb
+*.ilk
+*.user
