@@ -16,31 +16,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure
-        id: configure
-        continue-on-error: true
+      - name: Enable MSVC x64 toolchain
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build Release with MSVC
         shell: pwsh
         run: |
-          cmake --version
-          cmake -S native -B native/build -G "Visual Studio 17 2022" -A x64 *> native/configure.log
-          Get-Content native/configure.log
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
-      - name: Stop when configure failed
-        if: steps.configure.outcome != 'success'
-        shell: pwsh
-        run: |
-          Get-Content native/configure.log
-          throw 'CMake configure failed'
-
-      - name: Build Release
-        shell: pwsh
-        run: cmake --build native/build --config Release --parallel
+          New-Item -ItemType Directory -Force native/build | Out-Null
+          cl.exe /nologo /std:c++17 /O2 /W4 /EHsc /utf-8 /DUNICODE /D_UNICODE /DWIN32_LEAN_AND_MEAN /DNOMINMAX /MT `
+            /Fe:"native/build/Gi DMG v2.2.0.exe" `
+            native/src/GiDMG.cpp native/src/model.cpp `
+            user32.lib gdi32.lib comctl32.lib comdlg32.lib shell32.lib `
+            /link /SUBSYSTEM:WINDOWS
+          if ($LASTEXITCODE -ne 0) { throw 'MSVC compilation failed' }
 
       - name: Verify single-file output
         shell: pwsh
         run: |
-          $exe = Get-Item 'native/build/Release/Gi DMG v2.2.0.exe'
+          $exe = Get-Item 'native/build/Gi DMG v2.2.0.exe'
           if ($exe.Length -le 0) { throw 'EXE is empty' }
           Write-Host "Built $($exe.FullName) ($($exe.Length) bytes)"
 
@@ -48,13 +43,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Gi-DMG-v2.2.0-windows-x64
-          path: native/build/Release/Gi DMG v2.2.0.exe
+          path: native/build/Gi DMG v2.2.0.exe
           if-no-files-found: error
-
-      - name: Upload configure log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: native-configure-log
-          path: native/configure.log
-          if-no-files-found: ignore
