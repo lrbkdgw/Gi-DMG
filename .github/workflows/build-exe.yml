@@ -16,6 +16,10 @@ on:
         type: boolean
         default: true
 
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUTF8: "1"
+
 jobs:
   build:
     name: Windows 打包

@@ -1,6 +1,8 @@
 @echo off
 rem Windows 一键打包：创建/复用 .venv，装依赖，跑测试，输出 ..\exe_bin\Gi DMG v*.exe
 setlocal
+chcp 65001 >nul
+set PYTHONIOENCODING=utf-8
 cd /d "%~dp0"
 
 if not exist ".venv\Scripts\python.exe" (

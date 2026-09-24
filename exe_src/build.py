@@ -24,6 +24,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Windows 控制台默认不是 UTF-8，直接 print 中文会抛 UnicodeEncodeError
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[union-attr]
+    except (AttributeError, ValueError, OSError):  # pragma: no cover - 取决于运行环境
+        pass
+os.environ.setdefault("PYTHONIOENCODING", "utf-8")
+
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 sys.path.insert(0, str(HERE))
