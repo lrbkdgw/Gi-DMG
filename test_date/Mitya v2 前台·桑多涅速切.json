@@ -1,6 +1,6 @@
 {
   "timelineEnabled": true,
-  "rotationDuration": 20,
+  "rotationDuration": 18,
   "enemy": {
     "level": 93,
     "res": {
@@ -32,8 +32,8 @@
       "hpPct": 0,
       "hpFlat": 4780,
       "em": 756.92,
-      "critRate": 48.03,
-      "critDMG": 223.42,
+      "critRate": 57.96,
+      "critDMG": 203.56,
       "allDmgBonus": 0,
       "elemDmgBonus": {
         "pyro": 0,
@@ -49,32 +49,32 @@
         {
           "timingMode": "uniform_dynamic",
           "startTime": 7,
-          "duration": 5.5,
+          "duration": 5,
           "id": "mitZ1",
           "on": true,
           "type": "special_direct",
-          "name": "C0 Z·前台①(7~12.5s)",
+          "name": "C0 Z·前台①(7~12s)",
           "specType": "star_sc_direct",
           "stat": "em",
-          "mult": 2120.58,
+          "mult": 2268,
           "triggerCharId": "mit001",
           "statCharId": "mit001",
-          "starStacks": 5
+          "starStacks": 6
         },
         {
           "timingMode": "uniform_dynamic",
-          "startTime": 15.5,
-          "duration": 4.5,
+          "startTime": 14.5,
+          "duration": 3.5,
           "id": "mitZ2",
           "on": true,
           "type": "special_direct",
-          "name": "C0 Z·前台②(15.5~20s)",
+          "name": "C0 Z·前台②(14.5~18s)",
           "specType": "star_sc_direct",
           "stat": "em",
-          "mult": 1735.02,
+          "mult": 1587.6,
           "triggerCharId": "mit001",
           "statCharId": "mit001",
-          "starStacks": 5
+          "starStacks": 6
         }
       ],
       "talents": [
@@ -84,7 +84,7 @@
           "source": "manual",
           "name": "C0-1 星耀祝礼·星超导基础区(0.028%/精通·满14%)",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -99,16 +99,16 @@
           "id": "mitT2",
           "on": true,
           "source": "manual",
-          "name": "C0-2 自拐爆伤·前台①(v2版·数值暂拟)",
+          "name": "C0-2 自拐爆伤·前台①(v2本体爆伤·暂拟120)",
           "startTime": 7,
-          "duration": 5.5,
+          "duration": 5,
           "isPermanent": false,
           "effs": [
             {
               "cat": "stat",
               "type": "critDMG",
               "target": "self",
-              "value": 60
+              "value": 120
             }
           ]
         },
@@ -116,50 +116,62 @@
           "id": "mitT3",
           "on": true,
           "source": "manual",
-          "name": "C0-3 自拐爆伤·前台②(v2版·数值暂拟)",
-          "startTime": 15.5,
-          "duration": 4.5,
+          "name": "C0-3 自拐爆伤·前台②(v2本体爆伤·暂拟120)",
+          "startTime": 14.5,
+          "duration": 3.5,
           "isPermanent": false,
           "effs": [
             {
               "cat": "stat",
               "type": "critDMG",
               "target": "self",
-              "value": 60
+              "value": 120
             }
           ]
         },
         {
           "id": "mitT4",
-          "on": false,
+          "on": true,
           "source": "manual",
-          "name": "C2-1 前台自身爆伤+90%(v2)",
+          "name": "C0-4 信标被动·前台①(全队+120精通·星超导增伤+20%)",
           "startTime": 7,
-          "duration": 5.5,
+          "duration": 5,
           "isPermanent": false,
           "effs": [
             {
               "cat": "stat",
-              "type": "critDMG",
-              "target": "self",
-              "value": 90
+              "type": "em_flat",
+              "target": "team",
+              "value": 120
+            },
+            {
+              "cat": "star",
+              "type": "star_sc_bonus",
+              "target": "team",
+              "value": 20
             }
           ]
         },
         {
           "id": "mitT5",
-          "on": false,
+          "on": true,
           "source": "manual",
-          "name": "C2-2 前台自身爆伤+90%(v2)",
-          "startTime": 15.5,
-          "duration": 4.5,
+          "name": "C0-5 信标被动·前台②(全队+120精通·星超导增伤+20%)",
+          "startTime": 14.5,
+          "duration": 3.5,
           "isPermanent": false,
           "effs": [
             {
               "cat": "stat",
-              "type": "critDMG",
-              "target": "self",
-              "value": 90
+              "type": "em_flat",
+              "target": "team",
+              "value": 120
+            },
+            {
+              "cat": "star",
+              "type": "star_sc_bonus",
+              "target": "team",
+              "value": 20
             }
           ]
         },
@@ -167,9 +179,43 @@
           "id": "mitT6",
           "on": false,
           "source": "manual",
+          "name": "C2-1 前台自身爆伤+90%(v2)",
+          "startTime": 7,
+          "duration": 5,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "critDMG",
+              "target": "self",
+              "value": 90
+            }
+          ]
+        },
+        {
+          "id": "mitT7",
+          "on": false,
+          "source": "manual",
+          "name": "C2-2 前台自身爆伤+90%(v2)",
+          "startTime": 14.5,
+          "duration": 3.5,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "critDMG",
+              "target": "self",
+              "value": 90
+            }
+          ]
+        },
+        {
+          "id": "mitT8",
+          "on": false,
+          "source": "manual",
           "name": "C6 擢升20%(v2仅自身)+Z倍率×1.4",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -216,13 +262,13 @@
               "on": true,
               "name": "专武特效(v2专武精通/本体爆伤·暂拟)",
               "startTime": 0,
-              "duration": 20,
+              "duration": 18,
               "effs": [
                 {
                   "cat": "stat",
                   "type": "em_flat",
                   "target": "self",
-                  "value": 60
+                  "value": 90
                 },
                 {
                   "cat": "star",
@@ -240,8 +286,8 @@
             "hp_pct": 0,
             "def_pct": 0,
             "em": 6,
-            "cr": 13,
-            "cd": 11,
+            "cr": 16,
+            "cd": 8,
             "atk_flat": 0,
             "hp_flat": 0,
             "def_flat": 0
@@ -256,7 +302,7 @@
               "name": "2+2(精通180)",
               "on": true,
               "startTime": 0,
-              "duration": 20,
+              "duration": 18,
               "effs": [
                 {
                   "cat": "stat",
@@ -264,7 +310,7 @@
                   "target": "self",
                   "value": 180,
                   "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 }
               ]
             }
@@ -310,12 +356,12 @@
       "dmgSrcs": [
         {
           "timingMode": "uniform_dynamic",
-          "startTime": 1.5,
+          "startTime": 0.5,
           "duration": 5,
           "id": "sndRay",
           "on": true,
           "type": "special_direct",
-          "name": "Z星超导冷凝射线×3(1.5~6.5s)",
+          "name": "Z星超导冷凝射线×3(0.5~5.5s)",
           "specType": "star_sc_direct",
           "stat": "atk",
           "mult": 484.5,
@@ -325,7 +371,7 @@
         },
         {
           "timingMode": "uniform_dynamic",
-          "startTime": 1.5,
+          "startTime": 0.5,
           "duration": 5,
           "id": "sndSpray",
           "on": true,
@@ -341,7 +387,7 @@
         },
         {
           "timingMode": "instant",
-          "startTime": 6.5,
+          "startTime": 5.5,
           "duration": 0,
           "id": "sndBolt",
           "on": true,
@@ -352,11 +398,11 @@
           "mult": 155.52,
           "triggerCharId": "snd001",
           "statCharId": "snd001",
-          "starStacks": 5
+          "starStacks": 6
         },
         {
           "timingMode": "instant",
-          "startTime": 6.5,
+          "startTime": 5.5,
           "duration": 0,
           "id": "sndBoltIce",
           "on": true,
@@ -372,7 +418,7 @@
         },
         {
           "timingMode": "instant",
-          "startTime": 13.5,
+          "startTime": 12.5,
           "duration": 0,
           "id": "sndQn",
           "on": true,
@@ -388,7 +434,7 @@
         },
         {
           "timingMode": "instant",
-          "startTime": 14.5,
+          "startTime": 13.5,
           "duration": 0,
           "id": "sndQs",
           "on": true,
@@ -399,26 +445,26 @@
           "mult": 793.92,
           "triggerCharId": "snd001",
           "statCharId": "snd001",
-          "starStacks": 5
+          "starStacks": 6
         },
         {
           "timingMode": "uniform_dynamic",
-          "startTime": 1.5,
-          "duration": 14,
+          "startTime": 0.5,
+          "duration": 13.5,
           "id": "sndC4",
           "on": false,
           "type": "special_direct",
-          "name": "C4 星超导追击(125%×2次)",
+          "name": "C4 星超导追击(125%×3次)",
           "specType": "star_sc_direct",
           "stat": "atk",
-          "mult": 250,
+          "mult": 375,
           "triggerCharId": "snd001",
           "statCharId": "snd001",
           "starStacks": 4
         },
         {
           "timingMode": "instant",
-          "startTime": 5,
+          "startTime": 5.0,
           "duration": 0,
           "id": "sndC6b",
           "on": false,
@@ -439,7 +485,7 @@
           "source": "manual",
           "name": "C0-1 星耀祝礼·超导转星超导+基础区(0.7%/100攻·满14%)",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -456,7 +502,7 @@
           "source": "manual",
           "name": "C0-2 被动2·攻击力转精通(8/100攻·满160)",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -473,7 +519,7 @@
           "source": "manual",
           "name": "C1 全队星超导伤害+30%",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -489,7 +535,7 @@
           "on": false,
           "source": "manual",
           "name": "C2 冷凝射线爆伤(40%+20%×3层·均+90)",
-          "startTime": 1.5,
+          "startTime": 0.5,
           "duration": 5,
           "isPermanent": false,
           "effs": [
@@ -507,7 +553,7 @@
           "source": "manual",
           "name": "C6 桑多涅星超导伤害擢升+20%",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -542,7 +588,7 @@
               "on": true,
               "name": "「超越」(攻28%+星超导增伤16%×3层)",
               "startTime": 0,
-              "duration": 20,
+              "duration": 18,
               "effs": [
                 {
                   "cat": "stat",
@@ -582,7 +628,7 @@
               "name": "影中沉凝的幻灭4pc",
               "on": true,
               "startTime": 0,
-              "duration": 20,
+              "duration": 18,
               "effs": [
                 {
                   "cat": "stat",
@@ -590,7 +636,7 @@
                   "target": "self",
                   "value": 18,
                   "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 },
                 {
                   "cat": "stat",
@@ -598,7 +644,7 @@
                   "target": "self",
                   "value": 16,
                   "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 },
                 {
                   "cat": "star",
@@ -606,7 +652,7 @@
                   "target": "self",
                   "value": 40,
                   "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 }
               ]
             }
@@ -657,7 +703,7 @@
           "source": "manual",
           "name": "C0 拐力·全队200精通+30星超导增伤(v2版)",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -676,11 +722,11 @@
         },
         {
           "id": "valT2",
-          "on": false,
+          "on": true,
           "source": "manual",
           "name": "C6 星超导羽毛(挂米提亚Z·前台①)",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -716,7 +762,7 @@
               "on": true,
               "name": "最终的崇高",
               "startTime": 0,
-              "duration": 20,
+              "duration": 18,
               "effs": [
                 {
                   "cat": "stat",
@@ -750,7 +796,7 @@
               "name": "千岩牢固4pc(E命中·全队攻击)",
               "on": true,
               "startTime": 0,
-              "duration": 20,
+              "duration": 18,
               "effs": [
                 {
                   "cat": "stat",
@@ -758,7 +804,7 @@
                   "target": "team",
                   "value": 20,
                   "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 }
               ]
             }
@@ -809,7 +855,7 @@
           "source": "manual",
           "name": "A1·精通分享(暂按250)",
           "startTime": 0,
-          "duration": 20,
+          "duration": 18,
           "isPermanent": false,
           "effs": [
             {
@@ -859,9 +905,33 @@
           },
           "sets": [
             {
-              "name": "翠绿之影4pc·减抗①(0.5~10.5s)",
+              "name": "翠绿之影4pc·减抗①(砂糖E① 5.5s施放·覆盖6~14s)",
               "on": true,
-              "startTime": 0.5,
+              "startTime": 6,
+              "duration": 8,
+              "effs": [
+                {
+                  "cat": "resShred",
+                  "type": "res_electro",
+                  "target": "",
+                  "value": 40,
+                  "startTime": 0,
+                  "duration": 18
+                },
+                {
+                  "cat": "resShred",
+                  "type": "res_cryo",
+                  "target": "",
+                  "value": 40,
+                  "startTime": 0,
+                  "duration": 18
+                }
+              ]
+            },
+            {
+              "name": "翠绿之影4pc·减抗②(砂糖E② 14s施放·借模覆盖14~18+0~6s)",
+              "on": true,
+              "startTime": 14,
               "duration": 10,
               "effs": [
                 {
@@ -870,23 +940,7 @@
                   "target": "",
                   "value": 40,
                   "startTime": 0,
-                  "duration": 20
-                }
-              ]
-            },
-            {
-              "name": "翠绿之影4pc·减抗②(12.5~20s)",
-              "on": true,
-              "startTime": 12.5,
-              "duration": 7.5,
-              "effs": [
-                {
-                  "cat": "resShred",
-                  "type": "res_electro",
-                  "target": "",
-                  "value": 40,
-                  "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 },
                 {
                   "cat": "resShred",
@@ -894,7 +948,7 @@
                   "target": "",
                   "value": 40,
                   "startTime": 0,
-                  "duration": 20
+                  "duration": 18
                 }
               ]
             }
