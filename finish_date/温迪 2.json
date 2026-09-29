@@ -1,0 +1,706 @@
+{
+  "enemy": {
+    "level": 93,
+    "res": {
+      "pyro": 10,
+      "hydro": 10,
+      "electro": 10,
+      "cryo": 10,
+      "dendro": 10,
+      "anemo": 10,
+      "geo": 10,
+      "physical": 10
+    }
+  },
+  "chars": [
+    {
+      "id": "9ymooa",
+      "on": true,
+      "name": "温迪",
+      "lv": 90,
+      "element": "anemo",
+      "baseAtk": 263,
+      "weaponAtk": 674,
+      "atkPct": 91.24,
+      "atkFlat": 311,
+      "baseDef": 669,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10500,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 0,
+      "critRate": 75.82,
+      "critDMG": 193.4,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 46.6,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "id": "jgjvdu",
+          "on": true,
+          "type": "normal",
+          "name": "普攻",
+          "stat": "atk",
+          "mult": 3600,
+          "element": "anemo",
+          "dmgType": "NA",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        },
+        {
+          "id": "2hw6nt",
+          "on": true,
+          "type": "normal",
+          "name": "战技",
+          "stat": "atk",
+          "mult": 500,
+          "element": "anemo",
+          "dmgType": "E",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        },
+        {
+          "id": "9c1lno",
+          "on": true,
+          "type": "normal",
+          "name": "爆发 1",
+          "stat": "atk",
+          "mult": 400,
+          "element": "anemo",
+          "dmgType": "Q",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        },
+        {
+          "id": "b6vs6e",
+          "on": true,
+          "type": "normal",
+          "name": "爆发 2",
+          "stat": "atk",
+          "mult": 600,
+          "element": "pyro",
+          "dmgType": "Q",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        },
+        {
+          "id": "vyn73z",
+          "on": true,
+          "type": "trans",
+          "name": "扩散",
+          "transType": "swirl_pyro",
+          "triggerCount": 10,
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        }
+      ],
+      "talents": [
+        {
+          "id": "g5fuog",
+          "on": true,
+          "source": "manual",
+          "name": "1",
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "all",
+              "target": "self",
+              "value": 50
+            },
+            {
+              "cat": "source",
+              "type": "source_final_mult",
+              "target": "source:9c1lno",
+              "value": 135
+            },
+            {
+              "cat": "source",
+              "type": "source_final_mult",
+              "target": "source:b6vs6e",
+              "value": 135
+            }
+          ]
+        },
+        {
+          "id": "ve2oqo",
+          "on": true,
+          "source": "manual",
+          "name": "E1",
+          "effs": [
+            {
+              "cat": "source",
+              "type": "source_final_mult",
+              "target": "source:jgjvdu",
+              "value": 140
+            }
+          ]
+        },
+        {
+          "id": "9sa4ji",
+          "on": true,
+          "source": "manual",
+          "name": "E2",
+          "effs": [
+            {
+              "cat": "source",
+              "type": "source_final_mult",
+              "target": "source:2hw6nt",
+              "value": 600
+            },
+            {
+              "cat": "resShred",
+              "type": "res_anemo",
+              "target": "team",
+              "value": 24
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 10500,
+          "atk": 263,
+          "def": 669,
+          "ascType": "none",
+          "ascVal": 0,
+          "ascPhase": 6
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "674",
+          "atk": 674,
+          "subType": "cd",
+          "subVal": 44.1,
+          "name": "悠远的流颂之歌",
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "NA",
+              "target": "self",
+              "value": 60
+            },
+            {
+              "cat": "dmgType",
+              "type": "E",
+              "target": "self",
+              "value": 60
+            },
+            {
+              "cat": "dmgType",
+              "type": "Q",
+              "target": "self",
+              "value": 60
+            }
+          ]
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 9,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 12,
+            "cd": 15,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "atk_pct",
+            "goblet": "dmg_anemo",
+            "circlet": "cr"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "critRate",
+                  "target": "self",
+                  "value": 20
+                },
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "self",
+                  "value": 42
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": false,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    },
+    {
+      "id": "5dnkai",
+      "on": true,
+      "name": "珐露珊",
+      "lv": 90,
+      "element": "anemo",
+      "baseAtk": 300,
+      "weaponAtk": 510,
+      "atkPct": 0,
+      "atkFlat": 0,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 0,
+      "em": 0,
+      "critRate": 5,
+      "critDMG": 50,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [],
+      "talents": [
+        {
+          "id": "zfxh2r",
+          "on": true,
+          "source": "manual",
+          "name": "1",
+          "effs": [
+            {
+              "cat": "resShred",
+              "type": "res_anemo",
+              "target": "team",
+              "value": 30
+            },
+            {
+              "cat": "dmgElem",
+              "type": "elem_anemo",
+              "target": "team",
+              "value": 36
+            }
+          ]
+        },
+        {
+          "id": "2dkhi7",
+          "on": true,
+          "source": "manual",
+          "name": "E6",
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "critDMG",
+              "target": "char:9ymooa",
+              "value": 40
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "542",
+          "atk": 0,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "effs": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 0,
+            "cd": 0,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "none",
+            "goblet": "none",
+            "circlet": "none"
+          },
+          "sets": []
+        }
+      }
+    },
+    {
+      "id": "y4e4zt",
+      "on": true,
+      "name": "尼可",
+      "lv": 90,
+      "element": "pyro",
+      "baseAtk": 0,
+      "weaponAtk": 0,
+      "atkPct": 0,
+      "atkFlat": 4000,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 0,
+      "critRate": 5,
+      "critDMG": 50,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "id": "2barvr",
+          "on": true,
+          "type": "normal",
+          "name": "E0-1",
+          "stat": "atk",
+          "mult": 720,
+          "element": "anemo",
+          "dmgType": "other",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        },
+        {
+          "id": "bkz6rc",
+          "on": true,
+          "type": "normal",
+          "name": "E0-2",
+          "stat": "atk",
+          "mult": 1200,
+          "element": "anemo",
+          "dmgType": "other",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "y4e4zt"
+        },
+        {
+          "id": "o2vqk1",
+          "on": false,
+          "type": "normal",
+          "name": "E1",
+          "stat": "atk",
+          "mult": 1200,
+          "element": "anemo",
+          "dmgType": "other",
+          "reaction": "none",
+          "triggerCharId": "9ymooa",
+          "statCharId": "9ymooa"
+        }
+      ],
+      "talents": [
+        {
+          "id": "hg9ews",
+          "on": true,
+          "source": "manual",
+          "name": "1",
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "atk_flat",
+              "target": "team",
+              "value": 600
+            },
+            {
+              "cat": "stat",
+              "type": "atk_flat",
+              "target": "char:9ymooa",
+              "value": 300
+            }
+          ]
+        },
+        {
+          "id": "0282lh",
+          "on": false,
+          "source": "manual",
+          "name": "E2",
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "atk_flat",
+              "target": "team",
+              "value": 300
+            },
+            {
+              "cat": "resShred",
+              "type": "res_anemo",
+              "target": "team",
+              "value": 25
+            },
+            {
+              "cat": "resShred",
+              "type": "res_pyro",
+              "target": "team",
+              "value": 25
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "542",
+          "atk": 542,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "effs": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 0,
+            "cd": 0,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "none",
+            "goblet": "none",
+            "circlet": "none"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "effs": [
+                {
+                  "cat": "dmgElem",
+                  "type": "elem_pyro",
+                  "target": "team",
+                  "value": 40
+                },
+                {
+                  "cat": "dmgElem",
+                  "type": "elem_anemo",
+                  "target": "team",
+                  "value": 40
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": false,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    },
+    {
+      "id": "hesjx5",
+      "on": true,
+      "name": "杜林",
+      "lv": 90,
+      "element": "pyro",
+      "baseAtk": 300,
+      "weaponAtk": 510,
+      "atkPct": 108.08,
+      "atkFlat": 360.62,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 0,
+      "critRate": 46.03,
+      "critDMG": 69.86,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "id": "e64xiq",
+          "on": true,
+          "type": "normal",
+          "name": "E0 爆发",
+          "stat": "atk",
+          "mult": 2000,
+          "element": "pyro",
+          "dmgType": "Q",
+          "reaction": "none",
+          "triggerCharId": "hesjx5",
+          "statCharId": "hesjx5"
+        },
+        {
+          "id": "tfce34",
+          "on": false,
+          "type": "normal",
+          "name": "E1",
+          "stat": "atk",
+          "mult": 1200,
+          "element": "anemo",
+          "dmgType": "NA",
+          "reaction": "none",
+          "triggerCharId": "hesjx5",
+          "statCharId": "9ymooa"
+        }
+      ],
+      "talents": [
+        {
+          "id": "nzap5p",
+          "on": true,
+          "source": "manual",
+          "name": "E0",
+          "effs": [
+            {
+              "cat": "resShred",
+              "type": "res_pyro",
+              "target": "team",
+              "value": 35
+            },
+            {
+              "cat": "resShred",
+              "type": "res_anemo",
+              "target": "team",
+              "value": 35
+            }
+          ]
+        },
+        {
+          "id": "icnsod",
+          "on": false,
+          "source": "manual",
+          "name": "E2",
+          "effs": [
+            {
+              "cat": "dmgElem",
+              "type": "elem_pyro",
+              "target": "team",
+              "value": 50
+            },
+            {
+              "cat": "dmgElem",
+              "type": "elem_anemo",
+              "target": "team",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": "4",
+          "atkTier": "510",
+          "atk": 510,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "effs": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 3,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 3,
+            "cd": 3,
+            "atk_flat": 3,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "atk_pct",
+            "goblet": "atk_pct",
+            "circlet": "cr"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "effs": [
+                {
+                  "cat": "dmgType",
+                  "type": "Q",
+                  "target": "self",
+                  "value": 20
+                },
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "team",
+                  "value": 20
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": true,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    }
+  ],
+  "selId": "hesjx5",
+  "baselines": []
+}

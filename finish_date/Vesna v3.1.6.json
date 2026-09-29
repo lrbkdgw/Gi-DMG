@@ -1,0 +1,1138 @@
+{
+  "timelineEnabled": true,
+  "rotationDuration": 20,
+  "enemy": {
+    "level": 93,
+    "res": {
+      "pyro": 10,
+      "hydro": 10,
+      "electro": 10,
+      "cryo": 10,
+      "dendro": 10,
+      "anemo": 10,
+      "geo": 10,
+      "physical": 10
+    }
+  },
+  "chars": [
+    {
+      "id": "yrci1g",
+      "on": true,
+      "name": "薇斯纳",
+      "lv": 90,
+      "element": "anemo",
+      "baseAtk": 354,
+      "weaponAtk": 510,
+      "atkPct": 122.96,
+      "atkFlat": 311,
+      "baseDef": 876,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 15552,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 118.92,
+      "critRate": 57.3,
+      "critDMG": 233.5,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "timingMode": "instant",
+          "startTime": 11,
+          "duration": 0,
+          "id": "c6cahw",
+          "on": true,
+          "type": "special_direct",
+          "name": "E D2",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 241,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "instant",
+          "startTime": 14,
+          "duration": 0,
+          "id": "652gde",
+          "on": true,
+          "type": "special_direct",
+          "name": "E D3-1",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 786.24,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "instant",
+          "startTime": 17,
+          "duration": 0,
+          "id": "qujr3p",
+          "on": true,
+          "type": "special_direct",
+          "name": "E D3-2",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 846.72,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "instant",
+          "startTime": 19.9,
+          "duration": 0,
+          "id": "wvvrg4",
+          "on": true,
+          "type": "special_direct",
+          "name": "E D3-3",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 907.2,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "instant",
+          "startTime": 13,
+          "duration": 0,
+          "id": "3dj4w4",
+          "on": false,
+          "type": "special_direct",
+          "name": "[C1] E D3-4",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 967.68,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "instant",
+          "startTime": 19.9,
+          "duration": 0,
+          "id": "kpav14",
+          "on": true,
+          "type": "special_direct",
+          "name": "Q",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 379,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "uniform_dynamic",
+          "startTime": 11,
+          "duration": 20,
+          "id": "yqkbmk",
+          "on": false,
+          "type": "special_direct",
+          "name": "C6",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 1280,
+          "triggerCharId": "yrci1g",
+          "statCharId": "yrci1g",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "uniform_dynamic",
+          "startTime": 0,
+          "duration": 20,
+          "id": "2td5zy",
+          "on": true,
+          "type": "special_reaction",
+          "name": "特殊反应 · 风",
+          "specType": "star_sd_anemo",
+          "triggerCount": 20,
+          "triggerCharId": "yrci1g",
+          "statCharId": "",
+          "contribs": [
+            "yrci1g",
+            "oj65o0"
+          ]
+        },
+        {
+          "timingMode": "uniform_dynamic",
+          "startTime": 0,
+          "duration": 20,
+          "id": "vsqakk",
+          "on": true,
+          "type": "special_reaction",
+          "name": "特殊反应 · 冰",
+          "specType": "star_sd_cryo",
+          "triggerCount": 4,
+          "triggerCharId": "yrci1g",
+          "statCharId": "",
+          "contribs": [
+            "yrci1g",
+            "oj65o0"
+          ],
+          "starSwirlCryoMult": "3"
+        }
+      ],
+      "talents": [
+        {
+          "id": "8pl99o",
+          "on": true,
+          "source": "manual",
+          "name": "C0",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_base_sd",
+              "target": "team",
+              "value": 14
+            },
+            {
+              "cat": "stat",
+              "type": "atk_pct",
+              "target": "self",
+              "value": 18
+            },
+            {
+              "cat": "stat",
+              "type": "em_flat",
+              "target": "self",
+              "value": 25
+            }
+          ]
+        },
+        {
+          "id": "olnri8",
+          "on": false,
+          "source": "manual",
+          "name": "C1",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "self",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "in3lkx",
+          "on": false,
+          "source": "manual",
+          "name": "C2",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "source:c6cahw",
+              "value": 133
+            },
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "source:652gde",
+              "value": 123
+            },
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "source:qujr3p",
+              "value": 114
+            },
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "source:wvvrg4",
+              "value": 106
+            },
+            {
+              "cat": "stat",
+              "type": "atk_pct",
+              "target": "self",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "id": "e4cjtm",
+          "on": false,
+          "source": "manual",
+          "name": "C3+C4+C5",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "self",
+              "value": 107
+            },
+            {
+              "cat": "stat",
+              "type": "atk_pct",
+              "target": "self",
+              "value": 36
+            },
+            {
+              "cat": "stat",
+              "type": "em_flat",
+              "target": "self",
+              "value": 50
+            }
+          ]
+        },
+        {
+          "id": "qc8yuq",
+          "on": false,
+          "source": "manual",
+          "name": "C6",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_ascend",
+              "target": "self",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "bdcc4l",
+          "on": false,
+          "source": "manual",
+          "name": "Add R",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "source:kpav14",
+              "value": 200
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 354,
+          "def": 0,
+          "ascType": "cr",
+          "ascPhase": 6,
+          "ascVal": 19.2
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 4,
+          "atkTier": "510",
+          "atk": 510,
+          "subType": "cd",
+          "subVal": 55.1,
+          "name": "新枝 R1",
+          "talents": [
+            {
+              "id": "rupkk3",
+              "on": true,
+              "name": "叶脉蔓生",
+              "startTime": 0,
+              "duration": 20,
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "self",
+                  "value": 18
+                },
+                {
+                  "cat": "star",
+                  "type": "star_all",
+                  "target": "self",
+                  "value": 24
+                }
+              ]
+            }
+          ]
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 6,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 6,
+            "cr": 10,
+            "cd": 10,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "atk_pct",
+            "goblet": "atk_pct",
+            "circlet": "cd"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "on": true,
+              "startTime": 0,
+              "duration": 20,
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "self",
+                  "value": 18
+                },
+                {
+                  "cat": "stat",
+                  "type": "critRate",
+                  "target": "self",
+                  "value": 16
+                },
+                {
+                  "cat": "star",
+                  "type": "star_sd_bonus",
+                  "target": "self",
+                  "value": 40
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": false,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    },
+    {
+      "id": "oj65o0",
+      "on": true,
+      "name": "奥黛塔",
+      "lv": 90,
+      "element": "cryo",
+      "baseAtk": 335,
+      "weaponAtk": 608,
+      "atkPct": 122.96,
+      "atkFlat": 311,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 118.92,
+      "critRate": 71.2,
+      "critDMG": 190.32,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "timingMode": "instant",
+          "startTime": 5.5,
+          "duration": 0,
+          "id": "8o7zjy",
+          "on": true,
+          "type": "special_direct",
+          "name": "E D1",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 825.5,
+          "triggerCharId": "oj65o0",
+          "statCharId": "oj65o0",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "uniform_dynamic",
+          "startTime": 0,
+          "duration": 20,
+          "id": "kb8suz",
+          "on": true,
+          "type": "special_direct",
+          "name": "E D2",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 800,
+          "triggerCharId": "oj65o0",
+          "statCharId": "oj65o0",
+          "starStacks": 1
+        },
+        {
+          "timingMode": "instant",
+          "startTime": 5.5,
+          "duration": 0,
+          "id": "f7wsd4",
+          "on": false,
+          "type": "special_direct",
+          "name": "C1",
+          "specType": "star_sd_direct",
+          "stat": "atk",
+          "mult": 450,
+          "triggerCharId": "oj65o0",
+          "statCharId": "oj65o0",
+          "starStacks": 1
+        }
+      ],
+      "talents": [
+        {
+          "id": "lfzkr0",
+          "on": true,
+          "source": "manual",
+          "name": "C0-1",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "self",
+              "value": 130
+            },
+            {
+              "cat": "star",
+              "type": "star_base",
+              "target": "team",
+              "value": 14
+            },
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "team",
+              "value": 60
+            }
+          ]
+        },
+        {
+          "id": "fzxp31",
+          "on": true,
+          "source": "manual",
+          "name": "C0-2",
+          "startTime": 6,
+          "duration": 16,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "self",
+              "value": -60
+            }
+          ]
+        },
+        {
+          "id": "36shez",
+          "on": false,
+          "source": "manual",
+          "name": "C1-1",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "team",
+              "value": 30
+            }
+          ]
+        },
+        {
+          "id": "kcuy9b",
+          "on": false,
+          "source": "manual",
+          "name": "C1-2",
+          "startTime": 6,
+          "duration": 16,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "self",
+              "value": -30
+            }
+          ]
+        },
+        {
+          "id": "m54zca",
+          "on": false,
+          "source": "manual",
+          "name": "C2",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "atk_pct",
+              "target": "team",
+              "value": 42
+            },
+            {
+              "cat": "resShred",
+              "type": "res_cryo",
+              "target": "",
+              "value": 20
+            },
+            {
+              "cat": "resShred",
+              "type": "res_anemo",
+              "target": "",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "zfit4p",
+          "on": false,
+          "source": "manual",
+          "name": "C3+C5",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "dmgType",
+              "type": "source_final_mult",
+              "target": "self",
+              "value": 107
+            }
+          ]
+        },
+        {
+          "id": "ovvh2f",
+          "on": false,
+          "source": "manual",
+          "name": "C6-1",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_ascend",
+              "target": "self",
+              "value": 20
+            },
+            {
+              "cat": "star",
+              "type": "star_ascend",
+              "target": "team",
+              "value": 25
+            }
+          ]
+        },
+        {
+          "id": "07idnx",
+          "on": false,
+          "source": "manual",
+          "name": "C6-2",
+          "startTime": 6,
+          "duration": 16,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "self",
+              "value": 90
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 335,
+          "def": 0,
+          "ascType": "cd",
+          "ascPhase": 6,
+          "ascVal": 38.4
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "608",
+          "atk": 608,
+          "subType": "cr",
+          "subVal": 33.1,
+          "name": "星锋剑  R0",
+          "talents": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 6,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 6,
+            "cr": 10,
+            "cd": 6,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "atk_pct",
+            "goblet": "atk_pct",
+            "circlet": "cd"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "on": true,
+              "startTime": 0,
+              "duration": 20,
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "self",
+                  "value": 30
+                },
+                {
+                  "cat": "star",
+                  "type": "star_all",
+                  "target": "team",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": false,
+          "sec2": true,
+          "sec3": false
+        }
+      }
+    },
+    {
+      "id": "ngu52w",
+      "on": true,
+      "name": "沃雅妮莎",
+      "lv": 90,
+      "element": "hydro",
+      "baseAtk": 300,
+      "weaponAtk": 401,
+      "atkPct": 0,
+      "atkFlat": 311,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 35.2,
+      "hpFlat": 4780,
+      "em": 0,
+      "critRate": 5,
+      "critDMG": 50,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [],
+      "talents": [
+        {
+          "id": "0yb6pe",
+          "on": true,
+          "source": "manual",
+          "name": "C0",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "resShred",
+              "type": "res_cryo",
+              "target": "",
+              "value": 30
+            },
+            {
+              "cat": "resShred",
+              "type": "res_anemo",
+              "target": "",
+              "value": 35
+            },
+            {
+              "cat": "feather",
+              "type": "fixed",
+              "target": "",
+              "value": 137500,
+              "featherSource": "source:c6cahw"
+            },
+            {
+              "cat": "feather",
+              "type": "fixed",
+              "target": "",
+              "value": 55000,
+              "featherSource": "source:kb8suz"
+            }
+          ]
+        },
+        {
+          "id": "nbtfqd",
+          "on": false,
+          "source": "manual",
+          "name": "C1",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "atk_flat",
+              "target": "team",
+              "value": 480
+            }
+          ]
+        },
+        {
+          "id": "vj0686",
+          "on": false,
+          "source": "manual",
+          "name": "C2",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "critDMG",
+              "target": "char:yrci1g",
+              "value": 60
+            }
+          ]
+        },
+        {
+          "id": "zklaop",
+          "on": false,
+          "source": "manual",
+          "name": "C3+C4+C5",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "atk_flat",
+              "target": "team",
+              "value": 70
+            },
+            {
+              "cat": "resShred",
+              "type": "res_cryo",
+              "target": "",
+              "value": 5.4
+            }
+          ]
+        },
+        {
+          "id": "ceigwy",
+          "on": false,
+          "source": "manual",
+          "name": "C6",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_ascend",
+              "target": "team",
+              "value": 25
+            }
+          ]
+        },
+        {
+          "id": "dc3yyg",
+          "on": false,
+          "source": "manual",
+          "name": "Add R",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "feather",
+              "type": "fixed",
+              "target": "",
+              "value": 25000,
+              "featherSource": "source:c6cahw"
+            },
+            {
+              "cat": "feather",
+              "type": "fixed",
+              "target": "",
+              "value": 10000,
+              "featherSource": "source:kb8suz"
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascPhase": 6,
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 3,
+          "atkTier": "401",
+          "atk": 401,
+          "subType": "hp_pct",
+          "subVal": 35.2,
+          "name": "讨龙英杰谭",
+          "talents": [
+            {
+              "id": "6d1uyr",
+              "on": true,
+              "name": "天赋 1",
+              "startTime": 8,
+              "duration": 12,
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "char:yrci1g",
+                  "value": 48
+                }
+              ]
+            }
+          ]
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 0,
+            "cd": 0,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "none",
+            "goblet": "none",
+            "circlet": "none"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "on": true,
+              "startTime": 0,
+              "duration": 20,
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "hp_pct",
+                  "target": "self",
+                  "value": 20
+                },
+                {
+                  "cat": "stat",
+                  "type": "atk_pct",
+                  "target": "team",
+                  "value": 20
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": true,
+          "sec2": true,
+          "sec3": false
+        }
+      }
+    },
+    {
+      "id": "pabjj4",
+      "on": true,
+      "name": "冰旅行者",
+      "lv": 90,
+      "element": "cryo",
+      "baseAtk": 300,
+      "weaponAtk": 510,
+      "atkPct": 0,
+      "atkFlat": 0,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 0,
+      "em": 0,
+      "critRate": 5,
+      "critDMG": 50,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [],
+      "talents": [
+        {
+          "id": "ac3fun",
+          "on": true,
+          "source": "manual",
+          "name": "All-1",
+          "startTime": 0,
+          "duration": 20,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "star",
+              "type": "star_base",
+              "target": "team",
+              "value": 7
+            },
+            {
+              "cat": "stat",
+              "type": "critRate",
+              "target": "team",
+              "value": 15
+            },
+            {
+              "cat": "star",
+              "type": "star_all",
+              "target": "team",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "id": "mayf1y",
+          "on": true,
+          "source": "manual",
+          "name": "All-2",
+          "startTime": 2,
+          "duration": 4,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "em_flat",
+              "target": "char:oj65o0",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "id": "392n60",
+          "on": true,
+          "source": "manual",
+          "name": "新天赋",
+          "startTime": 8,
+          "duration": 12,
+          "isPermanent": false,
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "em_flat",
+              "target": "char:yrci1g",
+              "value": 120
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascPhase": 6,
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "542",
+          "atk": 0,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "talents": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 0,
+            "cd": 0,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "none",
+            "goblet": "none",
+            "circlet": "none"
+          },
+          "sets": []
+        }
+      }
+    }
+  ],
+  "selId": "yrci1g",
+  "baselines": [],
+  "baselineMode": "a"
+}

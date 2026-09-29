@@ -1,0 +1,1315 @@
+{
+  "enemy": {
+    "level": 93,
+    "res": {
+      "pyro": 10,
+      "hydro": 10,
+      "electro": 10,
+      "cryo": 10,
+      "dendro": 10,
+      "anemo": 10,
+      "geo": 10,
+      "physical": 10
+    }
+  },
+  "chars": [
+    {
+      "id": "f2bmps",
+      "on": true,
+      "name": "哥伦比娅",
+      "lv": 90,
+      "element": "hydro",
+      "baseAtk": 300,
+      "weaponAtk": 454,
+      "atkPct": 0,
+      "atkFlat": 311,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 14600,
+      "hpPct": 113.04,
+      "hpFlat": 4780,
+      "em": 320.1,
+      "critRate": 46.03,
+      "critDMG": 167.84,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "id": "ewf8m2",
+          "on": true,
+          "type": "lunarDirect",
+          "name": "普攻",
+          "lunarType": "bloom",
+          "stat": "hp",
+          "mult": 48,
+          "triggerCharId": "f2bmps",
+          "statCharId": "f2bmps"
+        },
+        {
+          "id": "hexwpu",
+          "on": true,
+          "type": "lunarDirect",
+          "name": "战技",
+          "lunarType": "bloom",
+          "stat": "hp",
+          "mult": 37.5,
+          "triggerCharId": "f2bmps",
+          "statCharId": "f2bmps"
+        }
+      ],
+      "talents": [
+        {
+          "id": "bw26mx",
+          "on": true,
+          "source": "manual",
+          "name": "E0",
+          "effs": [
+            {
+              "cat": "lunar",
+              "type": "lunar_all",
+              "target": "team",
+              "value": 40
+            },
+            {
+              "cat": "stat",
+              "type": "critRate",
+              "target": "self",
+              "value": 15
+            },
+            {
+              "cat": "lunar",
+              "type": "lunar_base_bloom",
+              "target": "team",
+              "value": 7
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 14600,
+          "atk": 0,
+          "def": 0,
+          "ascType": "cd",
+          "ascPhase": 6,
+          "ascVal": 38.4
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": "4",
+          "atkTier": "454",
+          "atk": 454,
+          "subType": "em",
+          "subVal": 221,
+          "name": "武器效果",
+          "effs": [
+            {
+              "cat": "lunar",
+              "type": "lunar_bloom",
+              "target": "self",
+              "value": 24
+            }
+          ]
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 4,
+            "def_pct": 0,
+            "em": 5,
+            "cr": 3,
+            "cd": 12,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "hp_pct",
+            "goblet": "hp_pct",
+            "circlet": "cr"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "effs": [
+                {
+                  "cat": "stat",
+                  "type": "critRate",
+                  "target": "self",
+                  "value": 30
+                },
+                {
+                  "cat": "lunar",
+                  "type": "lunar_all",
+                  "target": "team",
+                  "value": 10
+                },
+                {
+                  "cat": "stat",
+                  "type": "em_flat",
+                  "target": "self",
+                  "value": 80
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": false,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    },
+    {
+      "id": "e8aqrp",
+      "on": true,
+      "name": "菈乌玛",
+      "lv": 90,
+      "element": "dendro",
+      "baseAtk": 300,
+      "weaponAtk": 510,
+      "atkPct": 0,
+      "atkFlat": 311,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10500,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 793.62,
+      "critRate": 24.86,
+      "critDMG": 89.72,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [
+        {
+          "id": "t0013d",
+          "on": true,
+          "type": "lunarDirect",
+          "name": "爆发",
+          "lunarType": "bloom",
+          "stat": "em",
+          "mult": 14400,
+          "triggerCharId": "f2bmps",
+          "statCharId": "e8aqrp"
+        }
+      ],
+      "talents": [
+        {
+          "id": "38qsvu",
+          "on": true,
+          "source": "manual",
+          "name": "E0",
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "critRate",
+              "target": "team",
+              "value": 10
+            },
+            {
+              "cat": "stat",
+              "type": "critDMG",
+              "target": "team",
+              "value": 20
+            },
+            {
+              "cat": "lunar",
+              "type": "lunar_base_bloom",
+              "target": "team",
+              "value": 14
+            },
+            {
+              "cat": "resShred",
+              "type": "res_dendro",
+              "target": "self",
+              "value": 20
+            },
+            {
+              "cat": "resShred",
+              "type": "res_hydro",
+              "target": "self",
+              "value": 20
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 10500,
+          "atk": 0,
+          "def": 0,
+          "ascType": "em",
+          "ascPhase": 6,
+          "ascVal": 115.2
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": "4",
+          "atkTier": "510",
+          "atk": 510,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "em_flat",
+              "target": "self",
+              "value": 200
+            }
+          ]
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 6,
+            "cr": 6,
+            "cd": 6,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "em",
+            "goblet": "em",
+            "circlet": "em"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "effs": [
+                {
+                  "cat": "lunar",
+                  "type": "lunar_all",
+                  "target": "team",
+                  "value": 10
+                },
+                {
+                  "cat": "stat",
+                  "type": "em_flat",
+                  "target": "team",
+                  "value": 120
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": false,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    },
+    {
+      "id": "i6c840",
+      "on": true,
+      "name": "爱诺",
+      "lv": 90,
+      "element": "hydro",
+      "baseAtk": 300,
+      "weaponAtk": 510,
+      "atkPct": 0,
+      "atkFlat": 0,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 0,
+      "em": 0,
+      "critRate": 5,
+      "critDMG": 50,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [],
+      "talents": [
+        {
+          "id": "7fvjls",
+          "on": true,
+          "source": "manual",
+          "name": "E0",
+          "effs": [
+            {
+              "cat": "stat",
+              "type": "em_flat",
+              "target": "team",
+              "value": 80
+            }
+          ]
+        }
+      ],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascPhase": 6,
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "542",
+          "atk": 0,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "effs": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 0,
+            "cd": 0,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "none",
+            "goblet": "none",
+            "circlet": "none"
+          },
+          "sets": []
+        }
+      }
+    },
+    {
+      "id": "m7lx1o",
+      "on": true,
+      "name": "神秘角色",
+      "lv": 90,
+      "element": "dendro",
+      "baseAtk": 300,
+      "weaponAtk": 542,
+      "atkPct": 0,
+      "atkFlat": 311,
+      "baseDef": 600,
+      "defPct": 0,
+      "defFlat": 0,
+      "baseHP": 10000,
+      "hpPct": 0,
+      "hpFlat": 4780,
+      "em": 0,
+      "critRate": 5,
+      "critDMG": 50,
+      "allDmgBonus": 0,
+      "elemDmgBonus": {
+        "pyro": 0,
+        "hydro": 0,
+        "electro": 0,
+        "cryo": 0,
+        "dendro": 0,
+        "anemo": 0,
+        "geo": 0,
+        "physical": 0
+      },
+      "dmgSrcs": [],
+      "talents": [],
+      "qs": {
+        "base": {
+          "hp": 0,
+          "atk": 0,
+          "def": 0,
+          "ascType": "none",
+          "ascPhase": 6,
+          "ascVal": 0
+        },
+        "weapon": {
+          "level": 90,
+          "rarity": 5,
+          "atkTier": "542",
+          "atk": 542,
+          "subType": "none",
+          "subVal": 0,
+          "name": "武器效果",
+          "effs": []
+        },
+        "artifact": {
+          "subs": {
+            "atk_pct": 0,
+            "hp_pct": 0,
+            "def_pct": 0,
+            "em": 0,
+            "cr": 0,
+            "cd": 0,
+            "atk_flat": 0,
+            "hp_flat": 0,
+            "def_flat": 0
+          },
+          "mains": {
+            "sand": "none",
+            "goblet": "none",
+            "circlet": "none"
+          },
+          "sets": [
+            {
+              "name": "套装效果 1",
+              "effs": [
+                {
+                  "cat": "resShred",
+                  "type": "res_dendro",
+                  "target": "self",
+                  "value": 30
+                }
+              ]
+            }
+          ]
+        },
+        "_open": {
+          "sec1": true,
+          "sec2": false,
+          "sec3": true
+        }
+      }
+    }
+  ],
+  "selId": "f2bmps",
+  "baselines": [
+    {
+      "id": "7vc7zt",
+      "name": "武器 1",
+      "val": 2727254.7604160253,
+      "snapshot": {
+        "panels": [
+          {
+            "id": "f2bmps",
+            "name": "哥伦比娅",
+            "level": 90,
+            "element": "hydro",
+            "enabled": true,
+            "atk": 1065,
+            "def": 600,
+            "hp": 43037.840000000004,
+            "em": 498.74,
+            "cr": 100.11,
+            "cd": 250.04
+          },
+          {
+            "id": "e8aqrp",
+            "name": "菈乌玛",
+            "level": 90,
+            "element": "dendro",
+            "enabled": true,
+            "atk": 1121,
+            "def": 600,
+            "hp": 17905,
+            "em": 1243.62,
+            "cr": 34.86,
+            "cd": 109.72
+          },
+          {
+            "id": "i6c840",
+            "name": "爱诺",
+            "level": 90,
+            "element": "hydro",
+            "enabled": true,
+            "atk": 810,
+            "def": 600,
+            "hp": 12500,
+            "em": 250,
+            "cr": 15,
+            "cd": 70
+          },
+          {
+            "id": "m7lx1o",
+            "name": "神秘角色",
+            "level": 90,
+            "element": "dendro",
+            "enabled": true,
+            "atk": 1153,
+            "def": 600,
+            "hp": 17280,
+            "em": 250,
+            "cr": 15,
+            "cd": 70
+          }
+        ],
+        "results": [
+          {
+            "charName": "哥伦比娅",
+            "ownerName": "哥伦比娅",
+            "dName": "普攻",
+            "elem": "dendro",
+            "expected": 260980.31608554377,
+            "crit": 260980,
+            "nonCrit": 74557,
+            "isTrans": false,
+            "isLunarDirect": true,
+            "count": 1
+          },
+          {
+            "charName": "哥伦比娅",
+            "ownerName": "哥伦比娅",
+            "dName": "战技",
+            "elem": "dendro",
+            "expected": 203890.87194183108,
+            "crit": 203891,
+            "nonCrit": 58248,
+            "isTrans": false,
+            "isLunarDirect": true,
+            "count": 1
+          },
+          {
+            "charName": "哥伦比娅",
+            "ownerName": "菈乌玛",
+            "dName": "爆发",
+            "elem": "dendro",
+            "expected": 2262383.5723886504,
+            "crit": 2262384,
+            "nonCrit": 646321,
+            "isTrans": false,
+            "isLunarDirect": true,
+            "count": 1
+          }
+        ],
+        "talents": [
+          {
+            "charName": "哥伦比娅",
+            "list": [
+              {
+                "name": "E0",
+                "source": "manual",
+                "effs": [
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_all",
+                    "target": "team",
+                    "value": 40,
+                    "desc": "月曜伤害+40% (全队)"
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "critRate",
+                    "target": "self",
+                    "value": 15,
+                    "desc": "暴击率+15%"
+                  },
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_base_bloom",
+                    "target": "team",
+                    "value": 7,
+                    "desc": "月绽放基础提升+7% (全队)"
+                  }
+                ]
+              },
+              {
+                "name": "武器效果",
+                "source": "weapon",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "hp_pct",
+                    "target": "self",
+                    "value": 24,
+                    "desc": "生命值+24%"
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "self",
+                    "value": 30,
+                    "desc": "元素精通+30"
+                  }
+                ]
+              },
+              {
+                "name": "套装效果 1",
+                "source": "artifact",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "critRate",
+                    "target": "self",
+                    "value": 30,
+                    "desc": "暴击率+30%"
+                  },
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_all",
+                    "target": "team",
+                    "value": 10,
+                    "desc": "月曜伤害+10% (全队)"
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "self",
+                    "value": 80,
+                    "desc": "元素精通+80"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "charName": "菈乌玛",
+            "list": [
+              {
+                "name": "E0",
+                "source": "manual",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "critRate",
+                    "target": "team",
+                    "value": 10,
+                    "desc": "暴击率+10% (全队)"
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "critDMG",
+                    "target": "team",
+                    "value": 20,
+                    "desc": "暴击伤害+20% (全队)"
+                  },
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_base_bloom",
+                    "target": "team",
+                    "value": 14,
+                    "desc": "月绽放基础提升+14% (全队)"
+                  },
+                  {
+                    "cat": "resShred",
+                    "type": "res_dendro",
+                    "target": "self",
+                    "value": 20,
+                    "desc": "草抗性+20%"
+                  },
+                  {
+                    "cat": "resShred",
+                    "type": "res_hydro",
+                    "target": "self",
+                    "value": 20,
+                    "desc": "水抗性+20%"
+                  }
+                ]
+              },
+              {
+                "name": "武器效果",
+                "source": "weapon",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "self",
+                    "value": 200,
+                    "desc": "元素精通+200"
+                  }
+                ]
+              },
+              {
+                "name": "套装效果 1",
+                "source": "artifact",
+                "effs": [
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_all",
+                    "target": "team",
+                    "value": 10,
+                    "desc": "月曜伤害+10% (全队)"
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "team",
+                    "value": 120,
+                    "desc": "元素精通+120 (全队)"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "charName": "爱诺",
+            "list": [
+              {
+                "name": "E0",
+                "source": "manual",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "team",
+                    "value": 80,
+                    "desc": "元素精通+80 (全队)"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "charName": "神秘角色",
+            "list": [
+              {
+                "name": "套装效果 1",
+                "source": "artifact",
+                "effs": [
+                  {
+                    "cat": "resShred",
+                    "type": "res_dendro",
+                    "target": "self",
+                    "value": 30,
+                    "desc": "草抗性+30%"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "config": {
+        "enemy": {
+          "level": 93,
+          "res": {
+            "pyro": 10,
+            "hydro": 10,
+            "electro": 10,
+            "cryo": 10,
+            "dendro": 10,
+            "anemo": 10,
+            "geo": 10,
+            "physical": 10
+          }
+        },
+        "chars": [
+          {
+            "id": "f2bmps",
+            "on": true,
+            "name": "哥伦比娅",
+            "lv": 90,
+            "element": "hydro",
+            "baseAtk": 300,
+            "weaponAtk": 454,
+            "atkPct": 0,
+            "atkFlat": 311,
+            "baseDef": 600,
+            "defPct": 0,
+            "defFlat": 0,
+            "baseHP": 14600,
+            "hpPct": 113.04,
+            "hpFlat": 4780,
+            "em": 138.74,
+            "critRate": 45.11,
+            "critDMG": 230.04,
+            "allDmgBonus": 0,
+            "elemDmgBonus": {
+              "pyro": 0,
+              "hydro": 0,
+              "electro": 0,
+              "cryo": 0,
+              "dendro": 0,
+              "anemo": 0,
+              "geo": 0,
+              "physical": 0
+            },
+            "dmgSrcs": [
+              {
+                "id": "ewf8m2",
+                "on": true,
+                "type": "lunarDirect",
+                "name": "普攻",
+                "lunarType": "bloom",
+                "stat": "hp",
+                "mult": 48,
+                "triggerCharId": "f2bmps",
+                "statCharId": "f2bmps"
+              },
+              {
+                "id": "hexwpu",
+                "on": true,
+                "type": "lunarDirect",
+                "name": "战技",
+                "lunarType": "bloom",
+                "stat": "hp",
+                "mult": 37.5,
+                "triggerCharId": "f2bmps",
+                "statCharId": "f2bmps"
+              }
+            ],
+            "talents": [
+              {
+                "id": "bw26mx",
+                "on": true,
+                "source": "manual",
+                "name": "E0",
+                "effs": [
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_all",
+                    "target": "team",
+                    "value": 40
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "critRate",
+                    "target": "self",
+                    "value": 15
+                  },
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_base_bloom",
+                    "target": "team",
+                    "value": 7
+                  }
+                ]
+              }
+            ],
+            "qs": {
+              "base": {
+                "hp": 14600,
+                "atk": 0,
+                "def": 0,
+                "ascType": "cd",
+                "ascPhase": 6,
+                "ascVal": 38.4
+              },
+              "weapon": {
+                "level": 90,
+                "rarity": "4",
+                "atkTier": "454",
+                "atk": 454,
+                "subType": "cr",
+                "subVal": 36.8,
+                "name": "武器效果",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "hp_pct",
+                    "target": "self",
+                    "value": 24
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "self",
+                    "value": 30
+                  }
+                ]
+              },
+              "artifact": {
+                "subs": {
+                  "atk_pct": 0,
+                  "hp_pct": 4,
+                  "def_pct": 0,
+                  "em": 7,
+                  "cr": 1,
+                  "cd": 12,
+                  "atk_flat": 0,
+                  "hp_flat": 0,
+                  "def_flat": 0
+                },
+                "mains": {
+                  "sand": "hp_pct",
+                  "goblet": "hp_pct",
+                  "circlet": "cd"
+                },
+                "sets": [
+                  {
+                    "name": "套装效果 1",
+                    "effs": [
+                      {
+                        "cat": "stat",
+                        "type": "critRate",
+                        "target": "self",
+                        "value": 30
+                      },
+                      {
+                        "cat": "lunar",
+                        "type": "lunar_all",
+                        "target": "team",
+                        "value": 10
+                      },
+                      {
+                        "cat": "stat",
+                        "type": "em_flat",
+                        "target": "self",
+                        "value": 80
+                      }
+                    ]
+                  }
+                ]
+              },
+              "_open": {
+                "sec1": false,
+                "sec2": false,
+                "sec3": true
+              }
+            }
+          },
+          {
+            "id": "e8aqrp",
+            "on": true,
+            "name": "菈乌玛",
+            "lv": 90,
+            "element": "dendro",
+            "baseAtk": 300,
+            "weaponAtk": 510,
+            "atkPct": 0,
+            "atkFlat": 311,
+            "baseDef": 600,
+            "defPct": 0,
+            "defFlat": 0,
+            "baseHP": 10500,
+            "hpPct": 0,
+            "hpFlat": 4780,
+            "em": 793.62,
+            "critRate": 24.86,
+            "critDMG": 89.72,
+            "allDmgBonus": 0,
+            "elemDmgBonus": {
+              "pyro": 0,
+              "hydro": 0,
+              "electro": 0,
+              "cryo": 0,
+              "dendro": 0,
+              "anemo": 0,
+              "geo": 0,
+              "physical": 0
+            },
+            "dmgSrcs": [
+              {
+                "id": "t0013d",
+                "on": true,
+                "type": "lunarDirect",
+                "name": "爆发",
+                "lunarType": "bloom",
+                "stat": "em",
+                "mult": 14400,
+                "triggerCharId": "f2bmps",
+                "statCharId": "e8aqrp"
+              }
+            ],
+            "talents": [
+              {
+                "id": "38qsvu",
+                "on": true,
+                "source": "manual",
+                "name": "E0",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "critRate",
+                    "target": "team",
+                    "value": 10
+                  },
+                  {
+                    "cat": "stat",
+                    "type": "critDMG",
+                    "target": "team",
+                    "value": 20
+                  },
+                  {
+                    "cat": "lunar",
+                    "type": "lunar_base_bloom",
+                    "target": "team",
+                    "value": 14
+                  },
+                  {
+                    "cat": "resShred",
+                    "type": "res_dendro",
+                    "target": "self",
+                    "value": 20
+                  },
+                  {
+                    "cat": "resShred",
+                    "type": "res_hydro",
+                    "target": "self",
+                    "value": 20
+                  }
+                ]
+              }
+            ],
+            "qs": {
+              "base": {
+                "hp": 10500,
+                "atk": 0,
+                "def": 0,
+                "ascType": "em",
+                "ascPhase": 6,
+                "ascVal": 115.2
+              },
+              "weapon": {
+                "level": 90,
+                "rarity": "4",
+                "atkTier": "510",
+                "atk": 510,
+                "subType": "none",
+                "subVal": 0,
+                "name": "武器效果",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "self",
+                    "value": 200
+                  }
+                ]
+              },
+              "artifact": {
+                "subs": {
+                  "atk_pct": 0,
+                  "hp_pct": 0,
+                  "def_pct": 0,
+                  "em": 6,
+                  "cr": 6,
+                  "cd": 6,
+                  "atk_flat": 0,
+                  "hp_flat": 0,
+                  "def_flat": 0
+                },
+                "mains": {
+                  "sand": "em",
+                  "goblet": "em",
+                  "circlet": "em"
+                },
+                "sets": [
+                  {
+                    "name": "套装效果 1",
+                    "effs": [
+                      {
+                        "cat": "lunar",
+                        "type": "lunar_all",
+                        "target": "team",
+                        "value": 10
+                      },
+                      {
+                        "cat": "stat",
+                        "type": "em_flat",
+                        "target": "team",
+                        "value": 120
+                      }
+                    ]
+                  }
+                ]
+              },
+              "_open": {
+                "sec1": false,
+                "sec2": false,
+                "sec3": true
+              }
+            }
+          },
+          {
+            "id": "i6c840",
+            "on": true,
+            "name": "爱诺",
+            "lv": 90,
+            "element": "hydro",
+            "baseAtk": 300,
+            "weaponAtk": 510,
+            "atkPct": 0,
+            "atkFlat": 0,
+            "baseDef": 600,
+            "defPct": 0,
+            "defFlat": 0,
+            "baseHP": 10000,
+            "hpPct": 0,
+            "hpFlat": 0,
+            "em": 0,
+            "critRate": 5,
+            "critDMG": 50,
+            "allDmgBonus": 0,
+            "elemDmgBonus": {
+              "pyro": 0,
+              "hydro": 0,
+              "electro": 0,
+              "cryo": 0,
+              "dendro": 0,
+              "anemo": 0,
+              "geo": 0,
+              "physical": 0
+            },
+            "dmgSrcs": [],
+            "talents": [
+              {
+                "id": "7fvjls",
+                "on": true,
+                "source": "manual",
+                "name": "E0",
+                "effs": [
+                  {
+                    "cat": "stat",
+                    "type": "em_flat",
+                    "target": "team",
+                    "value": 80
+                  }
+                ]
+              }
+            ],
+            "qs": {
+              "base": {
+                "hp": 0,
+                "atk": 0,
+                "def": 0,
+                "ascType": "none",
+                "ascPhase": 6,
+                "ascVal": 0
+              },
+              "weapon": {
+                "level": 90,
+                "rarity": 5,
+                "atkTier": "542",
+                "atk": 0,
+                "subType": "none",
+                "subVal": 0,
+                "name": "武器效果",
+                "effs": []
+              },
+              "artifact": {
+                "subs": {
+                  "atk_pct": 0,
+                  "hp_pct": 0,
+                  "def_pct": 0,
+                  "em": 0,
+                  "cr": 0,
+                  "cd": 0,
+                  "atk_flat": 0,
+                  "hp_flat": 0,
+                  "def_flat": 0
+                },
+                "mains": {
+                  "sand": "none",
+                  "goblet": "none",
+                  "circlet": "none"
+                },
+                "sets": []
+              }
+            }
+          },
+          {
+            "id": "m7lx1o",
+            "on": true,
+            "name": "神秘角色",
+            "lv": 90,
+            "element": "dendro",
+            "baseAtk": 300,
+            "weaponAtk": 542,
+            "atkPct": 0,
+            "atkFlat": 311,
+            "baseDef": 600,
+            "defPct": 0,
+            "defFlat": 0,
+            "baseHP": 10000,
+            "hpPct": 0,
+            "hpFlat": 4780,
+            "em": 0,
+            "critRate": 5,
+            "critDMG": 50,
+            "allDmgBonus": 0,
+            "elemDmgBonus": {
+              "pyro": 0,
+              "hydro": 0,
+              "electro": 0,
+              "cryo": 0,
+              "dendro": 0,
+              "anemo": 0,
+              "geo": 0,
+              "physical": 0
+            },
+            "dmgSrcs": [],
+            "talents": [],
+            "qs": {
+              "base": {
+                "hp": 0,
+                "atk": 0,
+                "def": 0,
+                "ascType": "none",
+                "ascPhase": 6,
+                "ascVal": 0
+              },
+              "weapon": {
+                "level": 90,
+                "rarity": 5,
+                "atkTier": "542",
+                "atk": 542,
+                "subType": "none",
+                "subVal": 0,
+                "name": "武器效果",
+                "effs": []
+              },
+              "artifact": {
+                "subs": {
+                  "atk_pct": 0,
+                  "hp_pct": 0,
+                  "def_pct": 0,
+                  "em": 0,
+                  "cr": 0,
+                  "cd": 0,
+                  "atk_flat": 0,
+                  "hp_flat": 0,
+                  "def_flat": 0
+                },
+                "mains": {
+                  "sand": "none",
+                  "goblet": "none",
+                  "circlet": "none"
+                },
+                "sets": [
+                  {
+                    "name": "套装效果 1",
+                    "effs": [
+                      {
+                        "cat": "resShred",
+                        "type": "res_dendro",
+                        "target": "self",
+                        "value": 30
+                      }
+                    ]
+                  }
+                ]
+              },
+              "_open": {
+                "sec1": true,
+                "sec2": false,
+                "sec3": true
+              }
+            }
+          }
+        ],
+        "selId": "f2bmps",
+        "baselineMode": "a"
+      }
+    }
+  ],
+  "baselineMode": "a"
+}
