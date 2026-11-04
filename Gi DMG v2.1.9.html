@@ -1121,6 +1121,16 @@ select.pi { padding-top: 0 !important; padding-bottom: 0 !important; }
   border: 1px dashed #ccd3dd; border-radius: 12px; font-size: 11.5px; text-align: center;
 }
 
+/* 天赋卡片内的「始终生效」开关行 —— 开启后该天赋不占用时间轴区间，全程参与结算。 */
+.talent-perm-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 7px; padding: 6px 10px;
+  color: var(--studio-muted); background: var(--studio-surface-subtle); border-radius: 10px;
+  font-size: 10.5px;
+}
+.talent-perm-row > span:first-child { display: inline-flex; align-items: baseline; gap: 5px; min-width: 0; }
+.talent-perm-row .talent-perm-hint { color: #9aa1ab; font-size: 10px; }
+
 /* ===== Timeline scheduler =====
    出伤与天赋的开始/结束时间统一在「循环时间轴」中编排，伤害来源与天赋卡片不再各自持有时间输入。 */
 .timeline-editor { margin-top: 18px; }
@@ -1184,7 +1194,14 @@ select.pi { padding-top: 0 !important; padding-bottom: 0 !important; }
 /* Talent / buff windows drawn on the board: a soft grey bar without end caps. */
 .timeline-block.talent .tl-line { height: 8px; margin-top: -4px; border-radius: 4px; background: #c3ccd8; }
 .timeline-block.talent .tl-cap { display: none; }
+/* 始终生效的天赋铺满整轴，用斜纹与普通区间区分。 */
+.timeline-block.talent.permanent .tl-line {
+  background: repeating-linear-gradient(115deg, #aab4c2 0 4px, #c3ccd8 4px 8px);
+}
 .timeline-legend-swatch { width: 20px; height: 8px; border-radius: 999px; background: #c3ccd8; }
+.timeline-legend-swatch.permanent {
+  background: repeating-linear-gradient(115deg, #aab4c2 0 4px, #c3ccd8 4px 8px);
+}
 .timeline-legend-ring {
   width: 12px; height: 12px; box-sizing: border-box;
   border: 2.5px solid #a8c7fa; border-radius: 50%; background: #fbfbfd;
@@ -2060,7 +2077,7 @@ ${qt?'':`<div class="relative">
 <section class="editor-section">
 <div class="flex items-center justify-between mb-2">
 <div class="config-section-title font-[700] text-[13px]">天赋 / 增益</div>
-<div class="text-[10.5px] text-[#8a7661] ml-2 hidden" id="talentTimingHint">生效区间在「循环时间轴」中统一编排</div>
+<div class="text-[10.5px] text-[#8a7661] ml-2 hidden" id="talentTimingHint">生效区间在「循环时间轴」中统一编排，也可在天赋卡片内设为始终生效</div>
 <button id="addTalent" class="bs-ico sm cursor-pointer" title="添加天赋" aria-label="添加天赋"><i class="w-3 h-3" data-lucide="plus"></i></button>
 </div>
 <div id="talentList" class="space-y-2.5 max-h-[520px] overflow-auto pr-1 thin-scroll"></div>
@@ -2234,17 +2251,22 @@ const b=$('talentList');if(!b)return;
 const hint=$('talentTimingHint');if(hint)hint.classList.toggle('hidden',timelineTimingHidden());
 const userTalents=(ch.talents||[]).filter(t=>!t.source||t.source==='manual');
 
-// 天赋的生效区间统一在「循环时间轴」中编排，这里只保留效果本身。
+// 天赋的生效区间统一在「循环时间轴」中编排；也可以在这里直接设为「始终生效」。
 b.innerHTML=userTalents.map(t=>{
 t.source='manual';
 if(t.startTime===undefined)t.startTime=0;
 if(t.duration===undefined)t.duration=20;
-// v2.1.5: manual talents always use an explicit activation interval.
-t.isPermanent=false;
+if(t.isPermanent===undefined)t.isPermanent=false;
 const valid=talentValid(t);
+const permRow=S.timelineEnabled?`
+<div class="talent-perm-row">
+<span>始终生效<span class="talent-perm-hint">开启后不占用时间轴区间，全程参与结算</span></span>
+<div class="tgl ${t.isPermanent?'on':''}" data-tp="${t.id}" role="switch" aria-checked="${t.isPermanent?'true':'false'}" aria-label="始终生效" tabindex="0"><span></span></div>
+</div>`:'';
 
 return`<div class="rounded-xl border ${valid?'border-[#e0cfb7]':'border-[#d95f4a]'} bg-[#fcf8ef] p-2.5">
 <div class="flex items-center gap-1.5 mb-1.5"><input data-tl="${t.id}" data-tk="name" value="${escapeHTML(t.name)}" class="pi font-normal"><div class="tgl ${t.on?'on':''}" data-tt="${t.id}"><span></span></div><button data-td="${t.id}" class="text-[10px] text-[#b86a4a]">删除</button></div>
+${permRow}
 <div class="space-y-1.5">${t.effs.map((ef,ei)=>renderGenericEffRow(t.id,ei,ef)).join('')}</div>
 <button data-ae="${t.id}" class="mt-1.5 text-[11px] text-[#b07a33] font-[600] cursor-pointer">+ 添加效果</button></div>`;
 }).join('')||`<div class="text-[11px] text-[#a08360]">暂无天赋。</div>`;
@@ -2253,6 +2275,11 @@ b.querySelectorAll('[data-tl]').forEach(i=>i.addEventListener('input',()=>{
 const t=ch.talents.find(x=>x.id===i.dataset.tl);if(t){t[i.dataset.tk]=i.type==='number'?parseFloat(i.value)||0:i.value;calc();}
 }));
 b.querySelectorAll('[data-tt]').forEach(x=>x.addEventListener('click',()=>{const t=ch.talents.find(v=>v.id===x.dataset.tt);if(t){t.on=!t.on;rTal();calc();}}));
+b.querySelectorAll('[data-tp]').forEach(x=>{
+const flip=()=>{const t=ch.talents.find(v=>v.id===x.dataset.tp);if(t){t.isPermanent=!t.isPermanent;rTal();calc();}};
+x.addEventListener('click',flip);
+x.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();flip();}});
+});
 b.querySelectorAll('[data-td]').forEach(x=>x.addEventListener('click',()=>{ch.talents=ch.talents.filter(v=>v.id!==x.dataset.td);rTal();calc();}));
 b.querySelectorAll('[data-ae]').forEach(x=>x.addEventListener('click',()=>{const t=ch.talents.find(v=>v.id===x.dataset.ae);if(t){t.effs.push({cat:'',type:'',target:'',value:0});rTal();calc();}}));
 
@@ -3102,10 +3129,12 @@ out.forEach(e=>{
 e.key=e.kind+':'+e.char.id+':'+e.idx;
 e.isSrc=e.kind==='source';
 e.mode=e.isSrc?(e.ref.timingMode||'instant'):'duration';
-e.dur=Math.max(0,+e.ref.duration||0);
+// 「始终生效」的天赋不占用区间，整轴参与结算。
+e.permanent=!e.isSrc&&e.ref.isPermanent===true;
+e.dur=e.permanent?rot:Math.max(0,+e.ref.duration||0);
 e.instant=e.isSrc&&(e.mode==='instant'||e.dur===0);
 e.locked=e.mode==='uniform_snapshot';
-e.start=normTlStart(e.ref.startTime,rot);
+e.start=e.permanent?0:normTlStart(e.ref.startTime,rot);
 e.end=e.start+e.dur;
 });
 return out;
@@ -3117,6 +3146,7 @@ return list.slice().sort((a,b)=>(a.start-b.start)||(a.end-b.end)
 }
 function tlSummaryText(kind,ref,rot){
 const label=TL_KIND_LABEL[kind]||'条目';
+if(kind!=='source'&&ref.isPermanent===true)return `${label} · 始终生效（全程覆盖）`;
 const dur=Math.max(0,+ref.duration||0);
 const start=normTlStart(ref.startTime,rot);
 if(kind!=='source'){
@@ -3134,9 +3164,11 @@ function renderTimelineEditor(force){
 const box=$('timelineEditor');if(!box)return;
 const en=S.chars.filter(c=>c.on),rot=timelineRot();
 const all=collectTimelineEntries(en);
-// Names, validity and the quick-table lock belong in the signature so renames,
-// newly completed configs and mode switches all refresh the rows.
-const sig=all.map(e=>`${e.key}@${e.name}@${e.valid?1:0}`).join('|')+'#'+rot+'#'+(quickTableActive?1:0);
+// Names, validity, the 始终生效 flag and the quick-table lock belong in the signature so
+// renames, newly completed configs and mode switches all refresh the rows. Timing values
+// are deliberately excluded — they change on every keystroke and a rebuild would steal focus.
+const sig=all.map(e=>`${e.key}@${e.name}@${e.valid?1:0}@${e.permanent?1:0}`).join('|')
++'#'+rot+'#'+(quickTableActive?1:0);
 // Skip the rebuild while the user is typing into a field — only entry-set changes matter here.
 if(!force&&sig===tlEditorSig&&box.innerHTML)return;
 tlEditorSig=sig;
@@ -3168,7 +3200,8 @@ const modeSel=e.isSrc?`<label>出伤方式<select class="pi" data-tle-mode="${e.
 <option value="instant" ${e.instant?'selected':''}>瞬发</option>
 <option value="duration" ${e.instant?'':'selected'}>持续均匀</option></select></label>`:'';
 const lockBtn=(e.isSrc&&!e.instant)?`<button type="button" class="tl-lock ${e.locked?'on':''}" data-tle-lock="${e.key}" title="锁面板：全程按开始时刻的面板结算；随动：逐段按当时面板结算" ${dis}>${e.locked?'锁面板':'随动'}</button>`:'';
-const inactive=(e.kind!=='source'&&e.dur<=0)||!e.valid;
+const disTime=e.permanent?'disabled':'';
+const inactive=(!e.permanent&&e.kind!=='source'&&e.dur<=0)||!e.valid;
 return `<div class="tl-entry ${inactive?'is-inactive':''}" data-tle-row="${e.key}">
 <div class="tl-entry-main">
 <span class="tl-entry-index">${i+1}</span>
@@ -3177,8 +3210,8 @@ return `<div class="tl-entry ${inactive?'is-inactive':''}" data-tle-row="${e.key
 </div>
 <div class="tl-entry-ctrl">
 ${modeSel}
-<label>开始(s)<input class="pi" type="number" step="0.1" min="0" value="${r2(e.start)}" data-tle-start="${e.key}" aria-label="开始时间（秒）" ${dis}></label>
-<label>结束(s)<input class="pi" type="number" step="0.1" min="0" value="${e.instant?'':r2(e.end)}" placeholder="—" ${e.instant?'disabled':''} data-tle-end="${e.key}" aria-label="结束时间（秒）" ${dis}></label>
+<label>开始(s)<input class="pi" type="number" step="0.1" min="0" value="${r2(e.start)}" data-tle-start="${e.key}" aria-label="开始时间（秒）" ${dis} ${disTime}></label>
+<label>结束(s)<input class="pi" type="number" step="0.1" min="0" value="${e.instant?'':r2(e.end)}" placeholder="${e.permanent?'全程':'—'}" ${e.instant?'disabled':''} data-tle-end="${e.key}" aria-label="结束时间（秒）" ${dis} ${disTime}></label>
 ${lockBtn}
 <button type="button" class="tl-entry-jump" data-tle-jump="${e.key}">编辑</button>
 </div></div>`;
@@ -3199,6 +3232,7 @@ if(aa)aa.onclick=()=>{
 const list=sortTimelineEntries(collectTimelineEntries(S.chars.filter(c=>c.on)).filter(tlFilterMatch));
 let cursor=0;
 list.forEach(e=>{
+if(e.permanent)return;   // 始终生效的天赋不占用区间
 e.ref.startTime=+cursor.toFixed(2);
 const dur=Math.max(0,+e.ref.duration||0);
 if(!(e.isSrc&&(e.ref.timingMode==='instant'||dur===0)))cursor+=dur;
@@ -3298,13 +3332,14 @@ let rows='';
 activeChars.forEach(c=>{
   const charElement=getElementMeta(c.element);
   const sources=(c.dmgSrcs||[]).filter(d=>d.on&&dmgSourceValid(d));
-  const talents=talentWindowsOf(c).filter(t=>Math.max(0,+t.ref.duration||0)>0);
+  const talents=talentWindowsOf(c).filter(t=>t.ref.isPermanent===true||Math.max(0,+t.ref.duration||0)>0);
   const intervals=[];
   const addInterval=(ref,kind,idx,name)=>{
-    const duration=Math.max(0,+ref.duration||0);
-    const start=((+ref.startTime||0)%rot+rot)%rot;
+    const permanent=kind!=='source'&&ref.isPermanent===true;
+    const duration=permanent?rot:Math.max(0,+ref.duration||0);
+    const start=permanent?0:((+ref.startTime||0)%rot+rot)%rot;
     const end=start+duration;
-    const base={ref,kind,idx,name,start,duration,originalStart:start,originalEnd:end};
+    const base={ref,kind,idx,name,permanent,start,duration,originalStart:start,originalEnd:end};
     if(end<=rot){
       intervals.push({...base,end:Math.max(start+.15,end)});
     }else{
@@ -3331,11 +3366,11 @@ activeChars.forEach(c=>{
       const element=visualElement?(getElementMeta(visualElement)||charElement):null;
       const left=item.start/rot*100,width=Math.max(1.2,(item.end-item.start)/rot*100);
       const title=isTalent
-        ?`${c.name} · ${item.name} · ${r2(item.originalStart)}s–${r2(item.originalEnd)}s（增益）`
+        ?(item.permanent?`${c.name} · ${item.name} · 始终生效（增益）`:`${c.name} · ${item.name} · ${r2(item.originalStart)}s–${r2(item.originalEnd)}s（增益）`)
         :(item.duration===0?`${c.name} · ${item.name} · ${r2(item.start)}s 瞬发`:`${c.name} · ${item.name} · ${r2(item.originalStart)}s–${r2(item.originalEnd)}s`);
       const action=`jumpToTimelineEntry('${item.kind}:${c.id}:${item.idx}')`;
       if(isTalent){
-        return `<button type="button" class="timeline-block talent" style="left:${left}%;width:${width}%" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}" onclick="${action}"><span class="tl-line"></span></button>`;
+        return `<button type="button" class="timeline-block talent${item.permanent?' permanent':''}" style="left:${left}%;width:${width}%" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}" onclick="${action}"><span class="tl-line"></span></button>`;
       }
       if(item.duration===0||mode==='instant'){
         return `<button type="button" class="timeline-instant ${element?.c||''}" style="left:${left}%" title="${escapeHTML(title)}" aria-label="${escapeHTML(title)}" onclick="${action}"></button>`;
@@ -3359,6 +3394,7 @@ graph.innerHTML=`<div class="timeline-scroll"><div class="timeline-board">
     <span><i class="timeline-legend-bar"></i>持续 · 锁面板</span>
     <span><i class="timeline-legend-bar dynamic"></i>持续 · 随动</span>
     <span><i class="timeline-legend-swatch"></i>天赋 / 增益</span>
+    <span><i class="timeline-legend-swatch permanent"></i>始终生效</span>
     <span class="timeline-legend-hint">在下方「时间轴编排」中调整时间</span>
   </div>
 </div></div>`;
