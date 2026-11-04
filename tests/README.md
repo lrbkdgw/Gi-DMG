@@ -3,7 +3,8 @@
 单文件应用无法拆成模块导入，所以测试用 Node 的 `vm` 在伪造 DOM 上跑成品 HTML 里那一段真实脚本，再对计算内核与迁移逻辑做断言。
 
 ```bash
-node tests/test.js
+node tests/test.js        # 计算内核 / 迁移 / 渲染冒烟（39 项）
+node tests/style.test.js  # 样式完整性 + 标签配对
 ```
 
 覆盖内容：
@@ -17,5 +18,7 @@ node tests/test.js
 | D 排序标签 | 同刻天赋优先、chip 文案、剪枝悬空引用、一键补充幂等 |
 | E 渲染冒烟 | 5 份存档跑遍角色/时间轴/魔物三个工作区与全部新弹窗 |
 | F 往返 | 快照含 `timeline`，保存→载入总伤与节点数不变 |
+
+`style.test.js` 保证两件事：**成品里出现的每个 class 都在内联样式表中有定义**（v2.2.0 换配色时，预编译的 Tailwind 里新 hex 全都不存在，脚本会直接报出来），以及 `<style>/<script>/<div>/<html>/<head>` 开合数量一致。
 
 `dom.js` 是最小 DOM 桩（含 `classList`、`dataset`、`querySelector` 缓存），`run.js` 从成品 HTML 里切出脚本并启动上下文。
