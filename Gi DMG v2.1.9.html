@@ -569,6 +569,181 @@ select.studio-select-native {
 .tgl.on span {
   transform: translateX(16px);
 }
+.tgl.partial {
+  background: var(--studio-blue-tint);
+  box-shadow: inset 0 0 0 1px var(--studio-blue-border);
+}
+.tgl.partial span {
+  transform: translateX(8px);
+  background: var(--studio-blue);
+}
+
+/* Skill Group Pill & Rounded Popover (Matches Original Capsule Style) */
+.group-tag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px dashed #c8d1de;
+  color: var(--studio-muted);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color .14s ease, border-color .14s ease, color .14s ease;
+}
+.group-tag-btn:hover {
+  border-style: solid;
+  border-color: var(--studio-blue-border);
+  background: var(--studio-blue-tint);
+  color: var(--studio-blue);
+}
+.group-tag-btn.has-group {
+  border-style: solid;
+  border-color: var(--studio-border);
+  background: var(--studio-surface-subtle);
+  color: var(--studio-text);
+  font-weight: 600;
+}
+.group-tag-btn.has-group:hover {
+  border-color: var(--studio-blue-border);
+  background: var(--studio-blue-tint);
+  color: var(--studio-blue);
+}
+.group-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.group-popover {
+  position: fixed;
+  z-index: 140;
+  width: 244px;
+  padding: 10px;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  border-radius: 16px;
+  box-shadow: var(--studio-shadow-float);
+}
+.group-pop-create {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.group-pop-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--studio-border-subtle);
+}
+.group-pop-list {
+  max-height: 184px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.group-pop-item {
+  width: 100%;
+  min-height: 30px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--studio-text-secondary);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .14s ease, color .14s ease;
+}
+.group-pop-item:hover {
+  background: var(--studio-surface-subtle);
+  color: var(--studio-text);
+}
+.group-pop-item.active {
+  background: var(--studio-blue-tint);
+  color: var(--studio-blue);
+  font-weight: 600;
+}
+
+/* Timeline Group Master Switch Panel (Rounded Capsule Style) */
+.tl-group-panel {
+  margin-top: 12px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: #f8fafd;
+  border: 1px solid var(--studio-border);
+}
+.tl-group-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11.5px;
+}
+.tl-group-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tl-group-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 7px 0 11px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--studio-border);
+  transition: border-color .14s ease, background-color .14s ease, opacity .14s ease;
+}
+.tl-group-card:hover {
+  border-color: #cbd5e1;
+}
+.tl-group-card.is-filtered {
+  border-color: var(--studio-blue-border);
+  background: var(--studio-blue-tint);
+}
+.tl-group-card.is-off {
+  opacity: .66;
+}
+.tl-group-name-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--studio-text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tl-group-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--studio-surface-subtle);
+  color: var(--studio-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
 
 /* Range Slider */
 .slider-unit { display: block; }
@@ -2299,6 +2474,7 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.14); curso
 </div>
 <div class="text-[11.5px] text-[#64748b]">点击轨道节点可快速定位下方条目</div>
 </div>
+<div id="tlGroupBar"></div>
 <div id="timelineGraph"></div>
 <div class="tl-editor-card" id="timelineEditor"></div>
 </div>
@@ -2325,7 +2501,7 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.14); curso
 </div>
 <div class="hidden" id="qtModeBanner">
 <span class="qt-active-badge">⚡ 快速拉表模式</span>
-<span>伤害来源已锁定，可调整面板、武器、圣遗物、开关与时间轴</span>
+<span>伤害来源已锁定，可调整面板、武器、圣遗物、分组与时间轴开关</span>
 <button aria-controls="quickTableModal" class="qt-finish-badge" id="qtFinishBtn" type="button">✓ 完成拉表</button>
 </div>
 <div class="sidebar-results-scroll">
@@ -2358,6 +2534,7 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.14); curso
 </aside>
 </div>
 </div><!-- /genshinView -->
+<div class="group-popover hidden" id="groupPickerPopover"></div>
 <!-- Settings Modal -->
 <div class="fixed inset-0 modal-overlay hidden items-center justify-center z-50 p-4" id="settingsModal">
 <div class="studio-modal-panel w-full max-w-md max-h-[85vh] flex flex-col relative">
@@ -2662,14 +2839,140 @@ feather:{n:'羽毛效果',opts:[{id:'atk',n:'攻击力 %'},{id:'def',n:'防御�
 const BASE_TYPES=['lunar_base','lunar_base_charged','lunar_base_bloom','lunar_base_crystal','star_base','star_base_sc','star_base_sd'];
 function applyBaseTypeDefault(ef){if(ef&&BASE_TYPES.includes(ef.type)&&!ef.target)ef.target='team';}
 
+const GROUP_PALETTE=['#0b57d0','#0284c7','#059669','#d97706','#db2777','#7c3aed','#ea580c','#0d9488'];
+const GROUP_PRESETS=['普攻组','战技组','爆发组','后台组','增益组'];
+
 let S={
 timelineEnabled:true,
 dmgShareEnabled:false,
 rotationDuration:20,
 enemy:{level:93,res:{pyro:10,hydro:10,electro:10,cryo:10,dendro:10,anemo:10,geo:10,physical:10}},
-chars:[],timeline:[],selId:null,baselines:[],baselineMode:'a'
+chars:[],timeline:[],groups:[],disabledGroups:[],selId:null,baselines:[],baselineMode:'a'
 };
 window.__lastCalc=null;
+
+function ensureGroupMeta(rawName,state=S){
+const name=String(rawName||'').trim();
+if(!name)return null;
+if(!Array.isArray(state.groups))state.groups=[];
+let found=state.groups.find(g=>g&&g.name===name);
+if(!found){
+  const color=GROUP_PALETTE[state.groups.length%GROUP_PALETTE.length];
+  found={name,color};
+  state.groups.push(found);
+}
+return found;
+}
+function getGroupColor(name,state=S){
+if(!name)return'#94a3b8';
+const found=(state.groups||[]).find(g=>g&&g.name===name);
+return found?.color||ensureGroupMeta(name,state)?.color||'#0b57d0';
+}
+function isItemEnabledInStaticMode(item,state=S){
+if(!item||item.on===false)return false;
+const g=String(item.group||'').trim();
+if(g&&Array.isArray(state.disabledGroups)&&state.disabledGroups.includes(g))return false;
+return true;
+}
+function forEachTeamConfigurableItem(cb,chars=S.chars){
+(chars||[]).forEach(c=>{
+  (c.dmgSrcs||[]).forEach(d=>cb(d,'damage','dmg',c));
+  (c.talents||[]).filter(t=>!t.source||t.source==='manual').forEach(t=>cb(t,'talent','manual',c));
+  (c.qs?.weapon?.talents||[]).forEach(wt=>cb(wt,'talent','weapon',c));
+  (c.qs?.artifact?.sets||[]).forEach(as=>cb(as,'talent','artifact',c));
+});
+}
+function collectActiveGroupList(state=S){
+const counts=new Map();
+forEachTeamConfigurableItem(item=>{
+  const g=String(item.group||'').trim();
+  if(!g)return;
+  ensureGroupMeta(g,state);
+  counts.set(g,(counts.get(g)||0)+1);
+},state.chars);
+return(state.groups||[]).filter(g=>g&&g.name&&counts.has(g.name)).map(g=>({name:g.name,color:g.color,itemCount:counts.get(g.name)||0}));
+}
+function renderGroupTagBtn(item,bindKey){
+const g=String(item?.group||'').trim();
+if(!g){
+  return`<button type="button" class="group-tag-btn" data-grp-pick="${bindKey}" title="设置分组（在时间轴可按分组一键开启或关闭）">+ 设分组</button>`;
+}
+const color=getGroupColor(g);
+return`<button type="button" class="group-tag-btn has-group" data-grp-pick="${bindKey}" title="所属分组：${escapeHTML(g)}（点击修改或清除分组）"><span class="group-dot" style="background:${color}"></span><span>${escapeHTML(g)}</span></button>`;
+}
+
+let activeGroupPopCleanup=null;
+function closeGroupPicker(){
+const pop=$('groupPickerPopover');
+if(pop){pop.classList.add('hidden');pop.innerHTML='';}
+if(typeof activeGroupPopCleanup==='function'){activeGroupPopCleanup();activeGroupPopCleanup=null;}
+}
+function openGroupPicker(anchor,currentGroup,onSelect){
+const pop=$('groupPickerPopover');if(!pop||!anchor)return;
+closeGroupPicker();
+const cur=String(currentGroup||'').trim();
+const existing=collectActiveGroupList();
+const existingNames=new Set(existing.map(x=>x.name));
+const extraPresets=GROUP_PRESETS.filter(p=>!existingNames.has(p));
+
+pop.innerHTML=`
+<div class="group-pop-create">
+  <input id="grpPopInput" class="pi pi-sm" placeholder="输入分组名称..." value="" maxlength="24"/>
+  <button type="button" id="grpPopCreateBtn" class="bg !py-1 !px-3 !text-[11.5px] shrink-0">创建</button>
+</div>
+${extraPresets.length?`<div class="group-pop-presets">${extraPresets.map(p=>`<button type="button" class="chip text-[10.5px]" data-grp-val="${escapeHTML(p)}">+ ${escapeHTML(p)}</button>`).join('')}</div>`:''}
+<div class="group-pop-list thin-scroll">
+  ${existing.map(g=>`<button type="button" class="group-pop-item ${g.name===cur?'active':''}" data-grp-val="${escapeHTML(g.name)}"><span class="flex items-center gap-2 min-w-0"><span class="group-dot" style="background:${g.color}"></span><span class="truncate">${escapeHTML(g.name)}</span></span><span class="text-[10.5px] text-[#94a3b8]">${g.name===cur?'✓ 当前':g.itemCount+'项'}</span></button>`).join('')||'<div class="text-[11px] text-[#94a3b8] px-2 py-1.5">暂无已建分组，可点上方预设或输入名称创建</div>'}
+  ${cur?`<button type="button" class="group-pop-item !text-[#d93025] mt-1" data-grp-clear="1"><span>清除分组</span><span>✕</span></button>`:''}
+</div>`;
+
+pop.classList.remove('hidden');
+const rect=anchor.getBoundingClientRect();
+const popW=244,popH=pop.offsetHeight||210;
+let left=Math.min(window.innerWidth-popW-10,Math.max(10,rect.right-popW));
+let top=rect.bottom+6;
+if(top+popH>window.innerHeight-10)top=Math.max(10,rect.top-popH-6);
+pop.style.left=left+'px';
+pop.style.top=top+'px';
+
+const commit=val=>{
+  const clean=String(val||'').trim();
+  if(clean)ensureGroupMeta(clean);
+  closeGroupPicker();
+  onSelect(clean);
+};
+const inp=pop.querySelector('#grpPopInput');
+const createBtn=pop.querySelector('#grpPopCreateBtn');
+if(createBtn)createBtn.onclick=()=>{if(inp.value.trim())commit(inp.value.trim());};
+if(inp){
+  inp.onkeydown=e=>{
+    if(e.key==='Enter'){e.preventDefault();if(inp.value.trim())commit(inp.value.trim());}
+    else if(e.key==='Escape'){e.preventDefault();closeGroupPicker();}
+  };
+  requestAnimationFrame(()=>inp.focus());
+}
+pop.querySelectorAll('[data-grp-val]').forEach(b=>{b.onclick=()=>commit(b.dataset.grpVal);});
+const clr=pop.querySelector('[data-grp-clear]');
+if(clr)clr.onclick=()=>commit('');
+
+const onOut=e=>{if(!pop.contains(e.target)&&!anchor.contains(e.target))closeGroupPicker();};
+setTimeout(()=>document.addEventListener('mousedown',onOut,true),0);
+activeGroupPopCleanup=()=>document.removeEventListener('mousedown',onOut,true);
+}
+function bindGroupPickers(root,resolveItemByKey,onAfterChange){
+if(!root)return;
+root.querySelectorAll('[data-grp-pick]').forEach(btn=>{
+  btn.onclick=e=>{
+    e.preventDefault();e.stopPropagation();
+    const item=resolveItemByKey(btn.dataset.grpPick);
+    if(!item)return;
+    openGroupPicker(btn,item.group||'',nextGrp=>{
+      item.group=nextGrp;
+      onAfterChange();
+    });
+  };
+});
+}
 
 function sortTimeline(list=S.timeline){
 if(!Array.isArray(list))return[];
@@ -2726,6 +3029,8 @@ const baseRes={pyro:10,hydro:10,electro:10,cryo:10,dendro:10,anemo:10,geo:10,phy
 raw.timelineEnabled=raw.timelineEnabled!==false;
 raw.dmgShareEnabled=!!raw.dmgShareEnabled;
 raw.rotationDuration=Math.max(1,Number(raw.rotationDuration)||20);
+raw.groups=Array.isArray(raw.groups)?raw.groups.filter(g=>g&&typeof g==='object'&&typeof g.name==='string'&&g.name.trim()).map((g,idx)=>({name:g.name.trim(),color:typeof g.color==='string'&&g.color?g.color:GROUP_PALETTE[idx%GROUP_PALETTE.length]})):[];
+raw.disabledGroups=Array.isArray(raw.disabledGroups)?raw.disabledGroups.filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim()):[];
 raw.enemy=raw.enemy&&typeof raw.enemy==='object'?raw.enemy:{};
 raw.enemy.level=Math.max(1,Number(raw.enemy.level)||93);
 raw.enemy.res={...baseRes,...(raw.enemy.res&&typeof raw.enemy.res==='object'?raw.enemy.res:{})};
@@ -2742,27 +3047,44 @@ raw.chars.forEach(c=>{
   c.dmgSrcs.forEach(d=>{
     if(typeof d.id!=='string'||!d.id||used.has(d.id))d.id=uid();used.add(d.id);
     d.on=d.on!==false;
+    d.group=typeof d.group==='string'?d.group.trim():'';
+    if(d.group)ensureGroupMeta(d.group,raw);
     if(d.type==='normal'&&(d.reaction==='aggravate'||d.reaction==='spread')){
       const qType=d.reaction;d.reaction='none';
       const nid=uid();used.add(nid);
-      extraTrans.push({id:nid,on:d.on,type:'trans',name:qType==='spread'?'蔓激化':'超激化',transType:qType,triggerCount:1,triggerCharId:d.triggerCharId||c.id,statCharId:d.statCharId||c.id,timingMode:d.timingMode,startTime:d.startTime,duration:d.duration});
+      extraTrans.push({id:nid,on:d.on,group:d.group,type:'trans',name:qType==='spread'?'蔓激化':'超激化',transType:qType,triggerCount:1,triggerCharId:d.triggerCharId||c.id,statCharId:d.statCharId||c.id,timingMode:d.timingMode,startTime:d.startTime,duration:d.duration});
     }
   });
   if(extraTrans.length)c.dmgSrcs.push(...extraTrans);
   c.talents=Array.isArray(c.talents)?c.talents.filter(t=>t&&typeof t==='object'):[];
-  c.talents.forEach(t=>{if(typeof t.id!=='string'||!t.id||used.has(t.id))t.id=uid();used.add(t.id);t.on=t.on!==false;});
+  c.talents.forEach(t=>{
+    if(typeof t.id!=='string'||!t.id||used.has(t.id))t.id=uid();used.add(t.id);
+    t.on=t.on!==false;
+    t.group=typeof t.group==='string'?t.group.trim():'';
+    if(t.group)ensureGroupMeta(t.group,raw);
+  });
   if(!c.qs||typeof c.qs!=='object')c.qs=defQS();
   if(!c.qs.weapon||typeof c.qs.weapon!=='object')c.qs.weapon={atkTier:510,subType:'atkPct',subVal:0,talents:[]};
   if(Array.isArray(c.qs.weapon.effs)&&!Array.isArray(c.qs.weapon.talents)){
     const _f=c.qs.weapon.effs[0]||{};
-    c.qs.weapon.talents=[{id:uid(),on:true,name:'武器天赋',startTime:+_f.startTime||0,duration:_f.duration==null?raw.rotationDuration:(+_f.duration||0),effs:c.qs.weapon.effs}];
+    c.qs.weapon.talents=[{id:uid(),on:true,group:'',name:'武器天赋',startTime:+_f.startTime||0,duration:_f.duration==null?raw.rotationDuration:(+_f.duration||0),effs:c.qs.weapon.effs}];
     c.qs.weapon.effs=[];
   }
   if(!Array.isArray(c.qs.weapon.talents))c.qs.weapon.talents=[];
-  c.qs.weapon.talents.forEach(wt=>{if(typeof wt.id!=='string'||!wt.id||used.has(wt.id))wt.id=uid();used.add(wt.id);wt.on=wt.on!==false;});
+  c.qs.weapon.talents.forEach(wt=>{
+    if(typeof wt.id!=='string'||!wt.id||used.has(wt.id))wt.id=uid();used.add(wt.id);
+    wt.on=wt.on!==false;
+    wt.group=typeof wt.group==='string'?wt.group.trim():'';
+    if(wt.group)ensureGroupMeta(wt.group,raw);
+  });
   if(!c.qs.artifact||typeof c.qs.artifact!=='object')c.qs.artifact=defQS().artifact;
   if(!Array.isArray(c.qs.artifact.sets))c.qs.artifact.sets=[];
-  c.qs.artifact.sets.forEach(s2=>{if(typeof s2.id!=='string'||!s2.id||used.has(s2.id))s2.id=uid();used.add(s2.id);s2.on=s2.on!==false;});
+  c.qs.artifact.sets.forEach(s2=>{
+    if(typeof s2.id!=='string'||!s2.id||used.has(s2.id))s2.id=uid();used.add(s2.id);
+    s2.on=s2.on!==false;
+    s2.group=typeof s2.group==='string'?s2.group.trim():'';
+    if(s2.group)ensureGroupMeta(s2.group,raw);
+  });
 });
 if(Array.isArray(raw.timeline)){
   const evUsed=new Set();
@@ -2777,7 +3099,6 @@ if(Array.isArray(raw.timeline)){
   }).filter(ev=>!!resolveTimelineTarget(ev,raw.chars));
   sortTimeline(raw.timeline);
 }else{
-  // Auto-migrate legacy per-item timing fields into S.timeline
   const migrated=[];
   raw.chars.forEach(c=>{
     (c.dmgSrcs||[]).forEach(d=>{
@@ -2785,22 +3106,22 @@ if(Array.isArray(raw.timeline)){
       const dur=Math.max(0,+d.duration||0);
       const st=Math.max(0,+d.startTime||0);
       const instant=(mode==='instant')||dur<=0;
-      migrated.push({id:uid(),on:true,kind:'damage',charId:c.id,refType:'dmg',refId:d.id,instant,startTime:st,endTime:instant?st:r2(st+dur),snapshot:!instant&&mode==='uniform_snapshot'});
+      migrated.push({id:uid(),on:d.on!==false,kind:'damage',charId:c.id,refType:'dmg',refId:d.id,instant,startTime:st,endTime:instant?st:r2(st+dur),snapshot:!instant&&mode==='uniform_snapshot'});
     });
     (c.talents||[]).filter(t=>!t.source||t.source==='manual').forEach(t=>{
       const st=Math.max(0,+t.startTime||0);
       const dur=t.duration==null?raw.rotationDuration:Math.max(0,+t.duration||0);
-      migrated.push({id:uid(),on:true,kind:'talent',charId:c.id,refType:'manual',refId:t.id,instant:false,startTime:st,endTime:r2(st+dur),snapshot:false});
+      migrated.push({id:uid(),on:t.on!==false,kind:'talent',charId:c.id,refType:'manual',refId:t.id,instant:false,startTime:st,endTime:r2(st+dur),snapshot:false});
     });
     (c.qs?.weapon?.talents||[]).forEach(wt=>{
       const st=Math.max(0,+wt.startTime||0);
       const dur=wt.duration==null?raw.rotationDuration:Math.max(0,+wt.duration||0);
-      migrated.push({id:uid(),on:true,kind:'talent',charId:c.id,refType:'weapon',refId:wt.id,instant:false,startTime:st,endTime:r2(st+dur),snapshot:false});
+      migrated.push({id:uid(),on:wt.on!==false,kind:'talent',charId:c.id,refType:'weapon',refId:wt.id,instant:false,startTime:st,endTime:r2(st+dur),snapshot:false});
     });
     (c.qs?.artifact?.sets||[]).forEach(as=>{
       const st=Math.max(0,+as.startTime||0);
       const dur=as.duration==null?raw.rotationDuration:Math.max(0,+as.duration||0);
-      migrated.push({id:uid(),on:true,kind:'talent',charId:c.id,refType:'artifact',refId:as.id,instant:false,startTime:st,endTime:r2(st+dur),snapshot:false});
+      migrated.push({id:uid(),on:as.on!==false,kind:'talent',charId:c.id,refType:'artifact',refId:as.id,instant:false,startTime:st,endTime:r2(st+dur),snapshot:false});
     });
   });
   raw.timeline=sortTimeline(migrated);
@@ -2989,10 +3310,10 @@ return{id:uid(),on:true,name:'新角色',lv:90,element:el,baseAtk:300,weaponAtk:
 }
 function preset(k){
 const P={
-hutao:{name:'胡桃',el:'pyro',bAtk:106,wAtk:510,bDef:876,bHP:15552,hPct:116.3,hFlat:4780,em:210,cr:72,cd:210,eb:{pyro:61.6},dm:[{on:true,type:'normal',name:'重击·蝶引来生',stat:'atk',mult:243,element:'pyro',dmgType:'CA',reaction:'vape',_tl:{instant:false,startTime:2,endTime:11,snapshot:true}}]},
-yelan:{name:'夜兰',el:'hydro',bAtk:244,wAtk:542,aFlat:311,bDef:548,bHP:14450,hPct:91.2,hFlat:4780,em:80,cr:68,cd:195,eb:{hydro:58},dm:[{on:true,type:'normal',name:'破局矢',stat:'hp',mult:28.5,element:'hydro',dmgType:'CA',reaction:'none',_tl:{instant:true,startTime:0,endTime:0,snapshot:false}},{on:true,type:'normal',name:'玄掷玲珑(连携)',stat:'hp',mult:8.7,element:'hydro',dmgType:'Q',reaction:'none',_tl:{instant:false,startTime:1,endTime:16,snapshot:false}}]},
-nahida:{name:'纳西妲',el:'dendro',bAtk:299,wAtk:510,aPct:14,aFlat:311,bDef:630,bHP:10360,hFlat:4780,em:820,cr:45,cd:135,eb:{dendro:46.6},dm:[{on:true,type:'normal',name:'灭净三业',stat:'atk',mult:185,element:'dendro',dmgType:'E',reaction:'none',_tl:{instant:false,startTime:1,endTime:15,snapshot:false}},{on:true,type:'trans',name:'蔓激化',transType:'spread',triggerCount:1,_tl:{instant:false,startTime:1,endTime:15,snapshot:false}}]},
-raiden:{name:'雷电将军',el:'electro',bAtk:337,wAtk:608,aPct:49.6,aFlat:311,bDef:789,bHP:12907,hFlat:4780,em:80,cr:65,cd:155,eb:{electro:66},dm:[{on:true,type:'normal',name:'梦想一刀',stat:'atk',mult:720,element:'electro',dmgType:'Q',reaction:'none',_tl:{instant:true,startTime:3,endTime:3,snapshot:false}},{on:true,type:'trans',name:'超激化',transType:'aggravate',triggerCount:1,_tl:{instant:true,startTime:3,endTime:3,snapshot:false}}]}
+hutao:{name:'胡桃',el:'pyro',bAtk:106,wAtk:510,bDef:876,bHP:15552,hPct:116.3,hFlat:4780,em:210,cr:72,cd:210,eb:{pyro:61.6},dm:[{on:true,group:'战技组',type:'normal',name:'重击·蝶引来生',stat:'atk',mult:243,element:'pyro',dmgType:'CA',reaction:'vape',_tl:{instant:false,startTime:2,endTime:11,snapshot:true}}]},
+yelan:{name:'夜兰',el:'hydro',bAtk:244,wAtk:542,aFlat:311,bDef:548,bHP:14450,hPct:91.2,hFlat:4780,em:80,cr:68,cd:195,eb:{hydro:58},dm:[{on:true,group:'普攻组',type:'normal',name:'破局矢',stat:'hp',mult:28.5,element:'hydro',dmgType:'CA',reaction:'none',_tl:{instant:true,startTime:0,endTime:0,snapshot:false}},{on:true,group:'后台组',type:'normal',name:'玄掷玲珑(连携)',stat:'hp',mult:8.7,element:'hydro',dmgType:'Q',reaction:'none',_tl:{instant:false,startTime:1,endTime:16,snapshot:false}}]},
+nahida:{name:'纳西妲',el:'dendro',bAtk:299,wAtk:510,aPct:14,aFlat:311,bDef:630,bHP:10360,hFlat:4780,em:820,cr:45,cd:135,eb:{dendro:46.6},dm:[{on:true,group:'后台组',type:'normal',name:'灭净三业',stat:'atk',mult:185,element:'dendro',dmgType:'E',reaction:'none',_tl:{instant:false,startTime:1,endTime:15,snapshot:false}},{on:true,group:'后台组',type:'trans',name:'蔓激化',transType:'spread',triggerCount:1,_tl:{instant:false,startTime:1,endTime:15,snapshot:false}}]},
+raiden:{name:'雷电将军',el:'electro',bAtk:337,wAtk:608,aPct:49.6,aFlat:311,bDef:789,bHP:12907,hFlat:4780,em:80,cr:65,cd:155,eb:{electro:66},dm:[{on:true,group:'爆发组',type:'normal',name:'梦想一刀',stat:'atk',mult:720,element:'electro',dmgType:'Q',reaction:'none',_tl:{instant:true,startTime:3,endTime:3,snapshot:false}},{on:true,type:'trans',group:'爆发组',name:'超激化',transType:'aggravate',triggerCount:1,_tl:{instant:true,startTime:3,endTime:3,snapshot:false}}]}
 };
 const p=P[k];if(!p)return;
 const c=defChar(p.el);
@@ -3003,10 +3324,11 @@ if(!Array.isArray(S.timeline))S.timeline=[];
 c.dmgSrcs=p.dm.map(rawD=>{
   const {_tl,...rest}=rawD;
   const id=uid();
+  if(rest.group)ensureGroupMeta(rest.group,S);
   if(_tl){
     S.timeline.push({id:uid(),on:true,kind:'damage',charId:c.id,refType:'dmg',refId:id,instant:!!_tl.instant,startTime:_tl.startTime||0,endTime:_tl.endTime||0,snapshot:!!_tl.snapshot});
   }
-  return{...rest,id,triggerCharId:c.id,statCharId:c.id};
+  return{...rest,id,group:rest.group||'',triggerCharId:c.id,statCharId:c.id};
 });
 sortTimeline(S.timeline);
 addChar(c);
@@ -3127,9 +3449,13 @@ requestAnimationFrame(()=>{
 function getItemScheduleSummary(kind,charId,refType,refId){
 if(!S.timelineEnabled)return'';
 const rot=Math.max(1,S.rotationDuration||20);
-const list=(S.timeline||[]).filter(ev=>ev.kind===kind&&ev.charId===charId&&ev.refType===refType&&ev.refId===refId&&ev.on!==false);
-if(!list.length){
+const allMatching=(S.timeline||[]).filter(ev=>ev.kind===kind&&ev.charId===charId&&ev.refType===refType&&ev.refId===refId);
+const list=allMatching.filter(ev=>ev.on!==false);
+if(!allMatching.length){
   return`<button type="button" data-tl-jump-empty="${kind}:${charId}:${refType}:${refId}" class="sched-pill is-unscheduled" title="前往时间轴排入此项">未排轴 · 去设置</button>`;
+}
+if(!list.length){
+  return`<button type="button" data-tl-jump="${allMatching[0].id}" class="sched-pill" title="已在时间轴中关闭，点击前往开启">已关闭 (${allMatching.length}) ›</button>`;
 }
 if(list.length>1){
   return`<button type="button" data-tl-jump="${list[0].id}" class="sched-pill" title="在时间轴中查看与编辑">已排 ${list.length} 次 ›</button>`;
@@ -3253,7 +3579,12 @@ if(addDmgBtn)addDmgBtn.onclick=e=>{e.stopPropagation();dmgMenu.classList.toggle(
 
 const pushDmg=obj=>{
 if(quickTableActive)return;
-ch.dmgSrcs.push({...obj});
+const item={...obj,group:obj.group||''};
+ch.dmgSrcs.push(item);
+if(S.timelineEnabled){
+  S.timeline.push({id:uid(),on:true,kind:'damage',charId:ch.id,refType:'dmg',refId:item.id,instant:true,startTime:0,endTime:0,snapshot:false});
+  sortTimeline(S.timeline);
+}
 if(dmgMenu)dmgMenu.classList.add('hidden');
 rDmg();rTal();calc();
 };
@@ -3261,7 +3592,16 @@ const addDmgN=w.querySelector('#addDmgN');if(addDmgN)addDmgN.onclick=()=>pushDmg
 const addDmgT=w.querySelector('#addDmgT');if(addDmgT)addDmgT.onclick=()=>pushDmg({id:uid(),on:true,type:'trans',name:'新剧变',transType:'',triggerCount:1,triggerCharId:'',statCharId:''});
 const addDmgLD=w.querySelector('#addDmgLD');if(addDmgLD)addDmgLD.onclick=()=>pushDmg({id:uid(),on:true,type:'special_direct',name:'新特殊直伤',specType:'',stat:'',mult:100,triggerCharId:'',statCharId:'',starStacks:1});
 const addDmgLR=w.querySelector('#addDmgLR');if(addDmgLR)addDmgLR.onclick=()=>pushDmg({id:uid(),on:true,type:'special_reaction',name:'新特殊反应',specType:'',triggerCount:1,triggerCharId:'',statCharId:'',contribs:[]});
-w.querySelector('#addTalent').onclick=()=>{ch.talents.push({id:uid(),on:true,source:'manual',name:'新天赋',effs:[{cat:'',type:'',target:'',value:0}]});rTal();calc();};
+w.querySelector('#addTalent').onclick=()=>{
+  const id=uid();
+  ch.talents.push({id,on:true,group:'',source:'manual',name:'新天赋',effs:[{cat:'',type:'',target:'',value:0}]});
+  if(S.timelineEnabled){
+    const rot=Math.max(1,S.rotationDuration||20);
+    S.timeline.push({id:uid(),on:true,kind:'talent',charId:ch.id,refType:'manual',refId:id,instant:false,startTime:0,endTime:rot,snapshot:false});
+    sortTimeline(S.timeline);
+  }
+  rTal();calc();
+};
 
 rDmg();rTal();showFS();
 const qsBtn=w.querySelector('#toggleQuickSetter'),qsBox=w.querySelector('#quickSetter');
@@ -3319,7 +3659,7 @@ const schedBadge=getItemScheduleSummary('damage',ch.id,'dmg',d.id);
 
 if(d.type==='trans'){
 return`<div class="editor-item-card ${invalidCls}" data-src-card="${d.id}">
-<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}<div class="tgl ${d.on?'on':''}" data-dt="${d.id}"><span></span></div><button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
+<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}${renderGroupTagBtn(d,d.id)}<button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
 <div class="grid grid-cols-3 gap-2 text-[11px]">
 <label>触发角色面板<select data-d="${d.id}" data-k="triggerCharId" class="pi mt-0.5" ${dis}>${charSelOpts(d.triggerCharId)}</select></label>
 <label>反应类型<select data-d="${d.id}" data-k="transType" class="pi mt-0.5" ${dis}><option value="" disabled hidden ${!d.transType?'selected':''}>选择反应</option>${TRANS_REACTIONS.map(r=>`<option value="${r.id}" ${r.id===d.transType?'selected':''}>${r.n}</option>`).join('')}</select></label>
@@ -3330,7 +3670,7 @@ if(d.type==='special_direct'){
 const meta=getSpecMeta(d.specType),isStar=!!meta?.star,curStacks=getStarStacks(d);
 const starSlider=(isStar&&d.specType==='star_sc_direct')?`<label class="col-span-3 slider-unit"><div class="slider-unit-head"><span class="slider-unit-title">星超导领域层数</span><b class="slider-unit-badge"><span data-star-stacks>${curStacks}</span> 层 · <span data-star-val>${starCoeffFromStacks(curStacks).toFixed(2)}</span></b></div><input data-d="${d.id}" data-k="starStacks" type="range" min="0" max="12" step="1" value="${curStacks}" class="studio-range" ${dis}></label>`:'';
 return`<div class="editor-item-card ${invalidCls}" data-src-card="${d.id}">
-<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}<div class="tgl ${d.on?'on':''}" data-dt="${d.id}"><span></span></div><button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
+<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}${renderGroupTagBtn(d,d.id)}<button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
 <div class="grid grid-cols-3 gap-2 text-[11px]">
 <label>伤害归属<select data-d="${d.id}" data-k="triggerCharId" class="pi mt-0.5" ${dis}>${charSelOpts(d.triggerCharId)}</select></label>
 <label>计入属性归属<select data-d="${d.id}" data-k="statCharId" class="pi mt-0.5" ${dis}>${charSelOpts(d.statCharId)}</select></label>
@@ -3346,7 +3686,7 @@ const contribChips=S.chars.filter(x=>x.on).map(cOpt=>`<span class="chip contrib-
 const meta=getSpecMeta(d.specType);
 const cryoMultSel=(meta?.cryoChoice)?`<label>系数<select data-d="${d.id}" data-k="starSwirlCryoMult" class="pi mt-0.5" ${dis}><option value="" disabled hidden ${!d.starSwirlCryoMult?'selected':''}>选择系数</option><option value="2" ${d.starSwirlCryoMult==2?'selected':''}>2</option><option value="3" ${d.starSwirlCryoMult==3?'selected':''}>3</option></select></label>`:'';
 return`<div class="editor-item-card ${invalidCls}" data-src-card="${d.id}">
-<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}<div class="tgl ${d.on?'on':''}" data-dt="${d.id}"><span></span></div><button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
+<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}${renderGroupTagBtn(d,d.id)}<button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
 <div class="grid grid-cols-3 gap-2 text-[11px]">
 <div class="col-span-3"><div class="ml mb-1">伤害归属（点击选择，可多选）</div><div class="flex flex-wrap gap-1">${contribChips||'<span class="text-[11px] text-[#94a3b8]">无可用角色</span>'}</div></div>
 <label>特殊反应类型<select data-d="${d.id}" data-k="specType" class="pi mt-0.5" ${dis}><option value="" disabled hidden ${!d.specType?'selected':''}>选择类型</option>${specReactionOptions}</select></label>
@@ -3355,7 +3695,7 @@ ${cryoMultSel}
 </div></div>`;
 }
 return`<div class="editor-item-card ${invalidCls}" data-src-card="${d.id}">
-<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}<div class="tgl ${d.on?'on':''}" data-dt="${d.id}"><span></span></div><button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
+<div class="item-card-head"><input data-d="${d.id}" data-k="name" value="${escapeHTML(d.name)}" class="pi item-name-input" ${dis}>${schedBadge}${renderGroupTagBtn(d,d.id)}<button data-dd="${d.id}" class="bgh danger" ${hid}>删除</button></div>
 <div class="grid grid-cols-3 gap-2 text-[11px]">
 <label>伤害归属<select data-d="${d.id}" data-k="triggerCharId" class="pi mt-0.5" ${dis}>${charSelOpts(d.triggerCharId)}</select></label>
 <label>计入属性归属<select data-d="${d.id}" data-k="statCharId" class="pi mt-0.5" ${dis}>${charSelOpts(d.statCharId)}</select></label>
@@ -3384,7 +3724,7 @@ calc();
 i.addEventListener('input',h);
 i.addEventListener('change',()=>{h();if(['specType','transType','stat','element','dmgType','reaction','starSwirlCryoMult','triggerCharId','statCharId'].includes(i.dataset.k))rDmg();});
 });
-b.querySelectorAll('[data-dt]').forEach(t=>t.addEventListener('click',()=>{const d=ch.dmgSrcs.find(x=>x.id===t.dataset.dt);d.on=!d.on;rDmg();calc();}));
+bindGroupPickers(b,id=>ch.dmgSrcs.find(x=>x.id===id),()=>{rDmg();calc();});
 if(!qt)b.querySelectorAll('[data-dd]').forEach(x=>x.addEventListener('click',()=>{ch.dmgSrcs=ch.dmgSrcs.filter(d=>d.id!==x.dataset.dd);pruneOrphanTimelineEntries();rDmg();rTal();calc();}));
 if(!qt)b.querySelectorAll('[data-contrib]').forEach(chp=>chp.addEventListener('click',()=>{
 const d=ch.dmgSrcs.find(x=>x.id===chp.dataset.contrib);if(!d)return;
@@ -3407,7 +3747,7 @@ const valid=talentValid(t);
 const schedBadge=getItemScheduleSummary('talent',ch.id,'manual',t.id);
 
 return`<div class="editor-item-card ${valid?'':'is-invalid'}" data-tal-card="${t.id}">
-<div class="item-card-head"><input data-tl="${t.id}" data-tk="name" value="${escapeHTML(t.name)}" class="pi item-name-input">${schedBadge}<div class="tgl ${t.on?'on':''}" data-tt="${t.id}"><span></span></div><button data-td="${t.id}" class="bgh danger">删除</button></div>
+<div class="item-card-head"><input data-tl="${t.id}" data-tk="name" value="${escapeHTML(t.name)}" class="pi item-name-input">${schedBadge}${renderGroupTagBtn(t,t.id)}<button data-td="${t.id}" class="bgh danger">删除</button></div>
 <div class="space-y-1.5">${t.effs.map((ef,ei)=>renderGenericEffRow(t.id,ei,ef)).join('')}</div>
 <button data-ae="${t.id}" class="mt-2 text-[11.5px] text-[#0b57d0] font-[600] hover:underline cursor-pointer">+ 添加效果</button></div>`;
 }).join('')||`<div class="text-[11.5px] text-[#94a3b8]">暂无天赋，点击右上角「+」添加。</div>`;
@@ -3416,7 +3756,7 @@ bindScheduleSummaryJumps(b);
 b.querySelectorAll('[data-tl]').forEach(i=>i.addEventListener('input',()=>{
 const t=ch.talents.find(x=>x.id===i.dataset.tl);if(t){t[i.dataset.tk]=i.type==='number'?parseFloat(i.value)||0:i.value;calc();}
 }));
-b.querySelectorAll('[data-tt]').forEach(x=>x.addEventListener('click',()=>{const t=ch.talents.find(v=>v.id===x.dataset.tt);if(t){t.on=!t.on;rTal();calc();}}));
+bindGroupPickers(b,id=>ch.talents.find(x=>x.id===id),()=>{rTal();calc();});
 b.querySelectorAll('[data-td]').forEach(x=>x.addEventListener('click',()=>{ch.talents=ch.talents.filter(v=>v.id!==x.dataset.td);pruneOrphanTimelineEntries();rTal();calc();}));
 b.querySelectorAll('[data-ae]').forEach(x=>x.addEventListener('click',()=>{const t=ch.talents.find(v=>v.id===x.dataset.ae);if(t){t.effs.push({cat:'',type:'',target:'',value:0});rTal();calc();}}));
 
@@ -3564,7 +3904,7 @@ box.innerHTML=qs.weapon.talents.map(t=>`
 <div class="item-card-head">
 <input data-wt-name="${t.id}" value="${escapeHTML(t.name)}" class="pi pi-sm item-name-input">
 ${getItemScheduleSummary('talent',ch.id,'weapon',t.id)}
-<div class="tgl ${t.on!==false?'on':''}" data-wt-on="${t.id}"><span></span></div>
+${renderGroupTagBtn(t,t.id)}
 <button data-wt-del="${t.id}" class="bgh danger" type="button">删除</button>
 </div>
 <div class="space-y-1.5">${(t.effs||[]).map((ef,j)=>renderGenericEffRow(t.id,j,ef)).join('')||'<div class="text-[10.5px] text-[#94a3b8]">无效果</div>'}</div>
@@ -3572,12 +3912,21 @@ ${getItemScheduleSummary('talent',ch.id,'weapon',t.id)}
 </div>`).join('')||'<div class="text-[10.5px] text-[#94a3b8]">暂无武器天赋，可在上方添加或在已有武器中选择。</div>';
 bindScheduleSummaryJumps(box);
 box.querySelectorAll('[data-wt-name]').forEach(i=>{i.oninput=()=>{const t=qs.weapon.talents.find(x=>x.id===i.dataset.wtName);if(t){t.name=i.value;showFS();}};});
-box.querySelectorAll('[data-wt-on]').forEach(g=>{g.onclick=()=>{g.classList.toggle('on');const t=qs.weapon.talents.find(x=>x.id===g.dataset.wtOn);if(t){t.on=g.classList.contains('on');calc();showFS();}};});
+bindGroupPickers(box,id=>qs.weapon.talents.find(x=>x.id===id),()=>{renderWeaponTalents();calc();showFS();});
 box.querySelectorAll('[data-wt-del]').forEach(b=>{b.onclick=()=>{const id=b.dataset.wtDel;qs.weapon.talents=qs.weapon.talents.filter(x=>x.id!==id);pruneOrphanTimelineEntries();renderWeaponTalents();calc();showFS();};});
 box.querySelectorAll('[data-wt-ae]').forEach(b=>{b.onclick=()=>{const t=qs.weapon.talents.find(x=>x.id===b.dataset.wtAe);if(t){(t.effs=t.effs||[]).push({cat:'',type:'',target:'',value:0});renderWeaponTalents();}};});
 qs.weapon.talents.forEach(t=>bindGenericEff(box,t.id,()=>t.effs,renderWeaponTalents));
 }
-container.querySelector('#qsAddWeaponTal').onclick=()=>{qs.weapon.talents.push({id:uid(),on:true,name:'武器天赋 '+(qs.weapon.talents.length+1),effs:[{cat:'',type:'',target:'',value:0}]});renderWeaponTalents();showFS();};
+container.querySelector('#qsAddWeaponTal').onclick=()=>{
+  const id=uid();
+  qs.weapon.talents.push({id,on:true,group:'',name:'武器天赋 '+(qs.weapon.talents.length+1),effs:[{cat:'',type:'',target:'',value:0}]});
+  if(S.timelineEnabled){
+    const rot=Math.max(1,S.rotationDuration||20);
+    S.timeline.push({id:uid(),on:true,kind:'talent',charId:ch.id,refType:'weapon',refId:id,instant:false,startTime:0,endTime:rot,snapshot:false});
+    sortTimeline(S.timeline);
+  }
+  renderWeaponTalents();calc();showFS();
+};
 renderWeaponTalents();
 container.querySelector('#qsPickWeapon').onclick=e=>{e.preventDefault();e.stopPropagation();openWeaponMgr(ch);};
 container.querySelector('#qsPickArtifact').onclick=e=>{e.preventDefault();e.stopPropagation();openArtifactMgr(ch);};
@@ -3589,7 +3938,7 @@ box.innerHTML=qs.artifact.sets.map((s,i)=>`
 <div class="item-card-head">
 <input data-qs-set-name="${i}" value="${escapeHTML(s.name)}" class="pi pi-sm item-name-input">
 ${getItemScheduleSummary('talent',ch.id,'artifact',s.id)}
-<div class="tgl ${s.on!==false?'on':''}" data-qs-set-on="${i}"><span></span></div>
+${renderGroupTagBtn(s,s.id)}
 <button data-qs-add-set-eff="${i}" class="bgh text-[#0b57d0] font-[600] whitespace-nowrap" type="button">+ 效果</button>
 <button data-qs-set-del="${i}" class="bgh danger" type="button">删除</button>
 </div>
@@ -3604,11 +3953,20 @@ bindGenericEff(container,'s'+i,()=>s.effs,renderArtSets);
 });
 bindScheduleSummaryJumps(box);
 container.querySelectorAll('[data-qs-set-name]').forEach(inp=>{inp.oninput=()=>{const s2=qs.artifact.sets[+inp.dataset.qsSetName];if(s2){s2.name=inp.value;showFS();}};});
-container.querySelectorAll('[data-qs-set-on]').forEach(g=>{g.onclick=()=>{g.classList.toggle('on');const s2=qs.artifact.sets[+g.dataset.qsSetOn];if(s2){s2.on=g.classList.contains('on');calc();showFS();}};});
+bindGroupPickers(box,id=>qs.artifact.sets.find(x=>x.id===id),()=>{renderArtSets();calc();showFS();});
 container.querySelectorAll('[data-qs-set-del]').forEach(b=>{b.onclick=()=>{qs.artifact.sets.splice(+b.dataset.qsSetDel,1);pruneOrphanTimelineEntries();renderArtSets();calc();showFS();};});
 container.querySelectorAll('[data-qs-add-set-eff]').forEach(b=>{b.onclick=()=>{qs.artifact.sets[+b.dataset.qsAddSetEff].effs.push({cat:'',type:'',target:'',value:0});renderArtSets();};});
 }
-container.querySelector('#qsAddArtSet').onclick=()=>{qs.artifact.sets.push({id:uid(),on:true,name:'套装效果 '+(qs.artifact.sets.length+1),effs:[{cat:'',type:'',target:'',value:0}]});renderArtSets();showFS();};
+container.querySelector('#qsAddArtSet').onclick=()=>{
+  const id=uid();
+  qs.artifact.sets.push({id,on:true,group:'',name:'套装效果 '+(qs.artifact.sets.length+1),effs:[{cat:'',type:'',target:'',value:0}]});
+  if(S.timelineEnabled){
+    const rot=Math.max(1,S.rotationDuration||20);
+    S.timeline.push({id:uid(),on:true,kind:'talent',charId:ch.id,refType:'artifact',refId:id,instant:false,startTime:0,endTime:rot,snapshot:false});
+    sortTimeline(S.timeline);
+  }
+  renderArtSets();calc();showFS();
+};
 renderArtSets();
 container.querySelector('#qsApply').onclick=()=>applyQS(ch);
 refreshIcons();
@@ -3693,7 +4051,7 @@ if(hasWeapon){
 const subName=QS_WEAPON_SUB_OPTS.find(o=>o.id===qs.weapon.subType)?.n||'无';
 html+=`<div class="equip-summary-card">
 <div class="equip-summary-head"><span class="equip-summary-title"><span class="tl-badge tl-badge-weapon">武器</span>${escapeHTML(qs.weapon.name||'已装备武器')}</span><span class="text-[11px] text-[#64748b]">白值 <b>${qs.weapon.atk||0}</b>${qs.weapon.subType!=='none'?` · ${subName.replace(/%$/,'')} <b>${qs.weapon.subVal||0}${/%/.test(subName)?'%':''}</b>`:''}</span></div>
-${(qs.weapon.talents||[]).filter(t=>(t.effs||[]).length).map((t,ti)=>`<div class="flex items-center justify-between gap-2 text-[11px] text-[#475569] mt-1"><span><b>${escapeHTML(t.name||('天赋 '+(ti+1)))}</b>${t.on===false?'（已停用）':''}：${t.effs.map(effDesc).join('；')}</span>${getItemScheduleSummary('talent',ch.id,'weapon',t.id)}</div>`).join('')}
+${(qs.weapon.talents||[]).filter(t=>(t.effs||[]).length).map((t,ti)=>{const g=String(t.group||'').trim();const gTag=g?`<span class="tl-badge" style="background:${getGroupColor(g)}16;color:${getGroupColor(g)};border:1px solid ${getGroupColor(g)}38">${escapeHTML(g)}</span>`:'';const offTxt=(!S.timelineEnabled&&!isItemEnabledInStaticMode(t))?'（已停用）':'';return`<div class="flex items-center justify-between gap-2 text-[11px] text-[#475569] mt-1"><span class="flex items-center gap-1.5 flex-wrap"><b>${escapeHTML(t.name||('天赋 '+(ti+1)))}</b>${gTag}${offTxt}：${t.effs.map(effDesc).join('；')}</span>${getItemScheduleSummary('talent',ch.id,'weapon',t.id)}</div>`;}).join('')}
 </div>`;
 }
 if(hasArtifact){
@@ -3701,7 +4059,7 @@ html+=`<div class="equip-summary-card">
 <div class="equip-summary-head"><span class="equip-summary-title"><span class="tl-badge tl-badge-artifact">圣遗物</span>词条与套装</span></div>
 ${mains.length?`<div class="text-[11px] text-[#475569]">主词条：${mains.join('，')}</div>`:''}
 ${subCnt.length?`<div class="text-[11px] text-[#64748b] mt-0.5">副词条：${subCnt.map(([k,v])=>`${subNames[k]||k} ×${v}`).join('　')}</div>`:''}
-${(qs.artifact.sets||[]).filter(s=>(s.effs||[]).length).map(s=>`<div class="flex items-center justify-between gap-2 text-[11px] text-[#475569] mt-1"><span><b>套装「${escapeHTML(s.name)}」</b>${s.on===false?'（已停用）':''}：${s.effs.map(effDesc).join('；')}</span>${getItemScheduleSummary('talent',ch.id,'artifact',s.id)}</div>`).join('')}
+${(qs.artifact.sets||[]).filter(s=>(s.effs||[]).length).map(s=>{const g=String(s.group||'').trim();const gTag=g?`<span class="tl-badge" style="background:${getGroupColor(g)}16;color:${getGroupColor(g)};border:1px solid ${getGroupColor(g)}38">${escapeHTML(g)}</span>`:'';const offTxt=(!S.timelineEnabled&&!isItemEnabledInStaticMode(s))?'（已停用）':'';return`<div class="flex items-center justify-between gap-2 text-[11px] text-[#475569] mt-1"><span class="flex items-center gap-1.5 flex-wrap"><b>套装「${escapeHTML(s.name)}」</b>${gTag}${offTxt}：${s.effs.map(effDesc).join('；')}</span>${getItemScheduleSummary('talent',ch.id,'artifact',s.id)}</div>`;}).join('')}
 </div>`;
 }
 box.innerHTML=html;
@@ -3710,20 +4068,21 @@ bindScheduleSummaryJumps(box);
 
 function allCharTalents(c){
 const out=[];
+const checkOn=item=>S.timelineEnabled?true:isItemEnabledInStaticMode(item);
 (c.talents||[]).forEach(t=>{
-  if(!t.on||!(t.effs||[]).length)return;
+  if(!checkOn(t)||!(t.effs||[]).length)return;
   if(t.source&&t.source!=='manual')return;
   if(!talentValid(t))return;
   out.push({id:t.id,refType:'manual',refId:t.id,source:'manual',name:t.name||'未命名天赋',effs:t.effs});
 });
 const qs=c.qs||defQS();
 (qs.weapon?.talents||[]).forEach((wt,i)=>{
-  if(wt.on===false||!(wt.effs||[]).length||!talentValid(wt))return;
+  if(!checkOn(wt)||!(wt.effs||[]).length||!talentValid(wt))return;
   if(!wt.id)wt.id=uid();
   out.push({id:'weapon:'+wt.id,refType:'weapon',refId:wt.id,source:'weapon',name:wt.name||('武器天赋 '+(i+1)),effs:wt.effs});
 });
 (qs.artifact?.sets||[]).forEach((as,i)=>{
-  if(as.on===false||!(as.effs||[]).length||!talentValid(as))return;
+  if(!checkOn(as)||!(as.effs||[]).length||!talentValid(as))return;
   if(!as.id)as.id=uid();
   out.push({id:'artifact:'+as.id,refType:'artifact',refId:as.id,source:'artifact',name:as.name||('套装效果 '+(i+1)),effs:as.effs});
 });
@@ -3759,7 +4118,7 @@ const enIds=new Set(en.map(c=>c.id));
 (S.timeline||[]).forEach(ev=>{
   if(ev.kind!=='talent'||ev.on===false||!enIds.has(ev.charId))return;
   const resolved=resolveTimelineTarget(ev,en);
-  if(!resolved||resolved.item.on===false||!talentValid(resolved.item))return;
+  if(!resolved||!talentValid(resolved.item))return;
   const tm=getEventTiming(ev,rot);
   if(tm.duration<=0||tm.duration>=rot)return;
   const ts=((tm.start%rot)+rot)%rot;
@@ -4135,7 +4494,7 @@ const inspectMap={};
 if(!S.timelineEnabled){
   // STATIC CALCULATION
   en.forEach(owner=>{
-    (owner.dmgSrcs||[]).filter(d=>d.on).forEach(d=>{
+    (owner.dmgSrcs||[]).filter(d=>isItemEnabledInStaticMode(d)).forEach(d=>{
       if(!dmgSourceValid(d))return;
       const hitRes=computeSingleHit(d,owner,staticState,null,1.0,1.0);
       if(hitRes){
@@ -4157,7 +4516,7 @@ if(!S.timelineEnabled){
     const resolved=resolveTimelineTarget(ev,en);
     if(!resolved)return;
     const{char:owner,item:d}=resolved;
-    if(!d.on||!dmgSourceValid(d))return;
+    if(!dmgSourceValid(d))return;
     const tm=getEventTiming(ev,rot);
     const mode=tm.isInstant?'instant':(ev.snapshot?'uniform_snapshot':'uniform_dynamic');
     const tStartNorm=((tm.start%rot)+rot)%rot;
@@ -4276,6 +4635,7 @@ $('totalDps').textContent=Math.round(dps).toLocaleString()+'/s';
 }else{
 $('dpsStatRow').classList.add('hidden');
 }
+renderTimelineGroupBar();
 renderTimelineVisual(en,rot);
 const activeEl=document.activeElement;
 if(!activeEl||!activeEl.closest?.('#timelineEditor'))renderTimelineEditor();
@@ -4288,7 +4648,126 @@ renderBaseSection();
 }
 
 // ==================== 时间轴可视化与统一时序编排器 ====================
-let tlEditorState={addKind:'damage',addTarget:'',addInstant:true,addStart:0,addEnd:20,addSnapshot:false,filterKind:'all',filterChar:'all'};
+let tlEditorState={addKind:'damage',addTarget:'',addInstant:true,addStart:0,addEnd:20,addSnapshot:false,filterKind:'all',filterChar:'all',filterGroup:'all'};
+
+function toggleGroupMasterSwitch(groupName){
+const g=String(groupName||'').trim();
+if(!g)return;
+const rot=Math.max(1,S.rotationDuration||20);
+if(!S.timelineEnabled){
+  if(!Array.isArray(S.disabledGroups))S.disabledGroups=[];
+  if(S.disabledGroups.includes(g))S.disabledGroups=S.disabledGroups.filter(x=>x!==g);
+  else S.disabledGroups.push(g);
+  if(gs())showFS();
+  rDmg();rTal();calc();renderTimelineEditor();enhanceStudioControls();refreshIcons();
+  return;
+}
+const evs=(S.timeline||[]).filter(ev=>{
+  const res=resolveTimelineTarget(ev);
+  return res&&String(res.item.group||'').trim()===g;
+});
+if(!evs.length){
+  forEachTeamConfigurableItem((item,kind,refType,ch)=>{
+    if(String(item.group||'').trim()!==g)return;
+    if(!item.id)item.id=uid();
+    if(kind==='damage'){
+      S.timeline.push({id:uid(),on:true,kind:'damage',charId:ch.id,refType:'dmg',refId:item.id,instant:true,startTime:0,endTime:0,snapshot:false});
+    }else{
+      S.timeline.push({id:uid(),on:true,kind:'talent',charId:ch.id,refType,refId:item.id,instant:false,startTime:0,endTime:rot,snapshot:false});
+    }
+  });
+  sortTimeline(S.timeline);
+}else{
+  const allOn=evs.every(ev=>ev.on!==false);
+  const nextOn=!allOn;
+  evs.forEach(ev=>{ev.on=nextOn;});
+}
+if(gs())showFS();
+rDmg();rTal();calc();renderTimelineEditor();enhanceStudioControls();refreshIcons();
+}
+
+function renderTimelineGroupBar(){
+const bar=$('tlGroupBar');if(!bar)return;
+const groups=collectActiveGroupList();
+if(tlEditorState.filterGroup!=='all'&&tlEditorState.filterGroup!=='__ungrouped__'&&!groups.some(g=>g.name===tlEditorState.filterGroup))tlEditorState.filterGroup='all';
+
+if(!groups.length){
+  bar.innerHTML=`<div class="tl-group-panel">
+    <div class="flex items-center justify-between gap-3 flex-wrap text-[11.5px] text-[#64748b]">
+      <div class="flex items-center gap-2"><span class="font-[700] text-[#1e293b]">技能分组总控</span><span>在「角色与技能」界面为伤害或天赋设置分组后，可在此一键开启或关闭整个分组。</span></div>
+      <button type="button" id="tlGotoCharForGroupBtn" class="bs">前往角色页设置分组 ›</button>
+    </div>
+  </div>`;
+  const btn=bar.querySelector('#tlGotoCharForGroupBtn');
+  if(btn)btn.onclick=()=>setWorkspace('character');
+  return;
+}
+
+const cardsHtml=groups.map(g=>{
+  const isFiltered=tlEditorState.filterGroup===g.name;
+  if(!S.timelineEnabled){
+    const isOn=!(S.disabledGroups||[]).includes(g.name);
+    return`<div class="tl-group-card ${isFiltered?'is-filtered':''} ${isOn?'':'is-off'}">
+      <button type="button" class="tl-group-name-btn" data-tl-grp-filter="${escapeHTML(g.name)}" title="点击筛选「${escapeHTML(g.name)}」"><span class="group-dot" style="background:${g.color}"></span><span>${escapeHTML(g.name)}</span></button>
+      <span class="tl-group-count">${g.itemCount}项</span>
+      <div class="tgl ${isOn?'on':''}" data-tl-grp-tgl="${escapeHTML(g.name)}" title="一键${isOn?'关闭':'开启'}「${escapeHTML(g.name)}」分组"><span></span></div>
+    </div>`;
+  }
+  const evs=(S.timeline||[]).filter(ev=>{
+    const res=resolveTimelineTarget(ev);
+    return res&&String(res.item.group||'').trim()===g.name;
+  });
+  const totalEv=evs.length;
+  const onEv=evs.filter(ev=>ev.on!==false).length;
+  const tglCls=totalEv>0?(onEv===totalEv?'on':(onEv>0?'partial':'')):'';
+  const countLabel=totalEv>0?`${onEv}/${totalEv}`:`未排(${g.itemCount})`;
+  const tip=totalEv===0?`点击将该组 ${g.itemCount} 项一键排入时间轴并开启`:(onEv===totalEv?`一键关闭「${g.name}」全部 ${totalEv} 条事件`:`一键开启「${g.name}」全部 ${totalEv} 条事件`);
+  return`<div class="tl-group-card ${isFiltered?'is-filtered':''} ${(totalEv>0&&onEv===0)?'is-off':''}">
+    <button type="button" class="tl-group-name-btn" data-tl-grp-filter="${escapeHTML(g.name)}" title="点击仅查看「${escapeHTML(g.name)}」组内事件"><span class="group-dot" style="background:${g.color}"></span><span>${escapeHTML(g.name)}</span></button>
+    <span class="tl-group-count">${countLabel}</span>
+    <div class="tgl ${tglCls}" data-tl-grp-tgl="${escapeHTML(g.name)}" title="${escapeHTML(tip)}"><span></span></div>
+  </div>`;
+}).join('');
+
+bar.innerHTML=`<div class="tl-group-panel">
+  <div class="tl-group-panel-head">
+    <div class="flex items-center gap-2">
+      <span class="font-[700] text-[#1e293b]">分组一键开关</span>
+      <span class="text-[#64748b] text-[11px]">点击右侧胶囊开关可整组启停，点击分组名可筛选下方条目</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      ${tlEditorState.filterGroup!=='all'?`<button type="button" id="tlClearGrpFilterBtn" class="tl-mini-btn">清除筛选 (${escapeHTML(tlEditorState.filterGroup==='__ungrouped__'?'未分组':tlEditorState.filterGroup)})</button>`:''}
+      <button type="button" id="tlAllEventsOnBtn" class="tl-mini-btn">全开所有条目</button>
+      <button type="button" id="tlAllEventsOffBtn" class="tl-mini-btn">全关所有条目</button>
+    </div>
+  </div>
+  <div class="tl-group-grid">${cardsHtml}</div>
+</div>`;
+
+bar.querySelectorAll('[data-tl-grp-tgl]').forEach(t=>t.onclick=()=>toggleGroupMasterSwitch(t.dataset.tlGrpTgl));
+bar.querySelectorAll('[data-tl-grp-filter]').forEach(b=>b.onclick=()=>{
+  const g=b.dataset.tlGrpFilter;
+  tlEditorState.filterGroup=tlEditorState.filterGroup===g?'all':g;
+  renderTimelineGroupBar();
+  renderTimelineEditor();
+});
+const clrBtn=bar.querySelector('#tlClearGrpFilterBtn');
+if(clrBtn)clrBtn.onclick=()=>{tlEditorState.filterGroup='all';renderTimelineGroupBar();renderTimelineEditor();};
+const allOnBtn=bar.querySelector('#tlAllEventsOnBtn');
+if(allOnBtn)allOnBtn.onclick=()=>{
+  if(!S.timelineEnabled)S.disabledGroups=[];
+  else(S.timeline||[]).forEach(ev=>{ev.on=true;});
+  if(gs())showFS();
+  rDmg();rTal();calc();renderTimelineEditor();enhanceStudioControls();refreshIcons();
+};
+const allOffBtn=bar.querySelector('#tlAllEventsOffBtn');
+if(allOffBtn)allOffBtn.onclick=()=>{
+  if(!S.timelineEnabled)S.disabledGroups=collectActiveGroupList().map(g=>g.name);
+  else(S.timeline||[]).forEach(ev=>{ev.on=false;});
+  if(gs())showFS();
+  rDmg();rTal();calc();renderTimelineEditor();enhanceStudioControls();refreshIcons();
+};
+}
 
 function renderTimelineVisual(en,rot){
 const graph=$('timelineGraph');if(!graph)return;
@@ -4296,7 +4775,7 @@ const enIds=new Set(en.map(c=>c.id));
 const activeEvs=(S.timeline||[]).filter(ev=>{
   if(ev.on===false||!enIds.has(ev.charId))return false;
   const res=resolveTimelineTarget(ev,en);
-  if(!res||res.item.on===false)return false;
+  if(!res)return false;
   return ev.kind==='damage'?dmgSourceValid(res.item):talentValid(res.item);
 });
 if(!activeEvs.length){
@@ -4488,12 +4967,20 @@ if(st.addKind==='damage'){
 }
 if(!addOpts.some(o=>o.val===st.addTarget))st.addTarget=addOpts[0]?.val||'';
 
+const activeGroups=collectActiveGroupList();
+if(st.filterGroup!=='all'&&st.filterGroup!=='__ungrouped__'&&!activeGroups.some(g=>g.name===st.filterGroup))st.filterGroup='all';
 const unscheduled=getUnscheduledItems();
 const sortedList=sortTimeline(S.timeline);
 const filtered=sortedList.filter(ev=>{
   if(st.filterKind==='damage'&&ev.kind!=='damage')return false;
   if(st.filterKind==='talent'&&ev.kind!=='talent')return false;
   if(st.filterChar!=='all'&&ev.charId!==st.filterChar)return false;
+  if(st.filterGroup!=='all'){
+    const res=resolveTimelineTarget(ev);
+    const g=String(res?.item?.group||'').trim();
+    if(st.filterGroup==='__ungrouped__'){if(g)return false;}
+    else if(g!==st.filterGroup)return false;
+  }
   return true;
 });
 
@@ -4519,13 +5006,14 @@ const rowsHtml=filtered.map(ev=>{
   const res=resolveTimelineTarget(ev);if(!res)return'';
   const{char:ch,item,sourceLabel}=res;
   const tm=getEventTiming(ev,rot);
-  const charOff=!ch.on,itemOff=item.on===false;
+  const charOff=!ch.on;
   const invalid=ev.kind==='damage'?dmgSourceIncomplete(item):!talentValid(item);
-  const rowDisabled=ev.on===false||charOff||itemOff;
+  const rowDisabled=ev.on===false||charOff;
   const timeBadgeTxt=(ev.kind==='damage'&&tm.isInstant)?`${r2(tm.start)}s`:`${r2(tm.start)}~${r2(tm.end)}s`;
   const kindBadgeCls=ev.kind==='damage'?'tl-badge-dmg':(ev.refType==='weapon'?'tl-badge-weapon':(ev.refType==='artifact'?'tl-badge-artifact':'tl-badge-manual'));
   const subDesc=ev.kind==='damage'?dmgShortDesc(item):((item.effs||[]).length?item.effs.map(effDesc).join('；'):'暂无效果');
-  const statusWarn=charOff?`<span class="text-[#b45309] shrink-0">· 角色未启用</span>`:(itemOff?`<span class="text-[#b45309] shrink-0">· 来源已停用</span>`:(invalid?`<span class="text-[#d93025] shrink-0">· 配置未完成</span>`:''));
+  const statusWarn=charOff?`<span class="text-[#b45309] shrink-0">· 角色未启用</span>`:(invalid?`<span class="text-[#d93025] shrink-0">· 配置未完成</span>`:'');
+  const grpBtn=renderGroupTagBtn(item,ev.id);
 
   const controlsHtml=ev.kind==='damage'
     ?`<div class="tl-seg tl-seg-sm">
@@ -4550,7 +5038,7 @@ const rowsHtml=filtered.map(ev=>{
         <div class="tl-entry-title-line">
           ${elementIcon(ev.kind==='damage'?(item.element||ch.element):ch.element,'element-icon')}
           <span class="tl-entry-name" title="${escapeHTML(ch.name+' · '+item.name)}">${escapeHTML(ch.name)} · ${escapeHTML(item.name)}</span>
-          <span class="tl-badge ${kindBadgeCls}">${sourceLabel}</span>
+          <span class="tl-badge ${kindBadgeCls}">${sourceLabel}</span>${grpBtn}
         </div>
         <div class="tl-entry-sub"><span title="${escapeHTML(subDesc)}">${escapeHTML(subDesc)}</span>${statusWarn}</div>
       </div>
@@ -4605,6 +5093,7 @@ box.innerHTML=`
   <div class="tl-filter-chips">
     <button type="button" class="tl-filter-chip ${st.filterChar==='all'?'active':''}" data-tl-fchar="all">全部角色</button>
     ${S.chars.map(c=>`<button type="button" class="tl-filter-chip ${st.filterChar===c.id?'active':''}" data-tl-fchar="${c.id}">${elementIcon(c.element,'element-icon')}<span>${escapeHTML(c.name)}</span></button>`).join('')}
+    ${activeGroups.length?`<button type="button" class="tl-filter-chip ${st.filterGroup==='__ungrouped__'?'active':''}" data-tl-fgrp="__ungrouped__">未分组</button>`:''}
   </div>
 </div>
 <div class="tl-entry-list">${rowsHtml}</div>`;
@@ -4673,6 +5162,11 @@ if(sortBtn)sortBtn.onclick=()=>{sortTimeline(S.timeline);renderTimelineEditor();
 // Filter Controls
 box.querySelectorAll('[data-tl-fkind]').forEach(b=>b.onclick=()=>{st.filterKind=b.dataset.tlFkind;renderTimelineEditor();enhanceStudioControls();refreshIcons();});
 box.querySelectorAll('[data-tl-fchar]').forEach(b=>b.onclick=()=>{st.filterChar=b.dataset.tlFchar;renderTimelineEditor();enhanceStudioControls();refreshIcons();});
+box.querySelectorAll('[data-tl-fgrp]').forEach(b=>b.onclick=()=>{const g=b.dataset.tlFgrp;st.filterGroup=st.filterGroup===g?'all':g;renderTimelineGroupBar();renderTimelineEditor();enhanceStudioControls();refreshIcons();});
+bindGroupPickers(box,evId=>resolveTimelineTarget(S.timeline.find(x=>x.id===evId))?.item,()=>{
+  if(gs())showFS();
+  rDmg();rTal();calc();renderTimelineEditor();enhanceStudioControls();refreshIcons();
+});
 
 // Row Controls
 const updateRowLiveMeta=ev=>{
@@ -5879,7 +6373,7 @@ renderAll();
 };
 r.readAsText(f);e.target.value='';
 });
-$('btnReset').addEventListener('click',()=>{if(!confirm('清空所有配置？'))return;S.chars=[];S.timeline=[];S.selId=null;S.baselines=[];renderAll();});
+$('btnReset').addEventListener('click',()=>{if(!confirm('清空所有配置？'))return;S.chars=[];S.timeline=[];S.groups=[];S.disabledGroups=[];S.selId=null;S.baselines=[];renderAll();});
 $('quickTpl')?.addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)preset(b.dataset.t);});
 
 
