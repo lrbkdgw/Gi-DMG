@@ -1,0 +1,388 @@
+</head>
+<body>
+<!-- 多游戏入口页：当前为单游戏版本，默认隐藏并直接进入工作台（移除 hidden 即可启用） -->
+<div class="landing hidden" id="landing">
+<div class="landing-inner">
+<div class="landing-kicker">DAMAGE CALCULATOR LAB</div>
+<h1 class="landing-title">伤害计算实验室</h1>
+<p class="landing-copy">选择一款游戏的伤害计算器开始</p>
+<button class="landing-card" onclick="document.getElementById('landing').style.display='none'" type="button">
+<span class="landing-card-kicker">GENSHIN IMPACT</span>
+<span class="landing-card-title">原神</span>
+<span class="landing-card-copy">元素反应 · 增幅/剧变 · 月曜反应 · 多角色排轴时间轴</span>
+</button>
+<button class="link-btn landing-resume" onclick="document.getElementById('landing').style.display='none'" type="button">恢复上次会话（直接进入原神）</button>
+</div>
+</div>
+
+<div class="studio-app" data-workspace="character" id="genshinView">
+<div class="studio-shell">
+
+<!-- ============ 左侧边栏：品牌 / 工作区导航 / 队伍 / 共鸣 / 历史 ============ -->
+<aside aria-label="计算器导航" class="studio-left-sidebar">
+<div class="brand">
+<span aria-hidden="true" class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 2.5C12.7 8.1 15.9 11.3 21.5 12 15.9 12.7 12.7 15.9 12 21.5 11.3 15.9 8.1 12.7 2.5 12 8.1 11.3 11.3 8.1 12 2.5Z" fill="currentColor"/></svg></span>
+<span class="brand-name">Gi DMG</span>
+<span class="brand-version">v2.2.0</span>
+</div>
+<nav aria-label="工作区" class="sidebar-nav">
+<button class="sidebar-entry active" id="navCharacters" title="角色配置" type="button">
+<i data-lucide="users-round"></i><span>角色</span>
+</button>
+<button class="sidebar-entry" id="navMonster" title="魔物设置" type="button">
+<i data-lucide="shield"></i><span>魔物设置</span>
+</button>
+<button class="sidebar-entry" id="navTimeline" title="时间轴" type="button">
+<i data-lucide="clock-3"></i><span>时间轴</span>
+</button>
+</nav>
+<section class="sidebar-team">
+<div class="sidebar-section-header">
+<span class="sidebar-subhead">队伍</span>
+<button aria-label="新增角色" class="sidebar-add-button" id="addCharBtn" title="新增角色" type="button">
+<i data-lucide="plus"></i>
+</button>
+</div>
+<div class="sidebar-character-list thin-scroll" id="charList"></div>
+</section>
+<section class="sidebar-resonance">
+<span class="sidebar-subhead">元素共鸣</span>
+<div class="resonance-box" id="resonanceBox"></div>
+</section>
+<div class="sidebar-foot">
+<button class="sidebar-entry" id="navHistory" title="历史记录" type="button">
+<i data-lucide="history"></i><span>历史记录</span>
+</button>
+</div>
+</aside>
+
+<!-- ============ 中央工作区：按左侧导航切换面板 ============ -->
+<main class="studio-main" id="studioMain">
+<div class="workspace-scroll">
+
+<section class="workspace-panel thin-scroll" id="characterWorkspace">
+<div class="workspace-panel-inner">
+<header class="workspace-header">
+<h1 class="workspace-heading">角色配置</h1>
+<p class="workspace-copy">编辑所选角色的面板属性、伤害来源与天赋增益，右侧结果会即时结算。</p>
+</header>
+<div class="workspace-card">
+<div class="empty-state" id="editorEmpty">
+<div class="empty-icon"><i data-lucide="user-round-plus"></i></div>
+<div class="empty-title">从左侧添加并选择角色</div>
+<div class="empty-copy">角色面板、伤害来源与天赋配置会显示在这里。</div>
+</div>
+<div class="hidden" id="editorContent"></div>
+</div>
+</div>
+</section>
+
+<section class="workspace-panel thin-scroll hidden" id="monsterWorkspace">
+<div class="workspace-panel-inner">
+<header class="workspace-header">
+<h1 class="workspace-heading">魔物设置</h1>
+<p class="workspace-copy">设置目标等级与各元素抗性，所有伤害来源会即时按该目标重新结算。</p>
+</header>
+<div class="workspace-card">
+<div class="monster-config-grid">
+<div class="monster-level-card">
+<label class="monster-field-label" for="enemyLevel">魔物等级</label>
+<input class="pi" id="enemyLevel" inputmode="decimal" type="number" value="93"/>
+<p class="monster-field-help">影响防御区计算。支持 1–120 级目标。</p>
+</div>
+<div class="monster-resistance-card">
+<div class="monster-resistance-title">元素抗性 %</div>
+<div class="monster-resistance-grid" id="enemyResGrid"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="workspace-panel thin-scroll hidden" id="timelineWorkspace">
+<div class="workspace-panel-inner">
+<header class="workspace-header">
+<h1 class="workspace-heading">循环时间轴</h1>
+<p class="workspace-copy">查看角色伤害来源在循环内的释放位置与持续区间；点击轨道节点可定位对应队列条目。</p>
+</header>
+<div class="workspace-card timeline-card">
+<div class="timeline-disabled-state hidden" id="timelineDisabledState">
+<div class="empty-icon"><i data-lucide="clock-3"></i></div>
+<div class="empty-copy">当前未开启循环时间轴模式。开启后即可按出伤时刻与 Buff 覆盖动态结算。</div>
+<button class="bs" id="btnEnableTimeline" type="button"><i data-lucide="settings"></i>打开时间轴设置</button>
+</div>
+<div class="hidden" id="timelineContainer">
+<div class="timeline-toolbar">
+<div class="timeline-stats">
+<div class="timeline-stat"><span>轴长</span><b id="tlRotDurBadge">20s</b></div>
+<div class="timeline-stat"><span>循环总伤</span><b id="tlTotalDmgBadge">0</b></div>
+<div class="timeline-stat is-accent"><span>全队秒伤 DPS</span><b id="tlDpsBadge">0/s</b></div>
+</div>
+<button class="bs timeline-settings-btn" id="btnOpenTimelineSettings" type="button"><i data-lucide="settings-2"></i>轴长设置</button>
+</div>
+<div id="timelineGraph"></div>
+<div aria-hidden="true" class="timeline-legend">
+<span><i class="timeline-legend-dot"></i>瞬发</span>
+<span><i class="timeline-legend-bar"></i>持续 · 锁面板</span>
+<span><i class="timeline-legend-bar dynamic"></i>持续 · 随动</span>
+<span class="timeline-legend-hint">节点颜色对应伤害元素</span>
+</div>
+<div id="timelineEditor"></div>
+</div>
+</div>
+</div>
+</section>
+
+</div>
+</main>
+
+<!-- ============ 右侧边栏：工具栏 + 结算结果 ============ -->
+<aside aria-label="伤害统计与工具" class="studio-right-sidebar">
+<div aria-label="文件与工具操作" class="sidebar-tools">
+<span class="sidebar-tools-title">计算结果</span>
+<div class="sidebar-tools-actions">
+<button aria-label="导入配置" class="sidebar-icon-button" id="btnImport" title="导入配置" type="button"><i data-lucide="download"></i></button>
+<button aria-label="导出配置" class="sidebar-icon-button" id="btnExport" title="导出配置" type="button"><i data-lucide="upload"></i></button>
+<button aria-label="计算公式" class="sidebar-icon-button" id="btnFormula" title="计算公式" type="button"><i data-lucide="sigma"></i></button>
+<button aria-label="切换深色 / 浅色主题" aria-pressed="false" class="sidebar-icon-button" id="btnTheme" title="切换深色 / 浅色主题" type="button"><i class="theme-icon-dark" data-lucide="moon"></i><i class="theme-icon-light" data-lucide="sun"></i></button>
+<div id="moreWrap">
+<button aria-haspopup="menu" aria-label="更多" class="sidebar-icon-button" id="btnMore" title="更多" type="button"><i data-lucide="ellipsis"></i></button>
+<div class="menu hidden" id="moreMenu">
+<button class="menu-item" id="btnQuickTable" type="button"><i data-lucide="table-properties"></i><span data-label>快速拉表</span></button>
+<button class="menu-item" id="btnSettings" type="button"><i data-lucide="settings-2"></i>全局设置</button>
+<button class="menu-item danger" id="btnReset" type="button"><i data-lucide="rotate-ccw"></i>重置配置</button>
+</div>
+</div>
+<input accept=".json" class="hidden" id="importFile" type="file"/>
+</div>
+</div>
+<div class="qt-banner hidden" id="qtModeBanner">
+<span class="qt-active-badge"><i data-lucide="zap"></i>快速拉表模式</span>
+<span class="qt-banner-copy">伤害来源已锁定，可调整面板、武器、天赋与伤害开关</span>
+<button aria-controls="quickTableModal" class="qt-finish-badge" id="qtFinishBtn" type="button"><i data-lucide="check"></i>完成拉表</button>
+</div>
+<div class="sidebar-results-scroll">
+<section class="results-card">
+<div class="results-hero">
+<div class="hero-label">总期望伤害</div>
+<div class="hero-value" id="totalDmg">0</div>
+<div class="hero-sub hidden" id="dpsStatRow">
+<span>全队秒伤 (DPS)</span>
+<span class="hero-sub-value" id="totalDps">0/s</span>
+</div>
+</div>
+<div class="results-section results-baseline">
+<div class="results-section-head">
+<h2 class="results-title" id="baseSectionTitle">基准值</h2>
+<button class="link-btn" id="addBaseBtn" type="button">+ 设为新基准</button>
+</div>
+<div class="base-list thin-scroll" id="baseList"></div>
+</div>
+<div class="results-section results-breakdown">
+<div class="results-section-head">
+<h2 class="results-title">伤害统计</h2>
+<div class="flex items-center gap-1.5">
+<button aria-label="面板明细" class="bs-ico" id="btnShowDetails" title="面板明细" type="button"><i data-lucide="chart-no-axes-combined"></i></button>
+<button aria-label="角色伤害占比" class="bs-ico hidden" id="btnShowDmgShare" title="角色伤害占比" type="button"><i data-lucide="pie-chart"></i></button>
+</div>
+</div>
+<div class="res-list thin-scroll" id="resList"></div>
+</div>
+</section>
+</div>
+</aside>
+
+</div>
+</div><!-- /genshinView -->
+
+<!-- ============ 弹窗 ============ -->
+<!-- 全局设置 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="settingsModal">
+<div aria-modal="true" class="modal-card max-w-md" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="settings-2"></i>全局设置<span class="pill">v2.2.0</span></h2>
+<button aria-label="关闭" class="modal-close" id="closeSettingsModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll">
+<div class="setting-list">
+<div class="setting-row">
+<div class="setting-text">
+<div class="setting-title">开启循环时间轴模式</div>
+<div class="setting-desc">按技能出伤时刻与持续时间动态结算 Buff</div>
+</div>
+<div class="tgl" id="cfgTimelineToggle"><span></span></div>
+</div>
+<div class="setting-row">
+<div class="setting-text">
+<div class="setting-title">开启伤害占比</div>
+<div class="setting-desc">在伤害统计与拉表结果中分析各角色与反应的伤害占比</div>
+</div>
+<div class="tgl" id="cfgDmgShareToggle"><span></span></div>
+</div>
+<div class="setting-block" id="cfgRotDurWrap">
+<label class="setting-title" for="cfgRotDurInput">循环总轴长 (秒)</label>
+<input class="pi" id="cfgRotDurInput" max="120" min="1" step="0.5" type="number" value="20"/>
+<div class="setting-desc">若技能或 Buff 持续时间超过轴长，将自动循环并在下一轮继续生效。</div>
+</div>
+<div class="setting-block">
+<div class="setting-title">历史记录</div>
+<div class="setting-fields">
+<label>配置历史保存次数（-1 为保存所有）<input class="pi" id="cfgHistCountInput" max="999" min="-1" step="1" type="number" value="5"/></label>
+<label>拉表结果保存次数（-1 为保存所有）<input class="pi" id="qtHistCountInput" max="999" min="-1" step="1" type="number" value="10"/></label>
+</div>
+<div class="setting-desc">页面关闭时自动保存当前配置，完成快速拉表时自动保存结果；-1 表示不限制保存数量。</div>
+</div>
+<div class="setting-row" id="cfgBaseModeRow">
+<div class="setting-text">
+<div class="setting-title">基准对比模式</div>
+<div class="setting-desc">切换当前配置与已保存基准的差异计算方向。</div>
+</div>
+<button class="bs sm" id="baseModeBtn" type="button">当前 vs 基准</button>
+</div>
+</div>
+</div>
+<footer class="modal-foot">
+<button class="bg" id="btnSaveSettings" type="button">确定</button>
+</footer>
+</div>
+</div>
+
+<!-- 技能面板与时序多段解析 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="skillPanelModal">
+<div aria-modal="true" class="modal-card max-w-3xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title" id="skillModalTitle"><i data-lucide="activity"></i>技能面板与时序多段解析</h2>
+<button aria-label="关闭" class="modal-close" id="closeSkillPanelModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll detail-stack" id="skillModalContent"></div>
+</div>
+</div>
+
+<!-- 角色伤害占比 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="dmgShareModal">
+<div aria-modal="true" class="modal-card max-w-2xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="pie-chart"></i>角色伤害占比</h2>
+<button aria-label="关闭" class="modal-close" id="closeDmgShareModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll" id="dmgShareModalContent"></div>
+</div>
+</div>
+
+<!-- 角色最终面板明细 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="detailModal">
+<div aria-modal="true" class="modal-card max-w-4xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="chart-no-axes-column"></i>角色最终面板明细</h2>
+<button aria-label="关闭" class="modal-close" id="closeDetailModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll detail-stack" id="detailModalContent"></div>
+</div>
+</div>
+
+<!-- 计算公式总览 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="formulaModal">
+<div aria-modal="true" class="modal-card max-w-4xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="sigma"></i>计算公式总览</h2>
+<button aria-label="关闭" class="modal-close" id="closeFormulaModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll">
+<div class="formula-list">
+<!--@FORMULA_CARDS@-->
+</div>
+</div>
+</div>
+</div>
+
+<!-- 武器管理 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="weaponModal">
+<div aria-modal="true" class="modal-card max-w-3xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="sword"></i>武器管理</h2>
+<button aria-label="关闭" class="modal-close" id="weaponModalClose" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll">
+<div class="lib-actions">
+<button class="bs sm" id="wImportBtn" type="button">导入武器列表</button>
+<button class="bs sm" id="wExportBtn" type="button">导出武器列表</button>
+<button class="bs sm" id="wAddToggle" type="button">+ 添加新武器</button>
+<input accept=".json" class="hidden" id="wImportFile" type="file"/>
+</div>
+<div class="lib-form hidden" id="wAddForm">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
+<label>名称<input class="pi sm mt-1.5" id="wNewName"/></label>
+<label>稀有度<select class="pi sm mt-1.5" id="wNewRarity"><option value="5">5星</option><option value="4">4星</option><option value="3">3星</option></select></label>
+<label>基础攻击档<select class="pi sm mt-1.5" id="wNewAtkTier"></select></label>
+<label>副词条<select class="pi sm mt-1.5" id="wNewSubType"></select></label>
+</div>
+<div class="lib-form-head"><span>天赋（每个天赋一个持续时长，多效果共用；应用后可设开始时间）</span><button aria-label="添加天赋" class="bs-ico sm" id="wAddTal" title="添加天赋" type="button"><i data-lucide="plus"></i></button></div>
+<div class="space-y-2" id="wNewTalents"></div>
+<div class="lib-form-foot"><button class="bgh sm hidden" id="wEditCancel" type="button">取消编辑</button><button class="bg sm" id="wNewConfirm" type="button">确认添加</button></div>
+</div>
+<div class="lib-list" id="weaponLibList"></div>
+</div>
+</div>
+</div>
+
+<!-- 圣遗物管理 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="artifactModal">
+<div aria-modal="true" class="modal-card max-w-3xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="gem"></i>圣遗物管理</h2>
+<button aria-label="关闭" class="modal-close" id="artifactModalClose" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll">
+<div class="lib-actions">
+<button class="bs sm" id="aImportBtn" type="button">导入圣遗物列表</button>
+<button class="bs sm" id="aExportBtn" type="button">导出圣遗物列表</button>
+<button class="bs sm" id="aAddToggle" type="button">+ 添加新圣遗物</button>
+<input accept=".json" class="hidden" id="aImportFile" type="file"/>
+</div>
+<div class="lib-form hidden" id="aAddForm">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">
+<label>配置名称<input class="pi sm mt-1.5" id="aNewName"/></label>
+</div>
+<div class="lib-form-head"><span>套装天赋效果</span><button aria-label="添加套装" class="bs-ico sm" id="aNewAddSet" title="添加套装" type="button"><i data-lucide="plus"></i></button></div>
+<div class="space-y-2" id="aNewSets"></div>
+<div class="lib-form-foot"><button class="bg sm" id="aNewConfirm" type="button">确认添加</button></div>
+</div>
+<div class="lib-list" id="artifactLibList"></div>
+</div>
+</div>
+</div>
+
+<!-- 快速拉表结果 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="quickTableModal">
+<div aria-modal="true" class="modal-card max-w-6xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="table"></i>快速拉表结果</h2>
+<button aria-label="关闭" class="modal-close" id="closeQuickTableModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll">
+<div class="qt-toolbar">
+<span class="qt-toolbar-label">排序</span>
+<button class="bs sm" id="qtSortCost" type="button">成本 ↑</button>
+<button class="bs sm" id="qtSortDmg" type="button">DPS ↓</button>
+<button class="bs sm" id="qtPrune" type="button">剔除被偏序方案</button>
+<button aria-pressed="false" class="bs sm" id="qtToggleDmgShareBtn" type="button"><i data-lucide="pie-chart"></i>显示伤害占比</button>
+<input class="hidden" id="qtToggleDmgShare" type="checkbox"/>
+<div class="flex-1"></div>
+<button class="bs sm" id="qtExportCsv" type="button"><i data-lucide="download"></i>导出 CSV</button>
+<button class="bs sm" id="qtCopyMd" type="button"><i data-lucide="copy"></i>复制 Markdown</button>
+</div>
+<div class="overflow-auto thin-scroll" id="qtTableWrap"></div>
+</div>
+</div>
+</div>
+
+<!-- 历史记录 -->
+<div aria-hidden="true" class="modal-overlay hidden" id="historyModal">
+<div aria-modal="true" class="modal-card max-w-2xl" role="dialog">
+<header class="modal-head">
+<h2 class="modal-title"><i data-lucide="history"></i>历史记录</h2>
+<button aria-label="关闭" class="modal-close" id="closeHistoryModal" type="button"><i data-lucide="x"></i></button>
+</header>
+<div class="modal-body thin-scroll" id="historyModalContent"></div>
+</div>
+</div>
